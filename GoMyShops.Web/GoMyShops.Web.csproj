@@ -1,0 +1,15 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>99a62bd6-3b95-4ec5-9d3e-747f0f20033d</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GoMyShops.BAL\GoMyShops.BAL.csproj" />
+    <ProjectReference Include="..\GoMyShops.Models\GoMyShops.Models.csproj" />
+  </ItemGroup>
+
+</Project>
