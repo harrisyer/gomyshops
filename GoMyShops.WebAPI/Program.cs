@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MyBGList.Constants;
-using MyBGList.Models;
+using GoMyShops.Commons;
+using GoMyShops.Models;
 using MyBGList.Swagger;
 using Serilog;
 using Serilog.Sinks.MSSqlServer;
@@ -202,7 +202,7 @@ builder.Services.AddDbContext<DataContext>(options =>
 });
 
 #region Authentication And Authorization (1-last) Setup to AutoMapper
-builder.Services.AddIdentity<ApiUser, IdentityRole>(options =>
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;

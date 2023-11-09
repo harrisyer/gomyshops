@@ -1,0 +1,178 @@
+﻿@{
+    ViewBag.Title = "Home ";
+}
+@section Scripts
+{
+    <script type="text/javascript">
+        $('.newstape').newstape({
+            // timer period
+            period: 30,
+            // offset pixel count
+            offset: 1,
+            // mousewheel scrolling
+            mousewheel: true,
+            // mousewheel offset pixel count
+            mousewheelRate: 30,
+            // dragging tape content
+            dragable: true
+        });
+
+        //$(document).ready(function () {
+        //    //$('#commentChatPageNo').val('1');
+        //    GetCommentData();
+
+
+        //   $(window).scroll(function () {
+        //        if ($(window).scrollTop() ==
+        //           $(document).height() - $(window).height()) {
+        //            if (CommonVariable.modelName()=="Home")
+        //            {
+        //                GetCommentData();
+        //            }
+
+        //        }
+        //    });
+        //});
+
+        var modelName = '@ViewContext.RouteData.Values["Controller"].ToString()';
+        CommonVariable.init(modelName);
+
+        var commentChatPageNo = 0;
+
+        //function GetCommentData() {
+        //    $.ajax({
+        //        type: "get",
+        //        url: GetPath(CommonVariable.modelName() + "/CommentChatDisplayList"),
+        //        contentType: "application/json",
+        //        data: { commentChatPageNo: commentChatPageNo },
+        //        dataType: "html",
+        //        success: function (result) {
+        //            if (result != null) {
+        //                $('.commentChatDisplayContainer').append(result);
+        //                commentChatPageNo = commentChatPageNo + 1;
+        //                var form = $('.commentChatDisplayContainer').closest("form");
+        //                $(form).removeData("validator");
+        //                $(form).removeData("unobtrusiveValidation");
+        //                $.validator.unobtrusive.parse(form);
+        //            }
+        //        },
+        //        beforeSend: function () {
+        //            $("#commentprogress").show();
+        //        },
+        //        complete: function () {
+        //            $("#commentprogress").hide();
+        //        },
+        //        error: function () {
+        //            alert("Error while retrieving data!");
+        //        }
+        //    });
+        //}
+
+        ////Start Items Handles
+        //$(document).on("click", ".setComment", function () {
+        //    //var currentE = $(this);
+        //    var row$ = $(this).closest('.commetrow');
+        //    var commentID = row$.find('.commentID').val();
+        //    var commentList$ = row$.find('.comments-list');
+        //    var commentsCount$ = row$.find('.commentsCount');
+        //    var commentslistpanelheading$ = row$.find('.commentslistpanelheading');
+        //    var commentMessage$ = row$.find('.commentMessage');
+        //    var data = { 'commentId': commentID, 'commentMessage': commentMessage$.val() };
+        //    var data1 = addRequestVerificationToken(data);
+        //    //var data1= JSON.stringify(addRequestVerificationToken(data));
+        //    $.ajax({
+        //        type: "POST",
+        //        url: GetPath(CommonVariable.modelName() + "/SetComment"),
+        //        data: data1,
+        //        //data: $(this).closest('form').serialize(),
+        //        //contentType: "application/json; charset=utf-8",
+        //        dataType: "json",
+        //        success: function (data) {
+        //            if (data != null) {
+        //                if (data.Success) {
+        //                    commentList$.html(data.ViewString);
+        //                    commentsCount$.text(data.ListCount);
+        //                    commentMessage$.val('');
+        //                    //if (!commentslistpanelheading$.hasClass('panel-collapsed')) {
+        //                       // commentslistpanelheading$.parents('.panel').find('.panel-body').slideUp();
+        //                       // commentslistpanelheading$.addClass('panel-collapsed');
+        //                       // commentslistpanelheading$.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+        //                    } else {
+        //                        commentslistpanelheading$.parents('.panel').find('.panel-body').slideDown();
+        //                        commentslistpanelheading$.removeClass('panel-collapsed');
+        //                        commentslistpanelheading$.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+        //                    //}
+
+        //                }
+                        
+        //                //commentList$.empty();
+        //                ShowAlertsMessage();
+        //            }
+        //        },
+        //        error: function (textStatus, errorThrown) {
+        //            Success = false;
+        //        }
+        //    }).done(function (data) {
+        //        //if (data != null) {
+        //        //    commentList$.html(result);
+        //        //    //commentList$.empty();
+        //        //    ShowAlertsMessage();
+        //        //}
+        //    });
+
+        //    return false;
+        //});
+        ////End Items Handles
+
+    </script>
+}
+
+@using (Html.BeginForm("Index", @ViewContext.RouteData.Values["Controller"].ToString(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.Raw(Html.CustomValidationSummary(true))
+<div class="row"></div>
+<div class="row text-center" style="font-size:xx-large">
+
+    <h1>OZOPAY</h1>
+    <h1>HOME</h1>
+</div>
+ @*<div class="row"><img src="@Url.Content("~/Images/MifunLogin.jpg")" /></div>*@
+ @*<div class="row homeIndex">
+                <div class="col-md-6">
+                    <div class="commentChatDisplayAnnouncementContainer">
+                        @Html.Action("CommentChatAnnouncementsList", "Home")
+                   
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    @if (Request.IsAuthenticated)
+                    {
+                        <div class="commentChatDisplayContainer">
+                         
+                        </div>
+                        <div id="commentprogress" style="display:none">
+                            <h4>Loading...</h4>
+                        </div>
+                    }
+                    else
+                    {
+                        <img src="@Url.Content("~/Images/BorneoExpressLogin.jpg")" />
+                     
+                    }
+
+                    
+
+                    
+                   
+            
+                    
+                </div>
+            </div>*@
+
+}
+
+
+
+           

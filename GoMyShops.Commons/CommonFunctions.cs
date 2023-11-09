@@ -18,6 +18,8 @@ using System.Globalization;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Newtonsoft.Json.Linq;
 //using Microsoft.AspNetCore.Http;
 //using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
@@ -271,7 +273,7 @@ namespace GoMyShops.Commons
             return false;
         }
 
-        public static bool IsNullOrEmptyString(this string enumerable)
+        public static bool IsNullOrEmptyString(this string? enumerable)
         {
             if (enumerable == null)
             {
@@ -308,7 +310,7 @@ namespace GoMyShops.Commons
             }
         }
 
-        public static string IsNullThenEmpty(this string obj)
+        public static string IsNullThenEmpty(this string? obj)
         {
             if (obj == null)
             { return ""; }
@@ -320,6 +322,35 @@ namespace GoMyShops.Commons
             if (obj == null)
             { return "0"; }
             return obj;
+        }
+
+        public static T IsNullThenDefault<T>(this T obj)
+        {
+            if (!IsNullOrEmpty<T>(obj))
+            {
+                return (T)obj;
+            }
+            return obj;
+            
+        }
+
+        public static T IsNullThenNew<T>(this T obj)
+        {
+            if (!IsNullOrEmpty<T>(obj))
+            {
+                return obj;
+            }
+            var a = Activator.CreateInstance(typeof(T));
+            if (a == null)
+            {
+                return obj;
+            }
+            else 
+            {
+                return (T)a;
+            }
+           
+           
         }
 
         public static T IsNullThenNew<T>(this T obj, IHttpContextAccessor httpContextAccessor)
@@ -512,6 +543,111 @@ namespace GoMyShops.Commons
             return obj;
         }
 
+        public static string GetGeneratedNo()
+        {
+            var currentDate = DateTime.Now;
+            string number = string.Format("{0}{1}{2}", "", currentDate.ToString("yyMMddHHmmssff"), RandomInteger(1, 999999).ToString("000000"));
+            return number;
+        }
+
+        public static string GenerateRandomString()
+        {
+            string randomTextUpper = System.Guid.NewGuid().ToString().Replace("-", string.Empty).ToUpper();
+            string randomTextLower = System.Guid.NewGuid().ToString().Replace("-", string.Empty).ToLower();
+            string CharsL = "abcdefghijklmnopqrstuvwxyz";
+            string CharsU = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+            using (RandomNumberGenerator rng = RandomNumberGenerator.Create())
+            {
+               
+                    byte[] randomUnsignedInteger32Bytes = new byte[4];
+                    rng.GetBytes(randomUnsignedInteger32Bytes);
+                    int randomInt32 = BitConverter.ToInt32(randomUnsignedInteger32Bytes, 0);
+                    randomInt32 = randomInt32 >= 0 ? randomInt32 : -randomInt32;
+
+                    int i = 0;
+                    string returnValue = "";
+                    foreach (char c in randomInt32.ToString())
+                    {
+                        var d = Convert.ToString(c).intParse();
+
+
+                        if (i % 3 == 0)
+                        {
+                            returnValue = returnValue + randomTextLower.Substring(d, 1);
+                            randomTextLower = System.Guid.NewGuid().ToString().Replace("-", string.Empty).ToLower();
+                        }
+                        else if (i % 3 == 1)
+                        {
+                            returnValue = returnValue + randomTextUpper.Substring(d, 1);
+                            randomTextUpper = System.Guid.NewGuid().ToString().Replace("-", string.Empty).ToUpper();
+                        }
+                        else
+                        {
+                            var intS = RandomInteger(2, 9);
+                            if (intS % 3 == 0)
+                            {
+                                returnValue = returnValue + "@";
+
+                            }
+                            else if (intS % 3 == 1)
+                            {
+                                returnValue = returnValue + "$";
+
+                            }
+                            else
+                            {
+                                returnValue = returnValue + "#";
+
+                            }//end if-else
+                        }//end if-else
+                        i = i + 1;
+
+                    }//end foreach
+
+                    returnValue = returnValue + RandomInteger(10, 99);
+                //add lower upper
+                var stringCharsL = CharsL.Substring(RandomInteger(1, 25), 1);
+                var stringCharsU = CharsU.Substring(RandomInteger(1, 25), 1);
+
+                var intR = RandomInteger(2, 9);
+                returnValue = returnValue.Substring(intR, returnValue.Length - intR) + stringCharsL + returnValue.Substring(0, intR);
+
+                var intR2 = RandomInteger(2, 9);
+                returnValue = returnValue.Substring(intR2, returnValue.Length - intR2) + stringCharsU + returnValue.Substring(0, intR2);
+
+                var intR3 = RandomInteger(2, 9);
+                returnValue = returnValue.Substring(intR3, returnValue.Length - intR3) + returnValue.Substring(0, intR3);
+
+
+                return returnValue;
+            }//end using
+    
+        }
+
+        public static string GetGeneratedRandomNo()
+        {
+            // Random rnd = new Random();
+            //var currentDate = DateTime.Now;
+            //string number = string.Format("{0}{1}{2}", "", currentDate.ToString("yyMMddHHmmssff"), rnd.Next(1, 999999).ToString("000000"));
+            string randomText = System.Guid.NewGuid().ToString().Replace("-", string.Empty);
+            //Random rnd1 = new Random();
+
+            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
+            {
+                byte[] randomNumber = new byte[4];//4 for int32
+                rng.GetBytes(randomNumber);
+                int value = BitConverter.ToInt32(randomNumber, 0);
+                value = value >= 0 ? value : -value;
+                return value.ToString() + randomText.Substring(2, RandomInteger(6, 12)).ToString();
+            }
+
+
+
+            //return randomText;
+        }
+
+
         public static bool IsDictionaryEmptyValues(this Dictionary<string, string> dict)
         {
             bool istrue = false;
@@ -589,109 +725,7 @@ namespace GoMyShops.Commons
             return (int)(min + (max - min) *
                 (scale / (double)uint.MaxValue));
         }
-
-        public static string GenerateRandomString()
-        {
-            string randomTextUpper = System.Guid.NewGuid().ToString().Replace("-", string.Empty).ToUpper();
-            string randomTextLower = System.Guid.NewGuid().ToString().Replace("-", string.Empty).ToLower();
-            string CharsL = "abcdefghijklmnopqrstuvwxyz";
-            string CharsU = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-
-
-            //string randomTextSymbol = "@#$";
-            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
-            {
-                var b = new byte[4];
-                rng.GetBytes(b);
-                int value = BitConverter.ToInt32(b, 0);
-                value = value >= 0 ? value : -value;
-
-                int i = 0;
-
-                string returnValue = "";
-                foreach (char c in value.ToString())
-                {
-                    var d = Convert.ToString(c).intParse();
-                   
-
-                    if (i % 3 == 0)
-                    {
-                        returnValue = returnValue + randomTextLower.Substring(d, 1);
-                        randomTextLower = System.Guid.NewGuid().ToString().Replace("-", string.Empty).ToLower();
-                    }
-                    else if (i % 3 == 1)
-                    {                        
-                        returnValue = returnValue + randomTextUpper.Substring(d, 1);
-                        randomTextUpper = System.Guid.NewGuid().ToString().Replace("-", string.Empty).ToUpper();
-                    }
-                    else
-                    {
-                        var intS = RandomInteger(2, 9);
-                        if (intS % 3 == 0)
-                        {
-                            returnValue = returnValue + "@";
-                        
-                        }
-                        else if (intS % 3 == 1)
-                        {
-                            returnValue = returnValue  +"$";
-
-                        }
-                        else
-                        {
-                            returnValue = returnValue + "#";
-
-                        }//end if-else
-                    }//end if-else
-                    i = i + 1;
-
-                }//end foreach
-
-                returnValue = returnValue + RandomInteger(10,99);
-
-                //add lower upper
-                var stringCharsL = CharsL.Substring(RandomInteger(1, 25),1);
-                var stringCharsU = CharsU.Substring(RandomInteger(1, 25), 1);
-
-                var intR = RandomInteger(2, 9);
-                returnValue = returnValue.Substring(intR, returnValue.Length- intR) + stringCharsL + returnValue.Substring(0, intR );
-
-                var intR2 = RandomInteger(2, 9);
-                returnValue = returnValue.Substring(intR2, returnValue.Length - intR2 ) + stringCharsU + returnValue.Substring(0, intR2);
-
-                var intR3 = RandomInteger(2, 9);
-                returnValue = returnValue.Substring(intR3, returnValue.Length - intR3 )  + returnValue.Substring(0, intR3);
-
-
-                return returnValue;//value.ToString() + randomText.Substring(2, RandomInteger(6, 12)).ToString();
-
-                //return System.Text.Encoding.Default.GetString(b);              
-            }//end using
-               
-        }
-
-        public static string GetGeneratedRandomNo()
-        {
-           // Random rnd = new Random();
-            //var currentDate = DateTime.Now;
-            //string number = string.Format("{0}{1}{2}", "", currentDate.ToString("yyMMddHHmmssff"), rnd.Next(1, 999999).ToString("000000"));
-            string randomText = System.Guid.NewGuid().ToString().Replace("-", string.Empty);
-            //Random rnd1 = new Random();
-
-            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
-            {
-                byte[] randomNumber = new byte[4];//4 for int32
-                rng.GetBytes(randomNumber);
-                int value = BitConverter.ToInt32(randomNumber, 0);
-                value= value >= 0 ? value : -value;
-                return value.ToString() + randomText.Substring(2, RandomInteger(6, 12)).ToString();  
-            }
-
-          
-
-            //return randomText;
-        }
-
+              
         //For Datetime Function
         public static DateTime ParseStandardDateFormat(string sDateTime, bool isDateTime)
         {
@@ -961,4 +995,31 @@ namespace GoMyShops.Commons
 
       
     }//end class
+
+    public static class TempDataExtensions
+    {
+        public static void Set<T>(this ITempDataDictionary tempData, string key, T value)
+        {
+            string json = JsonConvert.SerializeObject(value);
+            tempData.Add(key, json);
+        }
+
+        public static T Get<T>(this ITempDataDictionary tempData, string key)
+        {
+            if (!tempData.ContainsKey(key)) return default(T);
+
+            var value = tempData[key] as string;
+
+            return value == null ? default(T) : JsonConvert.DeserializeObject<T>(value);
+        }
+    }
+
+    public class IsOptionalAttribute : Attribute
+    {
+        internal IsOptionalAttribute(bool isOptional)
+        {
+            this.IsOptional = isOptional;
+        }
+        public bool IsOptional { get; private set; }
+    }
 }//end namespace

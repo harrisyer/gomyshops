@@ -1,0 +1,141 @@
+﻿@*@Html.Raw(Html.CustomValidationSummary(true))*@
+@model GoMyShops.Models.ViewModels.SignUpDetailsViewModels
+@Html.HiddenFor(a => a.IsSignUpSuccess)
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-4 FormLableTitle">
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.DisplayNameFor(model => model.SignUpName)
+                </div>
+                <div class="col-md-3">
+                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(u => u.SignUpName, new { @class = "form-control", maxlength = 20 })
+            @Html.ValidationMessageFor(m => m.SignUpName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 FormLableTitle">
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.DisplayNameFor(model => model.CompanyName)
+                </div>
+                <div class="col-md-3">
+                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(u => u.CompanyName, new { @class = "form-control", maxlength = 100 })
+            @Html.ValidationMessageFor(m => m.CompanyName)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 FormLableTitle">
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.DisplayNameFor(model => model.CompanyRegistrationNumber)
+                </div>
+                <div class="col-md-3">
+                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(u => u.CompanyRegistrationNumber, new { @class = "form-control", maxlength = 100 })
+            @Html.ValidationMessageFor(m => m.CompanyRegistrationNumber)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 FormLableTitle">
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.DisplayNameFor(model => model.Email)
+                </div>
+                <div class="col-md-3">
+                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(u => u.Email, new { @class = "form-control", maxlength = 50 })
+            @Html.ValidationMessageFor(m => m.Email)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 FormLableTitle">
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.DisplayNameFor(model => model.ContactNo)
+                </div>
+                <div class="col-md-3">
+                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @Html.TextBoxFor(u => u.ContactNo, new { @class = "form-control", placeholder = "Malaysia Mobile : 60xxxxxxxxx", maxlength = 20 })
+            @Html.ValidationMessageFor(m => m.ContactNo)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 FormLableTitle">
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.DisplayNameFor(model => model.Password)
+                </div>
+                <div class="col-md-3">
+                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @Html.PasswordFor(u => u.Password, new { @class = "form-control", maxlength = 20, AUTOCOMPLETE = "OFF" })
+            @Html.ValidationMessageFor(m => m.Password)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 FormLableTitle">
+            <div class="row">
+                <div class="col-md-9">
+                    @Html.DisplayNameFor(model => model.ConfirmPassword)
+                </div>
+                <div class="col-md-3">
+                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            @Html.PasswordFor(u => u.ConfirmPassword, new { @class = "form-control", maxlength = 20 })
+            @Html.ValidationMessageFor(m => m.ConfirmPassword)
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4 FormLableTitle">
+        </div>
+        <div class="col-md-6">
+            <div id="captchadiv" class="g-recaptcha" data-sitekey="6Lcgp3kUAAAAAOb9ZI4uuE9g4N4EgdknXScowGvA"></div>
+        </div>
+
+    </div>
+
+    @*<div class="row">
+            <div class="col-md-4 FormLableTitle"></div>
+            <div class="col-md-6 text-left">
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="submit" value="SignUp" class="btn btn-primary btnSignUp" />
+                    </div>
+                    <div class="col-md-6">
+                        <input type="button" value="Cancel" class="btn btn-primary itemLoginPage" />
+                    </div>
+                </div>
+
+            </div>
+
+        </div>*@
+</div>

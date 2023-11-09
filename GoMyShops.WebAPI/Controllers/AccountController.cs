@@ -12,6 +12,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using GoMyShops.Data;
+using GoMyShops.Models;
 namespace GoMyShops.WebAPI.Controllers
 {
     [Route("[controller]/[action]")]
@@ -24,16 +25,16 @@ namespace GoMyShops.WebAPI.Controllers
 
         private readonly IConfiguration _configuration;
 
-        private readonly UserManager<ApiUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        private readonly SignInManager<ApiUser> _signInManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
 
         public AccountController(
             DataContext context,
             ILogger<DomainsController> logger,
             IConfiguration configuration,
-            UserManager<ApiUser> userManager,
-            SignInManager<ApiUser> signInManager)
+            UserManager<ApplicationUser> userManager,
+            SignInManager<ApplicationUser> signInManager)
         {
             _context = context;
             _logger = logger;
@@ -50,7 +51,7 @@ namespace GoMyShops.WebAPI.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    var newUser = new ApiUser();
+                    var newUser = new ApplicationUser();
                     newUser.UserName = input.UserName;
                     newUser.Email = input.Email;
                     var result = await _userManager.CreateAsync(

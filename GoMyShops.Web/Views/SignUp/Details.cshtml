@@ -1,0 +1,98 @@
+﻿@model GoMyShops.Models.ViewModels.SignUpDetailsViewModels
+@using GoMyShops.Models.Helpers;
+<div class="panel panel-default">
+    <div class="panel-heading">Sign Up Profile Details</div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            @Html.HiddenFor(a => a.SignUpName)
+            @Html.HiddenFor(a => a.EditJson)
+            @Html.Raw(Html.CustomValidationSummary(true))
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.SignUpName)</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.SignUpName, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.CompanyName)</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.CompanyName, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.CompanyRegistrationNumber)</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.CompanyRegistrationNumber, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.Email)</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.Email, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.ContactNo)</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.ContactNo, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    @if (Model.CurrentUser.UserType != "O")
+                    {
+                        <h5 class="sub-title"><span>Operation Logs Details</span></h5>
+                        <div class="row">
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.CreatedBy)</div>
+                            <div class="col-md-4">@Html.DisplayFor(model => model.CreatedBy, new { @class = "form-control" })</div>
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.sCreatedTime)</div>
+                            <div class="col-md-4">@Html.DisplayFor(model => model.sCreatedTime, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.ModifiedBy)</div>
+                            <div class="col-md-4">@Html.DisplayFor(model => model.ModifiedBy, new { @class = "form-control" })</div>
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.sModifiedTime)</div>
+                            <div class="col-md-4">@Html.DisplayFor(model => model.sModifiedTime, new { @class = "form-control" })</div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.Status)</div>
+                            <div class="col-md-4">@Html.DisplayFor(model => model.Status, new { @class = "form-control" })</div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemPress itemEdit" data-editjson="@Model.EditJson">
+                        <i class="fa fa-pencil-square-o"></i>
+                        Edit
+                    </button>
+                    @*<input class="btn btn-primary itemEdit" data-editjson="@Model.EditJson" type="button" value="Edit" />*@
+                </div>
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemBack">
+                        <i class="fa fa-reply-all"></i>
+                        Back
+                    </button>
+                </div>
+
+            </div>
+            <div class="row">
+            </div>
+            <div>
+                <div class="row">
+                    <div class="itemDetailValidationMessageContainer ValidationMessageContainer"></div>
+                    <div class="itemDetailMessageContainer DetailMessageContainer"></div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

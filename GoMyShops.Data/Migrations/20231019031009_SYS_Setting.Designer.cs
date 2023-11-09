@@ -209,7 +209,7 @@ namespace GoMyShops.Data.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("MyBGList.Models.ApiUser", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.ApiUser", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("nvarchar(450)");
@@ -274,7 +274,7 @@ namespace GoMyShops.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
-            modelBuilder.Entity("MyBGList.Models.BoardGame", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.BoardGame", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -330,7 +330,7 @@ namespace GoMyShops.Data.Migrations
                     b.ToTable("BoardGames");
                 });
 
-            modelBuilder.Entity("MyBGList.Models.BoardGames_Domains", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.BoardGames_Domains", b =>
                 {
                     b.Property<int>("BoardGameId")
                         .HasColumnType("int");
@@ -348,7 +348,7 @@ namespace GoMyShops.Data.Migrations
                     b.ToTable("BoardGames_Domains");
                 });
 
-            modelBuilder.Entity("MyBGList.Models.BoardGames_Mechanics", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.BoardGames_Mechanics", b =>
                 {
                     b.Property<int>("BoardGameId")
                         .HasColumnType("int");
@@ -366,7 +366,7 @@ namespace GoMyShops.Data.Migrations
                     b.ToTable("BoardGames_Mechanics");
                 });
 
-            modelBuilder.Entity("MyBGList.Models.Domain", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.Domain", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -390,7 +390,7 @@ namespace GoMyShops.Data.Migrations
                     b.ToTable("Domains");
                 });
 
-            modelBuilder.Entity("MyBGList.Models.Mechanic", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.Mechanic", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -425,7 +425,7 @@ namespace GoMyShops.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<string>", b =>
                 {
-                    b.HasOne("MyBGList.Models.ApiUser", null)
+                    b.HasOne("GoMyShops.Data.Entity.ApiUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -434,7 +434,7 @@ namespace GoMyShops.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<string>", b =>
                 {
-                    b.HasOne("MyBGList.Models.ApiUser", null)
+                    b.HasOne("GoMyShops.Data.Entity.ApiUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -449,7 +449,7 @@ namespace GoMyShops.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyBGList.Models.ApiUser", null)
+                    b.HasOne("GoMyShops.Data.Entity.ApiUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -458,22 +458,22 @@ namespace GoMyShops.Data.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
                 {
-                    b.HasOne("MyBGList.Models.ApiUser", null)
+                    b.HasOne("GoMyShops.Data.Entity.ApiUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("MyBGList.Models.BoardGames_Domains", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.BoardGames_Domains", b =>
                 {
-                    b.HasOne("MyBGList.Models.BoardGame", "BoardGame")
+                    b.HasOne("GoMyShops.Data.Entity.BoardGame", "BoardGame")
                         .WithMany("BoardGames_Domains")
                         .HasForeignKey("BoardGameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyBGList.Models.Domain", "Domain")
+                    b.HasOne("GoMyShops.Data.Entity.Domain", "Domain")
                         .WithMany("BoardGames_Domains")
                         .HasForeignKey("DomainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -484,15 +484,15 @@ namespace GoMyShops.Data.Migrations
                     b.Navigation("Domain");
                 });
 
-            modelBuilder.Entity("MyBGList.Models.BoardGames_Mechanics", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.BoardGames_Mechanics", b =>
                 {
-                    b.HasOne("MyBGList.Models.BoardGame", "BoardGame")
+                    b.HasOne("GoMyShops.Data.Entity.BoardGame", "BoardGame")
                         .WithMany("BoardGames_Mechanics")
                         .HasForeignKey("BoardGameId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("MyBGList.Models.Mechanic", "Mechanic")
+                    b.HasOne("GoMyShops.Data.Entity.Mechanic", "Mechanic")
                         .WithMany("BoardGames_Mechanics")
                         .HasForeignKey("MechanicId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -503,19 +503,19 @@ namespace GoMyShops.Data.Migrations
                     b.Navigation("Mechanic");
                 });
 
-            modelBuilder.Entity("MyBGList.Models.BoardGame", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.BoardGame", b =>
                 {
                     b.Navigation("BoardGames_Domains");
 
                     b.Navigation("BoardGames_Mechanics");
                 });
 
-            modelBuilder.Entity("MyBGList.Models.Domain", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.Domain", b =>
                 {
                     b.Navigation("BoardGames_Domains");
                 });
 
-            modelBuilder.Entity("MyBGList.Models.Mechanic", b =>
+            modelBuilder.Entity("GoMyShops.Data.Entity.Mechanic", b =>
                 {
                     b.Navigation("BoardGames_Mechanics");
                 });

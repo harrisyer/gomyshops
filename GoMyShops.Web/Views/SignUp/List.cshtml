@@ -1,0 +1,169 @@
+﻿@model GoMyShops.Models.ViewModels.SignUpViewModels
+@using GoMyShops.Models.Helpers;
+@section Scripts
+{
+    <script type="text/javascript">
+          var modelName = '@ViewContext.RouteData.Values["Controller"].ToString()';
+          CommonVariable.init(modelName);
+
+          $('#tbllist').bootstrapTable({
+               method: 'post',
+               queryParams: function (params) {
+                   return {
+                       limit: params.limit,
+                       offset: params.offset,
+                       search: params.search,
+                       sort: params.sort,
+                       order: params.order,
+                       param1: $("#srcSignUpName").val(),
+                       param2: $("#srcCompanyName").val(),
+                       param3: $("#srcContactNo").val(),
+                       param4: $("#srcEmail").val(),
+                       param5: $("#srcCreateDate").val(),
+                       param6: $("#srcStatus").val()
+                   };
+               }
+
+           });
+
+          $(document).on("click", "#btnReset", function (e) {
+              e.preventDefault();
+              $("#srcSignUpName").val('');
+              $("#srcCompanyName").val('');
+              $("#srcContactNo").val('');
+              $("#srcEmail").val('');
+              $("#srcCreateDate").val('');
+              $("#srcStatus").val('');
+               listSearch();
+           });
+
+        ////Start Items Handles
+        ////End Items Handles
+    </script>
+}
+
+@using (Html.BeginForm("List", @ViewContext.RouteData.Values["Controller"].ToString(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.Raw(Html.CustomValidationSummary(true))
+    <div class="itemsListingContainer">
+        <div class="panel panel-default">
+            <div class="panel-heading" data-bs-toggle="collapse" data-bs-target="#collapseOne">Sign Up Profile<span class="fa fa-arrows-v pull-right"></span></div>
+            <div id="collapseOne" class="panel-collapse collapse in">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcSignUpName)</div>
+                            <div class="col-md-4">
+                                @Html.TextBoxFor(u => u.srcSignUpName, new { @class = "form-control", maxlength = 20 })
+                                @Html.ValidationMessageFor(m => m.srcSignUpName)
+
+                            </div>
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcCompanyName)</div>
+                            <div class="col-md-4">
+                                @Html.TextBoxFor(u => u.srcCompanyName, new { @class = "form-control", maxlength = 100 })
+                                @Html.ValidationMessageFor(m => m.srcCompanyName)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcContactNo)</div>
+                            <div class="col-md-4">
+                                @Html.TextBoxFor(u => u.srcContactNo, new { @class = "form-control", maxlength = 20 })
+                                @Html.ValidationMessageFor(m => m.srcContactNo)
+                            </div>
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcEmail)</div>
+                            <div class="col-md-4">
+                                @Html.TextBoxFor(u => u.srcEmail, new { @class = "form-control", maxlength = 50 })
+                                @Html.ValidationMessageFor(m => m.srcEmail)
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 FormLableTitle">
+                                <div class="row">
+                                    <div class="col-md-9">
+                                        @Html.DisplayNameFor(model => model.srcCreateDate)
+                                    </div>
+                                    <div class="col-md-3">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class='input-group date routeDateControl'>
+                                        <div>@Html.TextBoxFor(model => model.srcCreateDate, new { @class = "form-control routedatecontrolInput", @readonly = true })</div>
+
+                                        <span class="input-group-addon routeDateControlSpan">
+                                            <span class="glyphicon glyphicon-calendar">
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcStatus)</div>
+                            <div class="col-md-4">
+                                @Html.DropDownListFor(u => u.srcStatus, Model.StatusDDL, "All", new { @class = "form-control SearchSelect" })
+                                @Html.ValidationMessageFor(m => m.srcStatus)
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="panel-footer">
+
+                    @*<button class="btn btn-primary btn-sm itemNew">
+                        <i class="fa fa-plus-circle"></i>
+                        Create New
+                    </button>*@
+                    <button id="btnReset" class="btn btn-primary btn-sm">
+                        <i class="fa fa-refresh"></i>
+                        Reset
+                    </button>
+
+                    <button id="btnFilter" class="btn btn-primary itemPress btn-sm">
+                        <i class="fa fa-search"></i>
+                        Search
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="panel panel-default">
+            <div class="panel-heading">Sign Up Profile List</div>
+            <div class="panel-body">
+                <div id="table-wrapper" class="table-responsive">
+                    <table id="tbllist"
+                           data-classes="table table-no-bordered"
+                           data-pagination="true"
+                           data-bs-toggle="table"
+                           data-id-field="id"
+                           data-page-list="[10, 25, 50, 100]"
+                           data-url="@Url.Content("~/")SignUp/getData"
+                           data-side-pagination="server"
+                           data-maintain-selected="false"
+                           data-row-style="TableListrowStyle">
+                        <thead>
+                            <tr>
+                                <th data-field="SignUpName" class="col-md-1" data-sortable="true">SignUp Name</th>
+                                <th data-field="CompanyName" data-sortable="true">Company Name</th>
+                                <th data-field="CompanyRegistrationNumber" class="col-md-1" data-sortable="true">Company Reg No</th>
+                                <th data-field="ContactNo" class="col-md-1" data-sortable="true">Contact No</th>
+                                <th data-field="Email" data-sortable="true">Email</th>
+                                <th data-field="sCreatedTime" data-sortable="true">Created Time</th>
+                                <th data-field="StatusName" class="col-md-1" data-class="StatusCol" data-sortable="true">Status</th>
+                                <th data-field="ActionLinks" data-formatter="operateFormatter" data-events="operateEvents">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="itemDetailsContainer"></div>
+    <div class="itemCreateContainer"></div>
+    <div class="itemEditContainer"></div>
+}
+

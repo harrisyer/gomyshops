@@ -6,11 +6,12 @@ using System.Linq.Expressions;
 using System.Linq.Dynamic.Core;
 using System.ComponentModel.DataAnnotations;
 using MyBGList.Attributes;
-using MyBGList.Constants;
+using GoMyShops.Commons;
 using Microsoft.Extensions.Caching.Memory;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
 using GoMyShops.Data;
+using GoMyShops.Data.Entity;
 namespace MyBGList.Controllers
 {
     [Route("[controller]")]

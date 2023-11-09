@@ -10,8 +10,9 @@ using MyBGList.Attributes;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 using Microsoft.AspNetCore.Authorization;
-using MyBGList.Constants;
+using GoMyShops.Commons;
 using GoMyShops.Data;
+using GoMyShops.Data.Entity;
 namespace MyBGList.Controllers
 {
     [Route("[controller]")]

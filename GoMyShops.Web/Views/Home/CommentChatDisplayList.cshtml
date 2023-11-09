@@ -1,0 +1,145 @@
+﻿@model GoMyShops.Models.ViewModels.CommentChatDisplayViewModels
+
+
+@{
+    //foreach (var item in Model.ccvm)
+    for (int i = 0; i <= Model.ccvm.Count()-1 ; i++)
+    {
+        var item = Model.ccvm[i];
+        //var childCount = item.childCount;
+        <div class="row commetrow">
+            @Html.HiddenFor(u => u.ccvm[i].CommentId, new { @class = "commentID" })
+            <div class="col-sm-8">
+                <div class="panel panel-white post panel-shadow">
+                    <div class="post-heading">
+                        <div class="pull-left meta">
+                            <div class="title h5">
+                                <a href="#"><b>@item.CreatedBy</b></a>
+                                made a post.
+                            </div>
+                            <h6 class="text-muted time">@item.CreatedTime</h6>
+                        </div>
+                    </div>
+                    <div class="post-description">
+                        <p>@item.Title</p>
+
+                    </div>
+                    <div class="post-footer">
+                        <div class="input-group">
+                            @Html.TextBoxFor(u => u.ccvm[i].CommentMessage, new { @class = "form-control commentMessage", @placeholder = "Add a comment", maxlength = 2000 })
+                            @Html.ValidationMessageFor(u => u.ccvm[i].CommentMessage)
+                            @*<input class="form-control" placeholder="Add a comment" type="text">*@
+                            <span class="input-group-addon">
+                                <a href="#" class="setComment"><i class="glyphicon glyphicon-edit"></i></a>
+                            </span>
+                        </div>
+
+                        <div class="panel-group">
+                            <div class="panel panel-info">
+                                <div class="panel-heading commentslistpanelheading">
+                                    <h4 class="panel-title">
+
+                                        <a data-bs-toggle="collapse" href="#@item.collapseId"><span class="label">Comments</span> <span class="badge commentsCount">@item.childCount</span> </a>
+                                    </h4>
+                                </div>
+                                <div id="@item.collapseId" class="panel-collapse collapse">
+                                    <div class="panel-body">
+                                        <ul class="comments-list">
+                                            @foreach (var item1 in item.InnerCCVM)
+                                            {
+                                                <li class="comment">
+                                                    <div class="comment-body">
+                                                        <div class="comment-heading">
+                                                            <h4 class="user">@item1.CreatedBy</h4>
+                                                            <h5 class="time">@item1.CreatedTime</h5>
+                                                        </div>
+                                                        <p>@item1.Comment</p>
+                                                    </div>
+                                                </li>
+                                            }
+                                        </ul>
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+                  </div>
+                </div>
+            </div>
+        </div>
+    }
+
+
+}
+
+@*<div class="row">
+    <div class="col-sm-8">
+        <div class="panel panel-white post panel-shadow">
+            <div class="post-heading">
+                <div class="pull-left meta">
+                    <div class="title h5">
+                        <a href="#"><b>Ryan Haywood</b></a>
+                        made a post.
+                    </div>
+                    <h6 class="text-muted time">1 minute ago</h6>
+                </div>
+            </div>
+            <div class="post-description">
+                <p>Bootdey is a gallery of free snippets resources templates and utilities for bootstrap css hmtl js framework. Codes for developers and web designers</p>
+
+            </div>
+            <div class="post-footer">
+                <div class="input-group">
+                    <input class="form-control" placeholder="Add a comment" type="text">
+                    <span class="input-group-addon">
+                        <a href="#"><i class="glyphicon glyphicon-edit"></i></a>
+                    </span>
+                </div>
+
+                <div class="panel-group">
+                    <div class="panel panel-info">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-bs-toggle="collapse" href="#collapse1">Comments (2)</a>
+                            </h4>
+                        </div>
+                        <div id="collapse1" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <ul class="comments-list">
+                                    <li class="comment">
+
+                                        <div class="comment-body">
+                                            <div class="comment-heading">
+                                                <h4 class="user">Gavino Free</h4>
+                                                <h5 class="time">5 minutes ago</h5>
+                                            </div>
+                                            <p>Sure, oooooooooooooooohhhhhhhhhhhhhhhh</p>
+                                        </div>
+
+                                    </li>
+                                    <li class="comment">
+                                        <div class="comment-body">
+                                            <div class="comment-heading">
+                                                <h4 class="user">abc</h4>
+                                                <h5 class="time">6 minutes ago</h5>
+                                            </div>
+                                            <p>DFGFDGF, HJHJYUYUYTU</p>
+                                        </div>
+
+                                    </li>
+                                </ul>
+                            </div>
+                           
+                        </div>
+                    </div>
+                </div>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>*@
+

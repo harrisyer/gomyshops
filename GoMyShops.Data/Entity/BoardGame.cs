@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace MyBGList.Models
+namespace GoMyShops.Data.Entity
 {
     [Table("BoardGames")]
     public class BoardGame

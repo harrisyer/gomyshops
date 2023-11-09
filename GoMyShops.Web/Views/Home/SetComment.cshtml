@@ -1,0 +1,14 @@
+﻿@model List<GoMyShops.Models.ViewModels.CommentChatDetailsViewModels>
+
+@foreach (var item1 in @Model)
+{
+    <li class="comment">
+        <div class="comment-body">
+            <div class="comment-heading">
+                <h4 class="user">@item1.CreatedBy</h4>
+                <h5 class="time">@item1.CreatedTime</h5>
+            </div>
+            <p>@item1.Comment</p>
+        </div>
+    </li>
+}

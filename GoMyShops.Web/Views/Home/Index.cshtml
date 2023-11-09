@@ -1,8 +1,1305 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@using GoMyShops.Models.Helpers;
+@model GoMyShops.Models.ViewModels.IndexViewModel
+
+@section styles
+{
+    <style>
+        .no-padding-bottom {
+            padding-bottom: 0 !important;
+        }
+
+        section {
+            padding: 0px 0;
+        }
+
+            section.dashboard-counts .row {
+                padding: 3px 5px;
+                margin: 0px;
+              
+            }
+
+            section.dashboard-counts .bg-white  {           
+                margin: 3px;
+            }
+
+            section.dashboard-counts .dashboard-no-padding-left {
+                padding-left: 3px;
+            }
+            section.dashboard-counts .dashboard-no-padding-right {
+                padding-right: 0px;
+            }
+
+            .dashboard-remove-all-leftright-padding, .dashboard-remove-all-leftright-padding div {
+                padding-left: 0px !important;
+                padding-right: 0px !important;
+            }
+
+            section.dashboard-counts .dashboard-no-border-right {
+               border-right:none !important;
+            }
+        
+
+        section.dashboard-counts .dashboard-item-title {
+            border-bottom: solid 1px;
+            border-bottom-color: darkgrey;
+        }
+
+            section.dashboard-counts .dashboard-item-title-row-less-padding {
+                /*border-bottom: solid 1px;
+                border-bottom-color: darkgrey;*/
+                padding-left:3px;
+                padding-right:3px;
+            }
+
+        section.dashboard-counts .row.row-bottom-padding {
+            padding-bottom: 15px;
+        }
+
+        section.dashboard-counts .bg-white {
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+            border-top-right-radius: 5px;
+            border-top-left-radius: 5px;
+        }
+
+        section.dashboard-counts .pull-right {
+            padding: 0px 5px 0px 0px;
+        }
+
+        section.dashboard-counts .pull-right-with-top-padding {
+            padding: 20px 5px 0px 0px;
+            float:right;
+        }
+
+        .has-shadow {
+            -webkit-box-shadow: 2px 2px 2px rgba(0,0,0,0.1), -1px 0 2px rgba(0,0,0,0.05);
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.1), -1px 0 2px rgba(0,0,0,0.05);
+        }
+
+        .bg-white {
+            background: #fff !important;
+        }
+
+        section.dashboard-counts div[class*='col-'] .item {
+            border-right: 1px solid #eee;
+            padding: 2px 0;
+            font-size: 8px;
+            text-align: center;
+        }
+
+        section.dashboard-counts .dashboarditem {
+         padding:2px 2px 2px 2px;
+        }
+
+        section.dashboard-counts .padding-right-less {
+            padding-right: 2px;
+            padding-left: 2px;
+        }
+
+        section.dashboard-counts .icon {
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            min-width: 40px;
+            max-width: 40px;
+            border-radius: 50%;
+        }
+
+        .bg-violet {
+            background: #796AEE !important;
+            color: #fff;
+        }
+        section.dashboard-counts .title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #777;
+            margin: 0 2px;
+        }
+
+        section.dashboard-counts .ratio-title {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #777;
+            margin: 0 2px;
+        }
+
+        section.dashboard-counts .number {
+            font-size: 3.0em;
+            font-weight:300;
+            text-align: center;
+        }
+
+        section.dashboard-counts .dashboard-no-circled-padding-left {
+            padding-left: 3px;
+        }
+
+        section.dashboard-counts .number-total {
+            font-size: 1.8em;
+            font-weight: 300;
+            text-align: center;
+        }
+
+        section.dashboard-counts .active-status {
+            color:#4fd50e;
+        }
+
+        section.dashboard-counts .active-status-no {
+            color: #ff0000;
+        }
+
+        section.dashboard-counts .number i {
+            font-size:14px;
+        }
+
+        section.dashboard-counts a {
+            color: #575869;
+        }
+
+        section.dashboard-counts .panel-heading span {     
+            font-size: 11px;
+        }
+
+        section.dashboard-counts .panel-default {
+            margin:3px;
+        }
+
+        section.dashboard-counts .dashboard-transaction {
+            height: 60px;
+            width: 60px;
+            border: 3px solid #4fd50e;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+        }
+
+        section.dashboard-counts .dashboard-transaction-header {
+            border-top:1px solid #777;
+        }
+
+        section.dashboard-counts .dashboard-transaction-no {
+            height: 60px;
+            width: 60px;
+            border: 3px solid #ff0000;
+            border-radius: 50%;
+            -moz-border-radius: 50%;
+            -webkit-border-radius: 50%;
+        }
+
+        section.dashboard-counts .dashboard-transaction-title {
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+
+        section.dashboard-counts .dashboard-transaction-value {
+            font-size: 1.5em;
+            font-weight: bold;
+            /*display: flex;
+            align-items: center;*/
+            padding-top: 10px;
+        }
+
+        section.dashboard-counts .dashboard-transaction-value-centered {
+            font-size: 1.5em;
+            font-weight: bold;
+            /*display: flex;
+            align-items: center;*/
+            padding-top: 10px;
+            margin-left : auto;
+            margin-right : auto;
+        }
+
+        section.dashboard-counts .chart-title-value {
+            color:#4fd50e;
+            font-weight:600;
+        }
+
+        /*morris-bar-chart-transaction-volume-today*/
+        .morris-bar-chart-transaction-volume-today .panel-body {
+            padding:2px;
+        }
+
+        .morris-bar-chart-transaction-no-today .panel-body {
+            padding: 2px;
+        }
+
+        section.dashboard-counts .small-padding {
+            padding:3px 5px 3px 5px;
+        }
+
+        section.dashboard-counts .dashboard-ransaction-valumn .panel-body {
+            padding: 10px;
+        }
+
+        section.dashboard-counts .dashboard-ransaction-valumn li > a {
+            padding: 5px 15px;
+        }
+
+        section.dashboard-counts .dashboard-ransaction-valumn li.active > a {
+            background-color:transparent;
+        }
+
+        section.dashboard-counts .dashboard-ransaction-valumn a:after {
+            display: none !important;
+            /*text-decoration: none;
+            background: none !important;*/
+            content: " ";
+        }
+
+        section.dashboard-counts .dashboard-ransaction-valumn a:before {
+            display: none !important;
+            /*text-decoration: none;
+            background: none !important;*/
+            content: " ";
+        }
+
+
+      
+
+        /* Tabs panel */
+        .tabbable-panel {
+            border: 1px solid #eee;
+            padding: 10px;
+            min-height: 290px;
+        }
+
+        /* Default mode */
+        .tabbable-line > .nav-tabs {
+            border: none;
+            margin: 0px;
+        }
+
+            .tabbable-line > .nav-tabs > li {
+                margin-right: 2px;
+            }
+
+                .tabbable-line > .nav-tabs > li > a {
+                    border: 0;
+                    margin-right: 0;
+                    color: #737373;
+                }
+
+                    .tabbable-line > .nav-tabs > li > a > i {
+                        color: #a6a6a6;
+                    }
+
+                .tabbable-line > .nav-tabs > li.open, .tabbable-line > .nav-tabs > li:hover {
+                    border-bottom: 4px solid #fbcdcf;
+                }
+
+                    .tabbable-line > .nav-tabs > li.open > a, .tabbable-line > .nav-tabs > li:hover > a {
+                        border: 0;
+                        background: none !important;
+                        color: #333333;
+                    }
+
+                        .tabbable-line > .nav-tabs > li.open > a > i, .tabbable-line > .nav-tabs > li:hover > a > i {
+                            color: #a6a6a6;
+                        }
+
+                    .tabbable-line > .nav-tabs > li.open .dropdown-menu, .tabbable-line > .nav-tabs > li:hover .dropdown-menu {
+                        margin-top: 0px;
+                    }
+
+                .tabbable-line > .nav-tabs > li.active {
+                    border-bottom: 4px solid #f3565d;
+                    position: relative;
+                }
+
+                    .tabbable-line > .nav-tabs > li.active > a {
+                        border: 0;
+                        color: #333333;
+                    }
+
+                        .tabbable-line > .nav-tabs > li.active > a > i {
+                            color: #404040;
+                        }
+
+        .tabbable-line > .tab-content {
+            margin-top: -3px;
+            background-color: #fff;
+            border: 0;
+            border-top: 1px solid #eee;
+            padding: 15px 0;
+        }
+
+        .portlet .tabbable-line > .tab-content {
+            padding-bottom: 0;
+        }
+
+        /* Below tabs mode */
+
+        .tabbable-line.tabs-below > .nav-tabs > li {
+            border-top: 4px solid transparent;
+        }
+
+            .tabbable-line.tabs-below > .nav-tabs > li > a {
+                margin-top: 0;
+            }
+
+            .tabbable-line.tabs-below > .nav-tabs > li:hover {
+                border-bottom: 0;
+                border-top: 4px solid #fbcdcf;
+            }
+
+            .tabbable-line.tabs-below > .nav-tabs > li.active {
+                margin-bottom: -2px;
+                border-bottom: 0;
+                border-top: 4px solid #f3565d;
+            }
+
+        .tabbable-line.tabs-below > .tab-content {
+            margin-top: -10px;
+            border-top: 0;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+        }
+
+    </style>
+
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+@{
+    ViewBag.Title = "Home ";
+}
+@section Scripts
+{
+    <script type="text/javascript">
+
+        var modelName = '@ViewContext.RouteData.Values["Controller"].ToString()';
+        CommonVariable.init(modelName);
+
+        var commentChatPageNo = 0;
+
+        //For Merchant and Partner
+        // For AreaChat
+        $(document).on("click", ".AreaChatTypes", function (e) {
+            e.preventDefault();
+            $('.AreaChatTypes').removeClass('selected');
+            $(this).addClass('selected');
+            GetAreaChart();
+        });
+
+        $(document).on("click", ".AreaChat", function (e) {
+            e.preventDefault();
+            var ActionPeriod = $(this).data("keyvalue");
+            var ActionType = $('.AreaChatTypes.selected').data("keyvalue");
+            $('.AreaChat').removeClass('selected');
+            $(this).addClass('selected');
+            GetAreaChart();
+
+        });
+
+        function GetAreaChart() {
+            var ActionPeriod = $('.AreaChat.selected').data("keyvalue");
+            var ActionType = $('.AreaChatTypes.selected').data("keyvalue");
+            $.ajax({
+                type: "POST",
+                url: GetPath(CommonVariable.modelName() + "/GetTransactionAreaChart"),
+                data: ({ ActionType: ActionType, ActionPeriod: ActionPeriod }),
+                success: function (result) {
+
+                    if (result != null) {
+                        //var data = jQuery.parseJSON(result.data);
+                        try {
+                            var data = jQuery.parseJSON(result.data);
+                            if (data != undefined && data != "") {
+                                $("#morris-area-chart").empty();
+                                //$('#SalesAreaChartTitle').text(result.AreaChart);
+                                $('#SalesAreaChartTitle').html(result.SalesAreaChartTimeTitle + '<span class="second-line">' + result.AreaChart + '</span>');
+
+                                if (ActionPeriod == '1') {
+                                    Morris.Line({
+                                        element: 'morris-area-chart',
+                                        data: data,
+                                        xkey: 'xkey',
+                                        ykeys: ['ykeysTransactionSuccess', 'ykeysTransactionFail'],
+                                        labels: ['Success', 'Fail'],
+                                        pointSize: 2,
+                                        hideHover: 'auto',
+                                        resize: true,
+                                        parseTime: false,
+                                        xLabels: 'hour',
+                                        fillOpacity: 0.6,
+                                        behaveLikeLine: true,
+                                        pointFillColors: ['#ffffff'],
+                                        pointStrokeColors: ['black'],
+                                        pointSize: '3px',
+                                        lineColors: ['#0b62a4', '#f41133'],
+                                    });
+                                }
+                                else {
+                                    Morris.Line({
+                                        element: 'morris-area-chart',
+                                        data: data,
+                                        xkey: 'xkeyYMD',
+                                        ykeys: ['ykeysTransactionSuccess', 'ykeysTransactionFail'],
+                                        labels: ['Success', 'Fail'],
+                                        pointSize: 2,
+                                        hideHover: 'auto',
+                                        resize: true,
+                                        fillOpacity: 0.6,
+                                        behaveLikeLine: true,
+                                        pointFillColors: ['#ffffff'],
+                                        pointStrokeColors: ['black'],
+                                        pointSize: '3px',
+                                        lineColors: ['#0b62a4', '#f41133'],
+                                    });
+                                }
+
+                            };
+                        }
+                        catch (err) {
+                            // Do something about the exception here
+                        }
+                        //alert(data);
+
+
+                    }
+                }
+            });
+
+        };
+        //End For AreaChat
+
+        // For DonutChat
+        $(document).on("click", ".DonutChatTypes", function (e) {
+            e.preventDefault();
+            $('.DonutChatTypes').removeClass('selected');
+            $(this).addClass('selected');
+            GetDonutChart();
+        });
+        $(document).on("click", ".DonutChat", function (e) {
+            e.preventDefault();
+            var ActionPeriod = $(this).data("keyvalue");
+            var ActionType = $('.DonutChatTypes.selected').data("keyvalue");
+            $('.DonutChat').removeClass('selected');
+            $(this).addClass('selected');
+            GetDonutChart();
+
+        });
+
+        function GetDonutChart() {
+            var ActionPeriod = $('.DonutChat.selected').data("keyvalue");
+            var ActionType = $('.DonutChatTypes.selected').data("keyvalue");
+            $.ajax({
+                type: "POST",
+                url: GetPath(CommonVariable.modelName() + "/GetPieChart"),
+                data: ({ ActionType: ActionType, ActionPeriod: ActionPeriod }),
+                success: function (result) {
+
+                    if (result != null) {
+                        try {
+                            //var data = jQuery.parseJSON(result.data);
+                            //if (data != undefined) {
+
+
+                            var donut = jQuery.parseJSON(result.donut);
+                            if (donut != undefined && donut != "") {
+                                //$(".donutDiv").empty();
+                                $("#morris-donut-chart").empty();
+                                $('#SalesPieChartTitle').html(result.SalesPieChartTimeTitle + '<span class="second-line">' + result.SalesPieChartTitle + '</span>');
+
+                                var dataSlices = [];
+                                $.each(donut, function (entryindex, entry) {
+                                    dataSlices.push([entry['label'], entry['value']]);
+                                });
+                                //alert(dataSlices);
+                                //var total = 0;
+                                //$(dataSlices).map(function () { total += this[1]; })
+                                myLabels = $.makeArray($(dataSlices).map(function () { return this[1] }));
+                                //myLabels = $.makeArray($(dataSlices).map(function () { return this[1] + " " + Math.round(this[1] / total * 100) + "%"; }));
+
+                                var plot1 = jQuery.jqplot('morris-donut-chart', [dataSlices],
+                                    {
+                                        seriesColors: ["#c90e1f", "#f02839", "#f35865", "#f78891", "#fab7bd", "#fde7e9"],
+                                        seriesDefaults: {
+                                            // Make this a pie chart.
+                                            renderer: jQuery.jqplot.PieRenderer,
+                                            rendererOptions: {
+                                                dataLabels: myLabels,
+                                                sliceMargin: 2,
+                                                //diameter: 100,
+                                                //fill: false,
+                                                // Put data labels on the pie slices.
+                                                // By default, labels show the percentage of the slice.
+                                                showDataLabels: true
+                                            }
+                                        },
+                                        //title: 'Poll Results',
+                                        formatter: function (label, series) {
+                                            return '<div style="font-size:14pt;text-align:center;padding:2px;color:black !important;">' + Math.round(series.percent) + "%<br/>" + series.data[0][1] + '</div>';
+                                        },
+                                        legend: {
+                                            show: true, location: 'e'
+                                        }
+                                    }
+                                );
+
+                                //}
+
+                            };
+                        }
+                        catch (err) {
+                            alert(err);
+                            // Do something about the exception here
+                        }
+                        //alert(data);
+
+
+                    }
+                }
+            });
+
+        };
+        //End For DonutChat
+
+        //For Ticket Size
+        $(document).on("click", ".TicketSize", function (e) {
+            e.preventDefault();
+            var ActionPeriod = $(this).data("keyvalue");
+            var ActionType = '1';
+            $('.TicketSize').removeClass('selected');
+            $(this).addClass('selected');
+            GetTicketSize(ActionPeriod, ActionType);
+
+        });
+
+        function GetTicketSize(ActionPeriod, ActionType) {
+            //var ActionPeriod = $('.DonutChat.selected').data("keyvalue");
+            //var ActionType = $('.DonutChatTypes.selected').data("keyvalue");
+            $.ajax({
+                type: "POST",
+                url: GetPath(CommonVariable.modelName() + "/GetTicketSize"),
+                data: ({ ActionType: ActionType, ActionPeriod: ActionPeriod }),
+                success: function (result) {
+
+                    if (result != null) {
+
+                        $('#TicketSizeTitle').html(result.TicketSizeTimeTitle + '<span class="second-line">' + result.TicketSizeTitle + '</span>');
+
+                        $('#average-ticket-size').text(result.TicketSize);
+                    }
+                }
+            });
+
+        };
+        //End For Ticket Size
+
+        //end For Merchant and Partner
+              
+
+        function PopulateAnnouncementList() {
+            if ($('#AnnoucementType').val() == "1")
+            {
+                $.ajax({
+                    type: "get",
+                    url: GetPath(modelName + "/PopulateAnnouncementList"),
+                    contentType: "application/json",
+                    dataType: "html",
+                    success: function (result) {
+                        if (result != null) {
+                            $(".PreviewAnnouncementContainer").html(result);
+
+                            // if ($("#AnnouncementCount").val() > 0) {
+                            //     var widthmodal = $(window).width() - 300;
+
+                            //     var $confirm = $(".PreviewAnnouncementModal");
+                            //     $confirm.css({                                 
+                            //         overflow: 'auto',
+                            //     });
+                            //     $confirm.modal('show');
+                            // }
+
+                        }//end if
+                    },//end success
+                    error: function (textStatus, errorThrown) {
+                        Success = false;
+                        showAlert("Error!");
+                    }
+                });
+            }
+
+        };
+
+        //$(document).on("click", ".AreaChat", function (e) {
+        //    e.preventDefault();
+
+        //    return false;
+        //});
+
+        $(document).ready(function () {
+
+            //Announcement
+            PopulateAnnouncementList();
+
+
+            //////alert($('#ListUsersType').val());
+            if ($('#ListUsersType').val() == "W" || $('#ListUsersType').val() == "A") {
+                // $(".body-content").removeClass("loginBackground");
+
+                $.ajax({
+                    type: "POST",
+                    url: GetPath(CommonVariable.modelName() + "/GetAdminFirstTimeChart"),
+                    //data: $(this).closest('form').serialize(),
+                    //data: ({ ActionType: '2', ActionPeriod: '1', }),
+                    //dataType: "json",
+                    success: function (result) {
+
+                        if (result != null) {                               
+                            try {
+                                $('.sAdminSalesAreaChartTotalSaleAmountTotalToday').text('RM ' + result.sAdminSalesAreaChartTotalSaleAmountTotalToday);
+                                $('.sAdminSalesAreaChartTotalSaleAmountToday').text('RM ' + result.sAdminSalesAreaChartTotalSaleAmountToday );
+                                $('.sAdminSalesAreaChartTotalSaleCountToday').text( result.sAdminSalesAreaChartTotalSaleCountToday );
+                                $('.sAdminSalesAreaChartTotalSaleAmountThisMonth').text('RM ' + result.sAdminSalesAreaChartTotalSaleAmountThisMonth );
+                                $('.sAdminSalesAreaChartTotalSaleCountThisMonth').text(result.sAdminSalesAreaChartTotalSaleCountThisMonth );
+                                $('.sAdminSalesAreaChartTotalSaleAmountThisYear').text('RM ' + result.sAdminSalesAreaChartTotalSaleAmountThisYear );
+                                $('.sAdminSalesAreaChartTotalSaleCountThisYear').text( result.sAdminSalesAreaChartTotalSaleCountThisYear);
+
+
+                                var data = jQuery.parseJSON(result.data);
+                                if (data != undefined && data != "") {
+                                    //alert(12345);
+                                    Morris.Bar({
+                                        element: 'morris-bar-chart-transaction-volume-today',
+                                        data: data,
+                                        xkey: 'CardType',
+                                        ykeys: ['SuccessAmount', 'PendingAmount', 'DeclinedAmount', 'CanceledAmount'],
+                                        labels: ['Success', 'Pending', 'Declined', 'Canceled'],
+                                        barColors: ["#0B62A4", "#ff8533", "#ff4d4d", "#e6b3b3"],
+                                        hideHover: 'auto',
+                                        resize: true
+                                    });
+                                }
+
+                                var dataNumber = jQuery.parseJSON(result.dataNumber);
+                                if (dataNumber != undefined && dataNumber != "") {
+                                   
+                                    Morris.Bar({
+                                        element: 'morris-bar-chart-transaction-no-today',
+                                        data: dataNumber,
+                                        xkey: 'CardType',
+                                        ykeys: ['SuccessCount', 'PendingCount', 'DeclinedCount', 'CanceledCount'],
+                                        labels: ['Success', 'Pending', 'Declined', 'Canceled'],
+                                        barColors: ["#0B62A4", "#ff8533", "#ff4d4d", "#e6b3b3"],
+                                        hideHover: 'auto',
+                                        resize: true
+                                    });
+                                 
+                                    //$("#tab_default_2").removeClass("active");
+                                   // $('#morris-bar-chart-transaction-no-today1').clone().appendTo('#morris-bar-chart-transaction-no-today');
+                                 }
+                                $("#tab_default_2").removeClass("active");
+
+
+                                var dataArea = jQuery.parseJSON(result.AdminSalesAreaChartJson);
+                                if (dataArea != undefined && dataArea != "") {
+                                    //alert(dataArea);
+                                    Morris.Line({
+                                        element: 'morris-line-chart-sales-valumn',
+                                        data: dataArea,
+                                        xkey: 'xkeyYMD',
+                                        ykeys: ['ykeySales','ykeyNumber'],
+                                        labels: ['Sales','No'],
+                                        xLabelFormat: function (x) { // <--- x.getMonth() returns valid index
+                                            var months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                                            var month = months[x.getMonth()];
+                                            return month;
+                                        },
+                                        //dateFormat: function (x) {
+                                        //    //var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+                                        //    var months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+                                        //    var month = months[new Date(x).getMonth()];
+                                        //    return month;
+                                        //},
+                                        //pointSize: 2,
+                                        hideHover: 'auto',
+                                        resize: true,
+                                        //parseTime: false,
+                                        fillOpacity: 0.6,
+                                        behaveLikeLine: true,
+                                        pointFillColors: ['#ffffff'],
+                                        pointStrokeColors: ['black'],
+                                        pointSize: '3px',
+                                        lineColors: ['#0b62a4','#f41133'],
+                                    });
+
+                                }
+
+                            }
+                            catch (err) {
+                                // Do something about the exception here
+                            }
+                        }
+                    }
+                });
+
+                $(document).on("click", ".popupLink", function (e) {
+                    e.preventDefault();
+                    window.open($(this).attr("href"), '_blank', 'width=300,height=250,scrollbars=1');
+                });
+            }
+            else if ($('#ListUsersType').val() == "C" || $('#ListUsersType').val() == "P") {
+                $(".body-content").removeClass("loginBackground");
+                $('.AreaChat').removeClass('selected');
+                $('.TodayChart').addClass('selected');
+                $('.TypesChart').addClass('selected');
+                $('.DonutTypesChart').addClass('selected');
+                $('.DonutTodayChart').addClass('selected');
+                $('.TicketTodayChart').addClass('selected');
+                //$(".donutDiv").css("height", "300")
+
+                $.ajax({
+                    type: "POST",
+                    url: GetPath(CommonVariable.modelName() + "/GetFirstTimeChart"),
+                    //data: $(this).closest('form').serialize(),
+                    data: ({ ActionType: '2', ActionPeriod: '1', }),
+                    //dataType: "json",
+                    success: function (result) {
+
+                        if (result != null) {
+
+                            $('#SalesAreaChartTitle').html(result.SalesAreaChartTimeTitle + '<span class="second-line">' + result.AreaChart + '</span>');
+                            $('#SalesPieChartTitle').html(result.SalesPieChartTimeTitle + '<span class="second-line">' + result.SalesPieChartTitle + '</span>');
+                            $('#TicketSizeTitle').html(result.TicketSizeTimeTitle + '<span class="second-line">' + result.TicketSizeTitle + '</span>');
+                            $('#average-ticket-size').text(result.TicketSize);
+
+                            try {
+                                var data = jQuery.parseJSON(result.data);
+                                if (data != undefined && data != "") {
+                                    //alert(data);
+                                    Morris.Line({
+                                        element: 'morris-area-chart',
+                                        data: data,
+                                        xkey: 'xkey',
+                                        ykeys: ['ykeysTransactionSuccess', 'ykeysTransactionFail'],
+                                        labels: ['Success', 'Fail'],
+                                        pointSize: 2,
+                                        hideHover: 'auto',
+                                        resize: true,
+                                        parseTime: false,
+                                        fillOpacity: 0.6,
+                                        behaveLikeLine: true,
+                                        pointFillColors: ['#ffffff'],
+                                        pointStrokeColors: ['black'],
+                                        pointSize: '3px',
+                                        lineColors: ['#0b62a4', '#f41133'],
+                                    });
+
+                                }
+
+                                var donut = jQuery.parseJSON(result.donut);
+                                //alert(myLabels);
+                                if (donut != undefined && donut != "") {
+                                    //alert(donut);
+                                    var dataSlices = [];
+                                    $.each(donut, function (entryindex, entry) {
+                                        dataSlices.push([entry['label'], entry['value']]);
+                                    });
+
+                                    var total = 0;
+                                    $(dataSlices).map(function () { total += this[1]; })
+                                    myLabels = $.makeArray($(dataSlices).map(function () { return this[1] }));
+                                    //myLabels = $.makeArray($(dataSlices).map(function () { return this[1] + " " + Math.round(this[1] / total * 100) + "%"; }));
+
+                                    var plot1 = jQuery.jqplot('morris-donut-chart', [dataSlices],
+                                        {
+                                            seriesColors: ["#c90e1f", "#f02839", "#f35865", "#f78891", "#fab7bd", "#fde7e9"],
+                                            seriesDefaults: {
+                                                // Make this a pie chart.
+                                                renderer: jQuery.jqplot.PieRenderer,
+                                                rendererOptions: {
+                                                    dataLabels: myLabels,
+                                                    sliceMargin: 2,
+                                                    //diameter: 100,
+                                                    //fill: false,
+                                                    // Put data labels on the pie slices.
+                                                    // By default, labels show the percentage of the slice.
+                                                    showDataLabels: true
+                                                }
+                                            },
+                                            //title: 'Poll Results',
+                                            formatter: function (label, series) {
+                                                return '<div style="font-size:14pt;text-align:center;padding:2px;color:white;">' + Math.round(series.percent) + "%<br/>" + series.data[0][1] + '</div>';
+                                            },
+                                            legend: {
+                                                show: true,
+                                                //location: 's'
+                                                //location: 'e'
+                                            }
+                                        }
+                                    );
+
+                                    //var bar= Morris.Donut({
+                                    //     element: 'morris-donut-chart111',
+                                    //     data: donut,
+                                    //     //resize: false,
+                                    //});
+                                    //$('.donutDiv').resize(function () { bar.redraw(); });
+
+                                }
+
+                            }
+                            catch (err) {
+                                // Do something about the exception here
+                            }
+                        }
+                    }
+                });
+            }
+            else
+            {
+                // $(".body-content").addClass("loginBackground");
+                // $('.body-content').css('background-size', 'cover');
+            }
+        });
+
+        
+
+        //Morris.Line({
+        //    element: 'morris-line-chart-sales-valumn1',
+        //    data: [
+        //        { m: '2018-01', a: 0 },
+        //        { m: '2018-02', a: 543200 },
+        //        { m: '2018-03', a: 243678 },
+        //        { m: '2018-04', a: 206123 },
+        //        { m: '2018-05', a: 161000 },
+        //        { m: '2018-06', a: 187654 },
+        //        { m: '2018-07', a: 210678 },
+        //        { m: '2018-08', a: 70000 },
+        //        { m: '2018-09', a: 0 },
+        //        { m: '2018-10', a: 0},
+        //        { m: '2018-11', a: 0 },
+        //        { m: '2018-12', a: 0},
+        //    ],            
+        //    xkey: 'm',
+        //    ykeys: ['a'],
+        //    labels: ['2018'],
+        //    xLabelFormat: function (x) { // <--- x.getMonth() returns valid index
+        //        var months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        //        var month = months[new Date(x).getMonth()];                
+        //        return month;
+        //    },
+        //    dateFormat: function (x) {
+        //        var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        //        var month = months[new Date(x).getMonth()];
+        //        return month;
+        //    },
+        //    pointSize: 2,
+        //    hideHover: 'auto',
+        //    resize: true
+        //});
+
+        //////Start Admin Dashboard Handles
+        //Morris.Bar({
+        //    element: 'morris-bar-chart-transaction-volume-today111',
+        //    data:  [{
+        //        "CardType": "FPX",
+        //        "PendingAmount": 233.00,
+        //        "SuccessAmount": 3723.80,
+        //        "DeclinedAmount": 799.00,
+        //        "CanceledAmount": 123.00
+        //    }, {
+        //            "CardType": "Creadit Card",
+        //            "PendingAmount": 78.00,
+        //            "SuccessAmount": 598.00,
+        //            "DeclinedAmount": 601.05,
+        //            "CanceledAmount": 333.00
+        //        }, {
+        //            "CardType": "Creadit Card",
+        //            "PendingAmount": 123.00,
+        //            "SuccessAmount": 666.00,
+        //            "DeclinedAmount": 724.50,
+        //            "CanceledAmount": 222.00
+        //        }],
+        //    //data: [{
+        //    //    y: '2006',
+        //    //    a: 50000,
+        //    //    b: 12300
+        //    //}, {
+        //    //    y: '2007',
+        //    //    a: 65321,
+        //    //    b: 32100
+        //    //}, {
+        //    //    y: '2008',
+        //    //    a: 55555,
+        //    //    b: 8888
+        //    //}, {
+        //    //    y: '2009',
+        //    //    a: 12345,
+        //    //    b: 4000
+        //    //}],
+        //    xkey: 'CardType',
+        //    ykeys: ['SuccessAmount', 'PendingAmount', 'DeclinedAmount', 'CanceledAmount'],
+        //    labels: ['Success', 'Pending', 'Declined', 'Canceled'],
+        //    barColors: ["#0B62A4", "#ff8533", "#ff4d4d", "#e6b3b3"],
+        //    hideHover: 'auto',
+        //    resize: true
+        //});
+
+        //Morris.Bar({
+        //    element: 'morris-bar-chart-transaction-no-today111',
+        //    data: [{
+        //        y: '2006',
+        //        a: 345,
+        //        b: 12
+        //    }, {
+        //        y: '2007',
+        //        a: 768,
+        //        b: 11
+        //    }, {
+        //        y: '2008',
+        //        a: 888,
+        //        b: 22
+        //    }, {
+        //        y: '2009',
+        //        a: 167,
+        //        b: 8
+        //    }],
+        //    xkey: 'y',
+        //    ykeys: ['a', 'b'],
+        //    labels: ['Series A', 'Series B'],
+        //    barColors: ["#0B62A4", "#ff8533"],
+        //    hideHover: 'auto',
+        //    resize: true
+        //});
+        
+        ////End Items Handles
+
+    </script>
+}
+
+@using (Html.BeginForm("Index", @ViewContext.RouteData.Values["Controller"].ToString(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.Raw(Html.CustomValidationSummary(true))
+    @Html.HiddenFor(a => a.ListUsersType)
+    @Html.HiddenFor(a => a.AnnoucementType)
+    @* if (Model.ListUsersType == "W")
+    {
+        <div class="itemAdminDashboardContainer">
+            @Url.Action("AdminDashboard", "Home", Model)        
+        </div>
+
+
+    }
+    else
+    {
+
+        <div class="row">
+            <div class="col-md-2">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <i class="fa fa-dollar fa-2x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="dbMenuTitle">Total Sales<br /><span style="font-size:10px;">Today</span><br /><br /></div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 text-left">
+                                <div class="dbMenuValue">@Model.ActionsMenuTotalPaymentTodayValue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <i class="fa fa-exchange fa-2x" style="font-size:1.8em;"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="dbMenuTitle" style="padding-left: 5px;">Successful<br />Transactions<br /><span style="font-size:10px;">Today</span></div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 text-left">
+                                <div class="dbMenuValue">@Model.ActionsMenuSuccessfulTransactionsTodayValue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="panel panel-warning">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <i class="fa fa-dollar fa-2x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="dbMenuTitle">Total Sales<br /><span style="font-size:10px;">This Month</span><br /><br /></div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 text-left">
+                                <div class="dbMenuValue">@Model.ActionsMenuTotalPaymentCollectedThisMonthValue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="panel panel-danger">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <i class="fa fa-angle-double-left fa-2x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="dbMenuTitle">Previous<br />Settlement<br />Figure</div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 text-left">
+                                <div class="dbMenuValue">@Model.ActionsMenuPreviousSettlementValue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="panel panel-info">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-1">
+                                <i class="fa fa-angle-double-right fa-2x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="dbMenuTitle">Latest<br />Settlement<br />Figure</div>
+
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12 text-left">
+                                <div class="dbMenuValue">@Model.ActionsMenuNextSettlementValue</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+
+                        <i class="fa fa-bar-chart-o fa-fw"></i>
+                        <span id="SalesAreaChartTitle">Transactions Chart for <span class="second-line" id="SalesAreaChartTimeTitle"></span></span>
+
+                        <div class="pull-right">
+                            <div class="dropdown">
+                                <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-bs-toggle="dropdown">
+                                    Sort
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu pull-right ChartUL">
+                                    <li class="dropdown-header">Types</li>
+                                    <li>
+                                        <a href="#" class="AreaChatTypes" data-Keyvalue="1">
+                                            <i class="fa fa-check"></i>
+                                            <span class="search-option">Sales</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="AreaChatTypes TypesChart" data-Keyvalue="2">
+                                            <i class="fa fa-check"></i>
+                                            <span class="search-option">Transactions</span>
+                                        </a>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li class="dropdown-header">Periods</li>
+                                    <li>
+                                        <a href="#" class="AreaChat TodayChart" data-Keyvalue="1">
+                                            <i class="fa fa-check"></i>
+                                            <span class="search-option">Today</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="AreaChat" data-Keyvalue="2">
+                                            <i class="fa fa-check"></i>
+                                            <span class="search-option">This Week</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="AreaChat" data-Keyvalue="3">
+                                            <i class="fa fa-check"></i>
+                                            <span class="search-option">This Month</span>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#" class="AreaChat" data-Keyvalue="4">
+                                            <i class="fa fa-check"></i>
+                                            <span class="search-option">Last Month</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                   
+                    <div class="panel-body">
+                        <div id="morris-area-chart"></div>
+                    </div>
+               
+                </div>
+              
+
+            </div>
+            <div class="col-lg-4">
+                <div class="row donutDiv">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-pie-chart fa-fw"></i> <span id="SalesPieChartTitle"></span>
+                            <div class="pull-right">
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-bs-toggle="dropdown">
+                                        Sort
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right ChartUL">
+                                        <li class="dropdown-header">Types</li>
+                                        <li>
+                                            <a href="#" class="DonutChatTypes" data-Keyvalue="1">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">Sales</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="DonutChatTypes DonutTypesChart" data-Keyvalue="2">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">Transactions</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="DonutChatTypes" data-Keyvalue="3">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">Web Browser</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="DonutChatTypes" data-Keyvalue="4">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">Device Browser</span>
+                                            </a>
+                                        </li>
+                                        <li class="divider"></li>
+                                        <li class="dropdown-header">Periods</li>
+                                        <li>
+                                            <a href="#" class="DonutChat DonutTodayChart" data-Keyvalue="1">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">Today</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="DonutChat" data-Keyvalue="2">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">This Week</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="DonutChat" data-Keyvalue="3">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">This Month</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="DonutChat" data-Keyvalue="4">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">Last Month</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div id="morris-donut-chart"></div>
+                          
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-align-center fa-fw"></i> <span id="TicketSizeTitle"></span>
+                            <div class="pull-right">
+                                <div class="dropdown">
+                                    <button type="button" class="btn btn-primary btn-xs dropdown-toggle" data-bs-toggle="dropdown">
+                                        Sort
+                                        <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu pull-right ChartUL">
+                                        <li class="dropdown-header">Periods</li>
+                                        <li>
+                                            <a href="#" class="TicketSize TicketTodayChart" data-Keyvalue="1">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">Today</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="TicketSize" data-Keyvalue="2">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">This Week</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="TicketSize" data-Keyvalue="3">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">This Month</span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="TicketSize" data-Keyvalue="4">
+                                                <i class="fa fa-check"></i>
+                                                <span class="search-option">Last Month</span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <span id="average-ticket-size"></span>
+                          
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+    }//end if *@
+
+    <div class="col-md-12 modal fade CloseModal PreviewAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="row closeRow">
+                    <button type="button" class="close modalclose" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                </div>
+                <div class="modal-body edit-content PreviewAnnouncementContainer">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+}
+
+
+

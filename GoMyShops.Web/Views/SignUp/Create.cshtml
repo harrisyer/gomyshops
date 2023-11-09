@@ -1,0 +1,89 @@
+﻿@model GoMyShops.Models.ViewModels.SignUpDetailsViewModels
+@using GoMyShops.Models.Helpers;
+
+@{
+    ViewBag.Title = "Sign Up";
+}
+@section Scripts
+{
+<script type="text/javascript">
+         var modelName = '@ViewContext.RouteData.Values["Controller"].ToString()';
+        CommonVariable.init(modelName);
+
+        // $(document).ready(function () {
+        //     $(".body-content").addClass("loginBackground");
+        //     $('.body-content').css('background-size', 'cover');
+        // });
+
+        $(document).on("click", ".itemSaveSignUp", function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: GetPath(CommonVariable.modelName() + "/Create"),
+                data: $(this).closest('form').serialize(),
+                dataType: "html",
+                success: function (result) {
+                },
+                error: function (xhr, status, error) {
+                    //alert(xhr.responseText);
+                    Success = false;
+                }
+            }).done(function (data) {
+                if (!isNull(data)) {
+                    $('.itemCreateContainer').html(data);
+                    if ($('#IsSignUpSuccess').val() === "True") {
+                        window.location.href = '@Url.Action("Login", "Account",new {type="7" })';
+                        return false;
+                    }
+                    //grecaptcha.reset();
+                    grecaptcha.render('captchadiv');
+                    //$('.itemDetailsContainer').hide();
+                    //$('.itemEditContainer').hide();
+                    //$('.itemCreateContainer').show();
+                    //$('.itemsListingContainer').hide();
+                    if (!isNull(data.Errors)) {
+                        $('.itemCreateValidationMessageContainer').html(data.Errors);
+                    }
+                    if (!isNull(data.Success)) {
+                        $('.itemCreateMessageContainer').html(data.Success);
+                    }
+                    ShowAlertsMessage('.itemCreateMessageContainer', true);
+
+                    validationPartialView('.itemCreateContainer');
+
+                }
+            });
+            return false;
+        });
+
+</script>
+}
+
+    <section id="loginForm" class="text-center invalidpassword">
+        @using (Html.BeginForm("Create", "SignUp", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.Raw(Html.CustomValidationSummary(true))
+            <div class="LoginContainer SignUpContainer">
+                <div class="row">
+                <div class="col-md-12">
+                    <div class="card border-primary mb-3 text-center">
+                        <div class="card-header">Sign Up</div>
+                        <div class="card-body">
+                            <div class="container-fluid">
+                                <div class="itemCreateContainer">
+                                    @{
+                                        @await Component.InvokeAsync(nameof(GoMyShops.Web.Components.PopulateCreate))
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted text-center">
+                            
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        }
+    </section>

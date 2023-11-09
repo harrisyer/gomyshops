@@ -1,14 +1,16 @@
 ﻿using CsvHelper;
 using CsvHelper.Configuration;
 using GoMyShops.Data;
+using GoMyShops.Data.Entity;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using MyBGList.Constants;
+using GoMyShops.Commons;
 using MyBGList.Models;
 using MyBGList.Models.Csv;
 using System.Globalization;
+using GoMyShops.Models;
 
 namespace MyBGList.Controllers
 {
@@ -25,14 +27,14 @@ namespace MyBGList.Controllers
 
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        private readonly UserManager<ApiUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
 
         public SeedController(
             DataContext context,
             IWebHostEnvironment env,
             ILogger<SeedController> logger,
             RoleManager<IdentityRole> roleManager,
-            UserManager<ApiUser> userManager)
+            UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _env = env;

@@ -1,0 +1,125 @@
+﻿@model GoMyShops.Models.ViewModels.SignUpDetailsViewModels
+@using GoMyShops.Models.Helpers;
+<div class="panel panel-default">
+    <div class="panel-heading">Update Sign Up Profile</div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            @Html.Raw(Html.CustomValidationSummary(true))
+            <div class="row">
+                <div class="col-sm-12">
+                    @Html.HiddenFor(a => a.SignUpName)
+                    @Html.HiddenFor(a => a.EditJson)
+
+                    <div class="row">
+                        <div class="col-md-4 FormLableTitle">@Html.DisplayNameFor(model => model.SignUpName)</div>
+                        <div class="col-md-4">
+                            @Html.DisplayFor(model => model.SignUpName, new { @class = "form-control" })
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-4 FormLableTitle">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    @Html.DisplayNameFor(model => model.CompanyName)
+                                </div>
+                                <div class="col-md-3">
+                                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(u => u.CompanyName, new { @class = "form-control", maxlength = 100 })
+                            @Html.ValidationMessageFor(m => m.CompanyName)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 FormLableTitle">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    @Html.DisplayNameFor(model => model.CompanyRegistrationNumber)
+                                </div>
+                                <div class="col-md-3">
+                                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(u => u.CompanyRegistrationNumber, new { @class = "form-control", maxlength = 100 })
+                            @Html.ValidationMessageFor(m => m.CompanyRegistrationNumber)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 FormLableTitle">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    @Html.DisplayNameFor(model => model.Email)
+                                </div>
+                                <div class="col-md-3">
+                                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(u => u.Email, new { @class = "form-control", maxlength = 50 })
+                            @Html.ValidationMessageFor(m => m.Email)
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 FormLableTitle">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    @Html.DisplayNameFor(model => model.ContactNo)
+                                </div>
+                                <div class="col-md-3">
+                                     <i class="far fa-asterisk fa-sm faRequired"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            @Html.TextBoxFor(u => u.ContactNo, new { @class = "form-control", placeholder = "Malaysia Mobile : 60xxxxxxxxx", maxlength = 20 })
+                            @Html.ValidationMessageFor(m => m.ContactNo)
+                        </div>
+                    </div>
+
+                    @if (Model.CurrentUser.UserType != "O")
+                    {
+                        <div class="row">
+                            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.CheckBoxStatus)</div>
+                            <div class="col-md-4">
+                                @Html.EditorFor(model => model.CheckBoxStatus, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Active", data_off = "<i class='fa fa-times'></i> Inactive" } })
+                            </div>
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+
+        <div class="container-fluid itemEditFooter">
+            <div class="row">
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemPress itemEditSave" data-editjson="@Model.EditJson">
+                        <i class="fa-light fa-floppy-disk"></i>
+                        Save
+                    </button>
+                </div>
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemBackRefresh">
+                        <i class="fa fa-reply-all"></i>
+                        Back
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="itemEditValidationMessageContainer ValidationMessageContainer"></div>
+                <div class="itemEditMessageContainer DetailMessageContainer"></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+

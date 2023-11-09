@@ -2,6 +2,7 @@
 using GoMyShops.Data;
 using GoMyShops.Data.Entity;
 using GoMyShops.Models;
+using GoMyShops.Models.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.EntityFrameworkCore;

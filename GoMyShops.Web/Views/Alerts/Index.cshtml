@@ -1,0 +1,51 @@
+﻿
+@{
+    ViewBag.Title = "MVC Bootstrap Alerts";
+}
+
+<h2>Alerts</h2>
+
+<input id="btnAlerts" type="button" value="JavaScript Alerts" class="btn btn-primary" />
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $(function () {
+
+            $("#btnAlerts").on("click", function () {
+                showBoostrapAlert("From Javascript - Success ", "success", true, false, false);
+                showBoostrapAlert("From Javascript - Danger ", "danger", true, false, false);
+                showBoostrapAlert("From Javascript - Info ", "info", true, false, false);
+                showBoostrapAlert("From Javascript - Warning ", "warning", true, false, false);
+            });
+
+            //Show Alert on top
+            function showBoostrapAlert(message, style, dismissable, empty, autoclose) {
+
+                if (empty)
+                    $("#AlertPartial").empty();
+
+                var html = "";
+                var dismissableClass = dismissable ? "alert-dismissable" : null;
+                var autoDisappearClass = autoclose ? "alert-disappear" : null;
+                html = "<div class='alert alert-" + style + " " + dismissableClass + " " + autoDisappearClass + "' >";
+
+
+         
+                if (dismissable) {
+                    html = html + "<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-hidden=\"true\">&times;</button>";
+
+        
+                }
+                html = html + message + "</div>";
+                $("#AlertPartial").append(html);
+                $("#AlertPartial").show();
+
+          
+                $(".alert-disappear").delay(8000).fadeOut(300);
+
+            };
+        });
+    </script>
+}

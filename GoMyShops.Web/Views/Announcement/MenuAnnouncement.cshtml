@@ -1,0 +1,145 @@
+﻿@model GoMyShops.Models.ViewModels.AnnouncementDisplayViewModels
+
+@section Scripts
+{
+    <script src="~/Scripts/Jquery/jquery-sortable.js"></script>
+    <script src="~/Scripts/RubaXa/Sortable.js"></script>
+    <script type="text/javascript">
+          var modelName = '@ViewContext.RouteData.Values["Controller"].ToString()';
+          CommonVariable.init(modelName);
+
+        $(document).on("click", ".itemPreviewAnnouncement", function (e) {
+            e.preventDefault();           
+            PopulateAnnouncementList($(this).data("annountcementid"));
+            return false;
+        })
+
+        function PopulateAnnouncementList(annountcementid) {
+            $.ajax({
+                type: "get",
+                url: GetPath(modelName + "/PopulateAnnouncementList"),
+                data: ({ AnnountcementId: annountcementid}),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (result) {
+                    if (result != null) {
+                        $(".PreviewAnnouncementContainer").html(result);
+
+                        if ($("#AnnouncementCount").val() > 0) {
+                            var widthmodal = $(window).width() - 300;
+
+                            var $confirm = $(".PreviewAnnouncementModal");
+                            $confirm.css({
+                                //width: (widthmodal),
+                                //top: (50),
+                                //left: ($(window).width() - widthmodal) / 2,
+                                overflow: 'auto',
+                            });
+                            $confirm.modal('show');
+                        }
+
+                    }//end if
+                },//end success
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                    showAlert("Error!");
+                }
+            });
+        };
+
+
+       
+
+    </script>
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">Announcements Lists</div>
+    <div class="panel-body">
+        @if (Model.advm != null)
+        {
+            for (int i = 0; i <= Model.advm.Count() - 1; i++)
+            {
+                var item = Model.advm[i];
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="news-title">
+                                    <h2 class=" title-small"><a href="#" class="itemPreviewAnnouncement" data-annountcementid="@item.ID">@item.Title</a></h2>
+                                </div>
+                                <p class="card-text"><small class="text-time"><em>@Html.Raw(@item.Message)</em></small></p>
+                                @*@Html.Raw(@item.Message)*@
+                            </div>
+                        </div>
+                    </div>
+
+                    @{
+                        int model2Count = Model.advm2.Count();
+                        if (model2Count - 1 >= i)
+                        {
+                            var item2 = Model.advm2[i];
+                            //if (item2 != null)
+                            //{
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="news-title">
+                                            <h2 class=" title-small"><a href="#" class="itemPreviewAnnouncement" data-annountcementid="@item2.ID">@item2.Title</a></h2>
+                                        </div>
+                                        <p class="card-text"><small class="text-time"><em>@Html.Raw(@item2.Message)</em></small></p>
+                                        @*@Html.Raw(@item.Message)*@
+                                    </div>
+                                </div>
+                            </div>
+                            //}
+                        }
+                    }
+                </div>
+
+            }
+        }
+
+                <div class="row">
+                    <div class="col-md-12 modal fade CloseModal PreviewAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="row closeRow">
+                                    <button type="button" class="close modalclose" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body edit-content PreviewAnnouncementContainer">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @*<div class="col-md-12 modal fade CloseModal PreviewAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="row closeRow">
+                        <button type="button" class="close modalclose" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    </div>
+                    <div class="modal-body edit-content">
+                        <div class="carousel slide carousel-fullscreen carousel-fade" data-interval="false" data-ride="carousel">
+                            <div class="carousel-inner" role="listbox">
+                                <div class="item active">
+                                    <div class="overlay"></div>
+                                    <div class="carousel-caption">
+                                        <div class="carousel-caption-inner PreviewAnnouncementContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+
+
+                </div>
+
+    </div>
+</div>
+

@@ -1,49 +1,846 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+﻿@using Microsoft.AspNetCore.Identity
+@using GoMyShops.Models.Helpers;
+@using GoMyShops.Models;
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<!DOCTYPE html>
+<html>
 <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - GoMyShops.Web</title>
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/GoMyShops.Web.styles.css" asp-append-version="true" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title Go My Shops</title>
+  
+    <!--bootstrap main css from bootwatch --></>
+    <link href="~/lib/bootstrap/css/bootwatch_flatly.css" rel="stylesheet" />  
+    
+    <!--font-awesome css --></>
+    <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+ 
+    <link href="~/css/boostrap/bootstrap-treeview.css" rel="stylesheet" />
+  
+    <!--bootstrap-table css --></>
+    <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.min.css" rel="stylesheet" />
+  
+    <!-- DateTime Picker css -->
+    <link href="~/css/tempusdominus/tempus-dominus.css" rel="stylesheet" />
+   
+    <link href="~/css/boostrap/bootstrap-select.css" rel="stylesheet" />
+  
+    <!--bootstrap-toggle css --></>
+    <link href="~/lib/bootstrap-toggle/bootstrap5-toggle.min.css" rel="stylesheet" />
+
+    <!--bootstrap-sidebar css --></>
+    <link href="~/css/boostrap/bootstrap-sidebar.css" rel="stylesheet" />
+
+    <!--summernote css --></>
+    <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+
+     @* <link href="~/css/boostrap/bootstrap-table-fixed-columns.css" rel="stylesheet" />  *@
+  
+   
+    <link href="~/css/metismenu.css" rel="stylesheet" />
+    <link href="~/css/sb-admin-2.css" rel="stylesheet" />
+    <link href="~/css/morris.css" rel="stylesheet" />
+    <link href="~/css/jqplot/jquery.jqplot.css" rel="stylesheet" />
+
+    <!--custom and site css --></>
+    <link href="~/css/bootstrap.custom.css" rel="stylesheet" />
+    <link href="~/css/fontawesomecustoms.css" rel="stylesheet" />
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/cssbootstrapformhelpers.css" rel="stylesheet" />
+
+
+     <style>
+        #sidebar-nav {
+            width: 200px;
+        }
+    </style>
+  
+    <script src='https://www.google.com/recaptcha/api.js'></script>
+    <script>
+
+
+    </script>
+
 </head>
+
 <body>
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-            <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">GoMyShops.Web</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-                        </li>
-                    </ul>
+    <div class="bg">
+        <header class="bodyheader">
+            <nav class="navbar navbar-expand-lg bg-primary" >
+                <div class="container-fluid">     
+                    
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <div class="collapse navbar-collapse flex-grow-0">
+                            @Html.ActionLink("GoShops", "Index", "Home", new { area = "" }, new { @class = "navbar-brand gomyshopsLogo" })
+                            <input id="IsMenu" type="checkbox" checked data-toggle="toggle" data-size="sm" data-onlabel="Menu On" data-offlabel="Menu Off">
+                        </div>
+                              
+                        
+                                           
+                   
+                        @* <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
+                            <i class="fa-solid fa-align-left"></i>                        
+                        </button> *@
+                    }
+                    else
+                    {
+                        @Html.ActionLink("GoShops", "Login", "Account", new { area = "" }, new { @class = "navbar-brand gomyshopsLogo" })
+                    }
+
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse flex-grow-0" id="navbarSupportedContent">
+                        <ul class="navbar-nav text-right">
+                            <li class="nav-item active">
+                                <div class="navbar-collapse collapse">
+                                    <partial name="_LoginPartial" />
+                                </div>
+                            </li>
+
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <div class="wrapper">
+            <div id="sidebar" class="collapse collapse-horizontal show">
+                <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+                   @*  @if (User.Identity.IsAuthenticated)
+                    { *@
+                        <nav id="sidebar" class="">
+                            @await Component.InvokeAsync(nameof(GoMyShops.Web.Components.MenuList))
+                        </nav>
+                  @*   } *@
                 </div>
             </div>
-        </nav>
-    </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
+            <div id="content">
+                <div class="container body-content">
+                    <partial name="_BootstrapDialog" />
+                    <div class="body-content-details">
+                        <div id="spinner">
+                        </div>
+                        @RenderBody()
+                    </div>
+                </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2023 - GoMyShops.Web - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            </div>
+
+            <footer class="footer d-flex flex-wrap bg-primary mt-auto justify-content-between align-items-center  ">
+                <div class="col-md-4 d-flex align-items-center">
+                    <p class="text-light bg-primary mb-3 mb-md-0">&copy; @DateTime.Now.Year - Go My Shops - Version @ViewContext.GetType().Assembly.GetName().Version</p>
+                </div>
+            </footer>
+
         </div>
-    </footer>
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="~/js/site.js" asp-append-version="true"></script>
-    @await RenderSectionAsync("Scripts", required: false)
+
+        @* <div class="container-fluid">
+            <div class="row flex-nowrap">
+                <div class="col-auto px-0">
+                    <div id="sidebar" class="collapse collapse-horizontal show border-end">
+                        <div id="sidebar-nav" class="list-group border-0 rounded-0 text-sm-start min-vh-100">
+                            @if (User.Identity.IsAuthenticated)
+                            {                               
+                                <nav id="sidebar" class="">
+                                    @await Component.InvokeAsync(nameof(GoMyShops.Web.Components.MenuList))
+                                </nav>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <main class="col ps-md-2 pt-2">
+                 
+                    <div class="bg-image d-flex justify-content-center align-items-center loginBackground flex-column min-vh-100">
+                        <partial name="_BootstrapDialog" />
+
+                        <div id="spinner">
+                        </div>
+                        @RenderBody()
+                    </div>                   
+                </main>
+            </div>
+        </div> *@
+    </div>
+  
+
+    <!-- Popperjs -->
+    <script src="~/js/popper.min.js"></script>
+    <!-- Popperjs -->
+   @*  <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+ *@
+
+    <!--jquery js --></>
+    <script src="~/lib/jquery/dist/jquery.js"></script>
+
+    <!--bootstrap-table js --></>
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+
+    <!--momentwithlocales js for easy write related to datetime --></>
+    <script src="~/js/momentwithlocales.min.js"></script>
+
+    <!-- DateTime Picker -->
+    <script src="~/js/tempusdominus/tempus-dominus.min.js"></script>
+    <script src="~/js/tempusdominus/jquery-provider.min.js"></script>
+
+       
+    <script src="~/js/lib/jspdf.js"></script>
+    <script src="~/js/lib/from_html.js"></script>
+    <script src="~/js/lib/split_text_to_size.js"></script>
+    <script src="~/js/lib/standard_fonts_metrics.js"></script>
+    <script src="~/js/lib/html2canvas.js"></script>
+  
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>   
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
+    <script src="~/js/modernizr.js"></script>
+
+
+    <script src="~/js/boostrap/bootstrap-treeview.js"></script>
+   @*  <script src="~/js/boostrap/bootstrap-datetimepicker.js"></script> *@
+    <script src="~/js/boostrap/bootstrap-select.js"></script> 
+    
+    <!--bootstrap-toggle js --></>
+    <script src="~/lib/bootstrap-toggle/bootstrap5-toggle.jquery.min.js"></script>
+
+    <!--bootstrap-tables js --></>
+    <script src="~/lib/bootstrap-table/bootstrap-table.min.js" type="module"></script>
+    <script src="~/lib/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js" type="module"></script>
+    <script src="~/lib/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.min.js" type="module"></script>
+    <script src="~/lib/bootstrap-table/extensions/export/bootstrap-table-export.min.js" type="module"></script>
+    <script src="~/lib/bootstrap-table/extensions/cookie/bootstrap-table-cookie.min.js" type="module"></script>
+    <script src="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.js" type="module"></script>
+    <script src="~/lib/bootstrap-table/tableexport.js"></script>
+  
+   @*  <script src="~/js/boostrap/bootstrap-table-fixed-columns.js"></script>
+    <script src="~/js/boostrap/summernote.js"></script>
+    <script src="~/js/respond.js"></script> *@
+    @* <script src="~/js/summernote.min.js"></script> *@
+
+    <!-- Summernote JS -->
+    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
+
+    <script src="~/js/bootstrapformhelpers/bootstrap-formhelpers.js"></script>  
+    <script src="~/js/bootstrapformhelpers/bootstrap-formhelpers-languages.js"></script>
+    <script src="~/js/bootstrapformhelpers/bootstrap-formhelpers-selectbox.js"></script>
+
+    <!--customs js --></>
+    <script src="~/js/bodycommonfunctions.js"></script>
+    <script src="~/js/bodycustoms.js"></script>
+   
+   
+    <script type="text/javascript">
+        $(document).ajaxStart(function () {
+            $("#spinner").show();
+        }).ajaxStop(function () {
+            $("#spinner").hide();
+        });
+
+        // $(".LoginContainer").center();
+        $(".LoginContainer").css('z-index', 3001);
+
+        //Disable Selection on Web
+        function disableselect(e) {
+            return false;
+        }
+        function reEnable() {
+            return true;
+        }
+
+        function isNull(data) {
+            //var data = this;
+            if (data === null || data === undefined) {
+                return true;
+            }
+            return false;
+        } 
+
+        //Set Enter Key as Save Button
+        //(function ($) {
+        //    $.fn.onEnter = function (func) {
+        //        this.bind('keypress', function (e) {
+        //            if (e.keyCode === 13)
+        //            {
+        //                e.preventDefault();
+
+        //            }
+        //        });
+        //        return this;
+        //    };
+
+
+        //    $("input").onEnter(function () {
+        //        alert("Enter key pressed");
+        //    });
+
+
+        //})(jQuery);
+
+        $(document).on('keypress', function (e) {
+            //var tag = e.target.tagName.toLowerCase();
+            //if (jQuery(e.target).is('input, textarea, select'))
+            if (e.keyCode === 13)
+            {
+                e.preventDefault();
+                $('.itemPress:visible').click();                
+                //alert("Enter key pressed");
+                //return false;
+            }
+        });
+
+
+        //document.onselectstart = new Function("return false");
+
+        $(document).on('selectstart', function (evt) {
+            var $target = $(evt.target).closest(".textareaEditor")
+
+            if ($target.hasClass("textareaEditor")) {
+                //
+            }
+            else
+            {
+                evt.preventDefault();
+                return false;
+                //alert($target.attr('class'));
+            }
+        });
+
+        //if (window.sidebar) {
+        //    document.onmousedown = disableselect                    // for mozilla
+        //    document.onclick = reEnable
+        //}
+
+
+       //document.oncontextmenu = new Function("return false")
+        //End Disable Selection on Web
+
+        $(document).on("click", "#sidebar a", function (e) {
+            //e.preventDefault();
+            var ulr = $(this).attr("href");
+            //alert(ulr);
+            if (ulr.indexOf('/') == -1) {
+                sessionStorage.setItem("menuurl", null);
+                sessionStorage.setItem("menuUL", ulr);
+
+                // will not be triggered because str has _..
+            }
+            else {
+                sessionStorage.setItem("menuurl", ulr);
+                //sessionStorage.setItem("menuUL", ulr);
+            }
+            //sessionStorage.setItem("menuurl", ulr);
+            //var yetVisited = sessionStorage.getItem("menuurl");;
+            //alert(yetVisited);
+            //return true;
+        });
+
+        $('.itemLoginPage').on('click', function (e) {
+            e.preventDefault();
+            window.location.href = '@Url.Action("Login", "Account")';
+        });
+
+        $(document).ready(function () {
+
+            //hightlight text on input
+            //$('.hightlightText').focus().select();
+            $(document).on("focus", "input", function (e) {
+            //$('input').on('focus', function () {
+                var $this = $(this)
+                    .one('mouseup.mouseupSelect', function () {
+                        $this.select();
+                        return false;
+                    })
+                    .one('mousedown', function () {
+                        // compensate for untriggered 'mouseup' caused by focus via tab
+                        $this.off('mouseup.mouseupSelect');
+                    })
+                    .select();
+            });
+            //
+
+
+            $('form').find(':submit').removeAttr("disabled");
+
+            $('form').submit(function () {
+                if ($(this).valid()) {
+                    $(this).find(':submit').attr('disabled', 'disabled');
+                }
+            });
+
+            //add __RequestVerificationToken to header
+            $.ajaxSetup({
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("__RequestVerificationToken", $('input[name="__RequestVerificationToken"]').val());         
+                }
+            });
+
+           
+
+            $('#txtSearchProdAssign').keypress(function (e) {
+                var key = e.which;
+                if (key == 13)  // the enter key code
+                {
+                    $('input[name = butAssignProd]').click();
+                    return false;
+                }
+            });   
+
+
+
+            ////Disable changeEmail for merchants and Partner
+            //$.ajax({
+            //    type: "POST",
+            //    url: GetPath("User/CheckChangeEmailRight"),
+            //    //data: (),
+            //    dataType: "json",
+            //    success: function (result) {
+            //        if (result != null) {
+            //            if (result.DisableEmail == '0') {
+            //                $('.menuResetEmail').hide();
+            //            }
+            //        }
+            //    }
+            //});
+
+
+
+            //$('.body-content').css('background-image', 'none');
+            // $(".body-content").removeClass("loginBackground");
+
+            @*//For Different Console.
+            $(".navbar-inverse").css("background-color", "#c41320");
+            $(".navbar-inverse").css("border-color", "#c41320");
+            $(".btn-info").css("background-color", "#a7101b");
+            $(".btn-info").css("border-color", "#a7101b");
+            var UserType ='@TempData["UserType"]';
+            if (UserType != null && UserType !='' )
+            {
+                //alert(UserType);
+                if(UserType=="P")
+                {
+                    $(".navbar-inverse").css("background-color", "#dd5600");
+                    $(".navbar-inverse").css("border-color", "#dd5600");
+                    $(".btn-info").css("background-color", "#cc5200");
+                    $(".btn-info").css("border-color", "#cc5200");
+                }
+                else if (UserType=="C")
+                {
+                    $(".navbar-inverse").css("background-color", "#033c73");
+                    $(".navbar-inverse").css("border-color", "#033c73");
+                    $(".btn-info").css("background-color", "#001b60");
+                    $(".btn-info").css("border-color", "#001b60");
+                }
+            }//end if*@
+
+            //
+                $('#IsMenu').bootstrapToggle();
+            $('#IsMenu').on('change', function () {
+                if ($("#IsMenu").prop('checked') == true) {
+                    $('#sidebar').show();                  
+                }
+                else {
+                    $('#sidebar').hide();             
+                }
+            });
+
+           
+
+            // $('#sidebarCollapse').on('click', function () {
+            //     $('#sidebar').toggleClass('active');
+            // });
+
+            var url = '';
+            var UL = sessionStorage.getItem("menuUL");
+            //alert(UL);
+            if (UL == null) {
+                var aa;
+            }
+            else
+            {
+                var showDiv = sessionStorage.getItem("menuUL");
+                if (showDiv != null) {
+                    $('#sidebar a').each(function () {
+                        var myHref = $(this).attr('href');
+                        //alert(myHref);
+                        if (showDiv.match(myHref)) {
+                            var a$ = $(this).next();
+                            //alert(a$.attr('id'));
+                            a$.addClass("in");
+                            var parentUL$ = a$.parents('ul');//.get(0).closest('ul');
+
+                            if (parentUL$ != null) {
+                                parentUL$.addClass("in");
+                                var parentUL2$ = parentUL$.parents('ul');
+                                if (parentUL2$ != null) {
+                                    parentUL2$.addClass("in");
+                                }
+                            }
+                            return false;
+                        }
+                    });
+                    //$("#" + nameOfDiv).addClass("in");                      // The div to show
+                    //$("#" + nameOfHeader).removeClass("collapsed");         // The header to stylize as expanded
+                }
+
+
+            }
+
+            var checkCloseX = 0;
+            $(document).mousemove(function (e) {
+                if (e.pageY <= 5) {
+                    checkCloseX = 1;
+                }
+                else { checkCloseX = 0; }
+            });
+
+            //window.addEventListener('unload', function (event) {
+            //    $.ajax({
+            //        type: "GET",
+            //        url: GetPath("Account/SetAuditHeaderTimeOut"),
+            //        //data: (),
+            //        dataType: "json",
+            //        success: function (result) {
+            //            if (result != null) {
+            //            }
+            //        }
+            //    });
+            //});
+
+            window.onbeforeunload = function (event) {
+                if (event) {
+
+                    if (checkCloseX == 1) {
+
+                        //alert('1111');
+                        $.ajax({
+                            type: "GET",
+                            url: GetPath("Account/SetAuditHeaderTimeOut"),
+                            //data: (),
+                            dataType: "json",
+                            success: function (result) {
+                                if (result != null) {
+                                }
+                            }
+                        });
+                    }
+                }
+            };
+
+            $('#body').on('click', '.modal-link', function (e) {
+                e.preventDefault();
+                //var $confirm = $("#listing-modal");
+                //$confirm.modal('show');
+
+                $(this).attr('data-bs-target', '#listing-modal');
+                $(this).attr('data-bs-toggle', 'modal');
+
+            });
+
+            $('#body').on('click', '.modaldetails-link', function (e) {
+                e.preventDefault();
+                //var $confirm = $("#listing-modal");
+                //$confirm.modal('show');
+
+                $(this).attr('data-bs-target', '#audit-modal');
+                $(this).attr('data-bs-toggle', 'modal');
+
+            });
+
+
+            //$('#body').on('click', '.modal-close-btn', function (e) {
+            //    $('#listing-modal').modal('hide');
+            //});
+
+            //$('#body').on('hidden.bs.modal', '.modal', function () {
+            //    $(this).removeData('bs.modal');
+            //});
+
+            $('body').on('click', '.modal-close-btn', function (e) {
+                //$('#listing-modal').modal('hide');
+                $(this).removeData('bs.modal');
+            });
+
+            $('body').on('hidden.bs.modal', '.modal', function () {
+                $(this).removeData('bs.modal');
+            });
+
+            $('#listing-modal').on('hidden', function () {
+                $(this).data('modal', null);
+                $(this).modal().hide();
+            });
+
+            $('#ok-modal').on('hidden', function () {
+                $(this).data('modal', null);
+                $(this).modal().hide();
+            });
+
+            $('#info-modal').on('hidden', function () {
+                $(this).data('modal', null);
+                $(this).modal().hide();
+            });
+
+        });
+
+        function GetPath(url) {
+            return '@Url.Content("~/")' + url;
+        }
+
+        $(document).on('click', '.panel-heading span.clickable', function (e) {
+            var $this = $(this);
+            if (!$this.hasClass('panel-collapsed')) {
+                $this.parents('.panel').find('.panel-body').slideUp();
+                $this.addClass('panel-collapsed');
+                $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+            } else {
+                $this.parents('.panel').find('.panel-body').slideDown();
+                $this.removeClass('panel-collapsed');
+                $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+            }
+        })
+
+        $(document).on("click", ".menuCommentPost", function (e) {
+
+            $.ajax({
+                type: "GET",
+                url: GetPath("CommentChat/CreateTitle"),
+                //data: ,
+                dataType: "html",
+                success: function (result) {
+                },
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                }
+            }).done(function (data) {
+                if (data != null) {
+                    $('.body-content-details').html(data);
+                    var form = $('.itemCommentChatTitleSave').closest("form");
+                    $(form).removeData("validator");
+                    $(form).removeData("unobtrusiveValidation");
+                    $.validator.unobtrusive.parse(form);
+                    ShowAlertsMessage();
+                }
+            });
+        });
+
+        $(document).on("click", ".itemCommentChatTitleSave", function (e) {
+            $.ajax({
+                type: "POST",
+                url: GetPath("CommentChat/CreateTitle"),
+                data: $(this).closest('form').serialize(),
+                dataType: "html",
+                success: function (result) {
+                },
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                }
+            }).done(function (data) {
+                if (data != null) {
+
+                    ShowAlertsMessage();
+                }
+            });
+        });
+
+        $(document).on("click", ".menuAnnouncement", function (e) {
+            window.location.href = '@Url.Action("MenuAnnouncement", "Announcement")';
+            //$.ajax({
+            //    type: "GET",
+            //    url: GetPath("Announcement/MenuAnnouncement"),
+            //    //data: ,
+            //    dataType: "html",
+            //    success: function (result) {
+            //    },
+            //    error: function (textStatus, errorThrown) {
+            //        Success = false;
+            //    }
+            //}).done(function (data) {
+            //    if (data != null) {
+            //        $('.body-content-details').html(data);
+            //        //var form = $('.itemCommentChatTitleSave').closest("form");
+            //        //$(form).removeData("validator");
+            //        //$(form).removeData("unobtrusiveValidation");
+            //        //$.validator.unobtrusive.parse(form);
+            //        ShowAlertsMessage();
+            //    }
+            //});
+        });
+
+        $(document).on("click", ".menuResetPassword", function (e) {
+            window.location.href = '@Url.Action("MenuResetPassword", "Account")';
+
+            //$.ajax({
+            //    type: "GET",
+            //    url: GetPath("Account/MenuResetPassword"),
+            //    data: ({ code: '', userName: '', partial:'Y' }),
+            //    dataType: "html",
+            //    success: function (result) {
+            //    },
+            //    error: function (textStatus, errorThrown) {
+            //        Success = false;
+            //    }
+            //}).done(function (data) {
+            //    if (data != null) {
+            //        $('.body-content-details').html(data);
+            //        ShowAlertsMessage();
+            //    }
+            //});
+        });
+
+        $(document).on("click", ".menuLoginImage", function (e) {
+
+             window.location.href = '@Url.Action("EditLoginImage", "User",new {type="1"})';
+
+            //$.ajax({
+            //    type: "GET",
+            //    url: GetPath("User/EditLoginImage"),
+            //    //data: ,
+            //    dataType: "html",
+            //    success: function (result) {
+            //    },
+            //    error: function (textStatus, errorThrown) {
+            //        Success = false;
+            //    }
+            //}).done(function (data) {
+            //    if (data != null) {
+            //        $('.body-content-details').html(data);
+            //        validationPartialView('itemEditImageContainer');
+
+            //        //For Login Images
+            //        if ($('#ImageCode').val() != '') {
+            //            $(".loginimageDiv img").each(function (index) {
+            //                if ($(this).data("imagecode") == $('#ImageCode').val())
+            //                {
+            //                    $(this).addClass("selected");
+            //                }
+            //            });
+            //        }
+            //        else
+            //        {
+            //            $(".loginimageDiv img:first").addClass("selected");
+            //        }
+
+            //        //
+            //        //ShowAlertsMessage();
+            //    }
+            //});
+        });
+
+        $(document).on("click", ".menuResetEmail", function (e) {
+            window.location.href = '@Url.Action("ResetEmailGet", "Account")';
+
+            //$.ajax({
+            //    type: "GET",
+            //    url: GetPath("Account/ResetEmailGet"),
+            //    //data: ,
+            //    //async:true,
+            //    dataType: "html",
+            //    success: function (result) {
+            //    },
+            //    error: function (textStatus, errorThrown) {
+            //        Success = false;
+            //    }
+            //}).done(function (data) {
+            //    if (data != null) {
+            //        $('.body-content-details').html(data);
+            //        //$('.body-content-details').empty();
+            //        //$('.body-content-details').append(data);
+            //        //ShowAlertsMessage();
+            //    }
+            //});
+        });
+
+        $(document).on("click", ".resetEmail", function (e) {
+            $.ajax({
+                type: "POST",
+                url: GetPath("Account/ResetEmail"),
+                data: $(this).closest('form').serialize(),
+                //data: ({ newEmail:$("Email").val()}),
+                dataType: "html",
+                success: function () {
+
+                },
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                }
+            }).done(function (data) {
+                if (data != null) {
+                    $('.body-content-details').html(data);
+                    ShowAlertsMessage();
+                }
+            });
+        });
+
+        $(document).on("click", ".linkForgotPassword", function (e) {
+            window.location.href = '@Url.Action("ForgotPasswordGet", "Account")';
+            //$.ajax({
+            //    type: "GET",
+            //    url: GetPath("Account/ForgotPasswordGet"),
+            //    //data: ,
+            //    //async:true,
+            //    dataType: "html",
+            //    success: function (result) {
+            //    },
+            //    error: function (textStatus, errorThrown) {
+            //        Success = false;
+            //    }
+            //}).done(function (data) {
+            //    if (data != null) {
+            //        $('.body-content-details').html(data);
+            //    }
+            //});
+        });
+        $(document).on("click", ".linkSignUp", function (e) {
+            window.location.href = '@Url.Action("Create", "SignUp")';     
+        });
+        
+
+        $(document).on("click", ".resendEmail", function (e) {
+            $.ajax({
+                type: "POST",
+                url: GetPath("Account/ForgotPassword"),
+                data: $(this).closest('form').serialize(),
+                //data: ({ newEmail:$("Email").val()}),
+                dataType: "html",
+                success: function () {
+
+                },
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                }
+            }).done(function (data) {
+                if (data != null) {
+                    $('.body-content-details').html(data);
+                    ShowAlertsMessage();
+                }
+            });
+        });
+
+        //$(document).ajaxSuccess(function(event, request, settings) {
+        //    if (request.status === 200) {
+        //        alert('success11');
+        //    }
+        //});
+
+        $(document).ajaxError(function (e, xhr, settings) {
+           // alert(xhr.status);
+            if (xhr.status === 403) {
+                //alert('222');
+                location = '@Url.Action( "Login", "Account" )';
+            }
+        });
+
+       
+
+        window.setTimeout(function () {
+            $('.alert-disappear').fadeOut(300);
+        }, 8000);
+
+    </script>
+    @RenderSection("styles", required: false)
+    @RenderSection("scripts", required: false)
 </body>
 </html>

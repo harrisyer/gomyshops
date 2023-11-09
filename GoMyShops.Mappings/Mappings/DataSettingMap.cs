@@ -18,5 +18,5 @@ namespace GoMyShops.Mappings.Mappings
              .ForMember(dest => dest.IsReadOnly, opt => opt.MapFrom(src => src.IsReadOnly))
              .ReverseMap();        
         }
-    }
-}
+    }//end class
+}//end namespace
