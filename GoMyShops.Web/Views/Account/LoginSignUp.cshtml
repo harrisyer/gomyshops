@@ -1,0 +1,97 @@
+﻿@model GoMyShops.Models.ViewModels.SignUpLoginViewModels
+@using System.Text.Json;
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('.body-content').css("background-image", "url('Images/featured-background.png')");
+            // $(".body-content").addClass("loginBackground");
+            // $('.body-content').css('background-size', 'cover');
+
+            var LoginObj = @Html.Raw(JsonSerializer.Serialize(Model))Or JsonConvert.SerializeObject(item)
+            if (LoginObj) {
+                if (LoginObj.Message != null && LoginObj.Message != "") {
+                    $('.itemListValidationMessageContainer').ShowBoostrapAlert(LoginObj.Message, "danger", true, true, true);
+                }
+            }
+        });
+    </script>
+}
+@{
+    var @ReturnUrl = (ViewBag.ReturnUrl == null) ? "" : ViewBag.ReturnUrl;
+}
+    <section id="loginForm" class="text-center">
+    @using (Html.BeginForm("LoginSignUp", "Account", new { ReturnUrl = @ReturnUrl }, FormMethod.Post, true, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()          
+            @Html.HiddenFor(model => model.UserName)
+           
+            <div class="LoginContainer">              
+                <div class="row">
+                    <div class="itemListMessageContainer"></div>
+
+                </div>
+                <div class="row loginForm">
+                <div class="col-md-12">
+                    <div class="card border-primary mb-3 text-center">
+                        <div class="card-header">User Login</div>
+                        <div class="card-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-md-4 FormLableTitle">User ID</div>
+                                    <div class="col-md-8 text-start">
+                                        @Html.DisplayTextFor(u => u.UserName)
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 FormLableTitle">User Password</div>
+                                    <div class="col-md-6">
+                                        @Html.PasswordFor(u => u.Password, new { @class = "form-control", maxlength = 20, AUTOCOMPLETE = "OFF" })
+                                        @Html.ValidationMessageFor(m => m.Password)
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 FormLableTitle"></div>
+                                    <div class="col-md-6 text-start">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="submit" value="Log in" class="btn btn-primary" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="button" value="Cancel" class="btn btn-primary itemLoginPage" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="row">
+                                    <div class="itemListValidationMessageContainer ValidationMessageContainer"></div>
+                                    <div class="itemListMessageContainer DetailMessageContainer"></div>
+                                </div>
+                              
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted text-start">
+                            <div class="row">
+                                <div class="col-md-12 text-left">
+                                    <a href="#" class="linkForgotPassword">Forgot your password?</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="col-md-2">
+          
+
+                </div>
+                </div>
+            </div>
+        }
+    </section>
+

@@ -1,0 +1,80 @@
+﻿
+@model GoMyShops.Models.ViewModels.AnnouncementDisplayViewModels
+
+@Html.HiddenFor(a => a.AnnouncementCount)
+<div id="carousel-announcement" class="carousel slide carousel-fullscreen carousel-fade" data-interval="false" data-ride="carousel">
+    <!-- Indicators -->
+    <ol class="carousel-indicators">
+        @if (Model.advm != null)
+        {
+            int count = 0;
+            foreach (var item in Model.advm)
+            {
+                if (count == 0)
+                {
+                    <li data-bs-target="#carousel-announcement" data-slide-to=@count class="@item.CssClass"></li>
+                }
+                else
+                {
+                    <li data-bs-target="#carousel-announcement" data-slide-to=@count class="@item.CssClass"></li>
+                }
+                count = count + 1;
+            }
+        }
+
+
+
+
+    </ol>
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        @if (Model.advm != null)
+        {
+            int count = 0;
+            foreach (var item in Model.advm)
+            {
+                if (count == 0)
+                {
+                    <div class="item @item.CssClass">
+                        <div class="overlay"></div>
+                        @*<div class="testing">*@
+                        <div class="carousel-caption">
+                            <div class="carousel-caption-inner">
+                                <h2>@item.Title </h2>
+                                <br />@Html.Raw(@item.Message)
+                            </div>
+
+                        </div>
+                        @*</div>*@
+                    </div>
+                }
+                else
+                {
+                    <div class="item @item.CssClass">
+                        <div class="overlay"></div>
+                        @*<div class="testing">*@
+                        <div class="carousel-caption">
+                            <div class="carousel-caption-inner">
+                                <h2>@item.Title </h2>
+                                <br />@Html.Raw(@item.Message)
+                            </div>
+                        </div>
+                        @*</div>*@
+                    </div>
+                }
+                count = count + 1;
+            }
+        }
+    </div>
+
+    <!-- Controls -->
+    <a class="left carousel-control" href="#carousel-announcement" role="button" data-slide="prev">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#carousel-announcement" role="button" data-slide="next">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>

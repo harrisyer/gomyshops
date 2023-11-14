@@ -1,0 +1,430 @@
+﻿@model GoMyShops.Models.ViewModels.IndexViewModel
+
+<section class="dashboard-counts no-padding-bottom">
+    <div class="row">
+        <div class="col-md-8 dashboard-no-padding-left">
+            <div class="row bg-white has-shadow">
+                <div class="row row-bottom-padding">
+                    <div class="col-md-12 dashboard-item-title-row">
+                        <span class="dashboard-item-title col-md-12">Merchant Status</span>
+                        <div class="row">
+                            <!-- Item -->
+                            <div class="col-md-3 dashboarditem padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title text-center">
+                                        @*<span>Active (@Model.ThisMonth)</span>*@
+                                        <span>Active (till Today)</span>
+                                    </div>
+                                    <div class="number active-status">
+                                        @Model.ActionsMenuActiveMerchantCount
+                                        <a href="@Model.StatusActiveURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right "></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title">
+                                        <span>Deactivated (till Today)</span>
+                                    </div>
+                                    <div class="number active-status-no">
+                                        @Model.ActionsMenuDeactivatedMerchantCount
+                                        <a href="@Model.StatusInActiveURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title">
+                                        <span>Suspended (till Today)</span>
+                                    </div>
+                                    <div class="number active-status-no">
+                                        @Model.ActionsMenuSuspendedMerchantCount
+                                        <a href="@Model.StatusSuspendedURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title">
+                                        <span>Terminated (till Today)</span>
+                                    </div>
+                                    <div class="number active-status-no">
+                                        @Model.ActionsMenuTerminatedMerchantCount
+                                        <a href="@Model.StatusTerminatedURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <div class="row row-bottom-padding">
+                    <div class="col-md-12">
+                        <span class="dashboard-item-title col-md-12">Merchant Application</span>
+                        <div class="row">
+                            <!-- Item -->
+                            <div class="col-md-3 dashboarditem padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title text-center">
+                                        <span>Active (till Today)</span>
+                                    </div>
+                                    <div class="number active-status">
+                                        @Model.ActionsMenuApplicationStatusApprovedMerchantCount
+                                        <a href="@Model.ApplicationStatusApprovedURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title">
+                                        <span>Onboarding (till Today)</span>
+                                    </div>
+                                    <div class="number active-status-no">
+                                        @Model.ActionsMenuApplicationStatusPendingOnboardingMerchantCount
+                                        <a href="@Model.ApplicationStatusPendingOnboardingURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title">
+                                        <span>Pending (till Today)</span>
+                                    </div>
+                                    <div class="number active-status-no">
+                                        @Model.ActionsMenuApplicationStatusPendingMerchantCount
+                                        <a href="@Model.ApplicationStatusPendingURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title">
+                                        <span>Declined (till Today)</span>
+                                    </div>
+                                    <div class="number active-status-no">
+                                        @Model.ActionsMenuApplicationStatusDeclinedMerchantCount
+                                        <a href="@Model.ApplicationStatusDeclinedURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="col-md-4 dashboard-no-padding-left">
+            <div class="row bg-white has-shadow">
+                <div class="row dashboard-remove-all-leftright-padding">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <!-- Item -->
+                            <div class="col-md-6 dashboard-no-padding-left dashboard-no-padding-right">
+                                <div class="item d-flex align-items-center">
+                                    <div class="ratio-title">
+                                        <span>Refund Ratio
+                                        <br/>
+                                        (last 30 days)
+                                        </span>
+                                    </div>
+                                    <div class="number">
+                                        @Model.sActionsMenuRefundRatio
+                                        <a class="popupLink" href="@Model.CreditRatioReportURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-6 dashboard-no-padding-left dashboard-no-padding-right">
+                                <div class="item d-flex align-items-center">
+                                    <div class="ratio-title">
+                                        <span>Chargeback Ratio
+                                        <br/>
+                                        (last 30 days)
+                                        </span>
+                                    </div>
+                                    <div class="number">
+                                        @Model.sActionsMenuChargebackRatio
+                                        <a class="popupLink" href="@Model.DisputeRatioReportURL">
+                                            <span class="pull-right"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                            <div class="clearfix"></div>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="row dashboard-transaction-header dashboard-remove-all-leftright-padding">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6 dashboard-no-padding-left dashboard-no-padding-right item">
+                                <div class="row dashboard-transaction-title text-center">
+                                    Active Merchants 
+                                    <br/>
+                                    (last 90 days)
+                                </div>
+                                <div class="col-md-3 text-center">
+
+                                </div>
+                                <div class="col-md-6 text-center padding-right-less">
+                                    <div class="dashboard-transaction dashboard-transaction-value-centered">
+                                        <span class="dashboard-no-circled-padding-left">
+                                            @Model.ActionsMenuMerchantWithTransactionCount
+                                        </span>
+                                            <br />
+                                            <i class="fa fa fa-shopping-basket fa-2x"></i>
+
+                                            @*merchants*@
+                                        </div>
+                                </div>
+                                <div class="text-center number">
+                                    <a href="@Model.MerchantWithTransactionCountURL">
+                                                <span class="pull-right-with-top-padding"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                                <div class="clearfix"></div>
+                                    </a>
+                                </div>
+
+                            </div>
+                            <div class="col-md-6 dashboard-no-padding-left dashboard-no-padding-right item">
+                                <div class="row dashboard-transaction-title text-center">
+                                    Inactive Merchants 
+                                    <br/>
+                                    (last 90 days)
+                                </div>
+                                <div class="col-md-3 text-center">
+                     
+                                </div>
+                                <div class="col-md-6 text-center padding-right-less">
+                                    <div class="dashboard-transaction-no dashboard-transaction-value-centered">
+                                        <span class="dashboard-no-circled-padding-left">
+                                            @Model.ActionsMenuMerchantWithoutTransactionCount
+                                        </span>
+                                        <br />
+                                        <i class="fa fa fa-shopping-basket fa-2x"></i>
+                                    </div>
+                                </div>
+                                <div class="text-center number">
+                                    <a href="@Model.MerchantWithoutTransactionCountURL">
+                                                <span class="pull-right-with-top-padding"><i class="fa fa-arrow-circle-right fa fa-arrow-circle-right fa-2x"></i></span>
+                                                <div class="clearfix"></div>
+                                    </a>
+                                </div>
+                            </div>
+                      </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-md-5 dashboard-no-padding-left dashboard-ransaction-valumn">
+            <div class="panel panel-default">
+                <div class="panel-heading small-padding">
+                    @*<i class="fa fa-bar-chart-o fa-fw"></i>*@
+                    <span id="barTitle">
+                        Transaction Volume @Model.Today : <span class="chart-title-value sAdminSalesAreaChartTotalSaleAmountTotalToday"></span>
+                        <span class="second-line" id="SalesAreaChartTimeTitle">
+                            No. of Transactions @Model.Today :
+                            <span class="chart-title-value sAdminSalesAreaChartTotalSaleCountToday"></span>
+
+                        </span>
+
+                    </span>
+                </div>
+                <div class="panel-body">
+                    @*<ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-bs-toggle="tab">Home</a></li>
+                <li role="presentation"><a href="#profile" aria-controls="profile" role="tab" data-bs-toggle="tab">Profile</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane active" id="home">
+                    <div id="morris-bar-chart-transaction-volume-today" style="height:200px;"></div>
+                </div>
+                <div role="tabpanel" class="tab-pane" id="profile">
+                    <div id="morris-bar-chart-transaction-no-today" style="height:200px;"></div>
+                </div>
+            </div>*@
+
+
+                    <div class="tabbable-panel">
+                        <div class="tabbable-line">
+                            <ul class="nav nav-tabs ">
+                                <li class="active">
+                                    <a href="#tab_default_1" data-bs-toggle="tab">
+                                        Transaction Volume
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="#tab_default_2" data-bs-toggle="tab">
+                                        Transaction No
+                                    </a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane active" id="tab_default_1">
+                                    <div id="morris-bar-chart-transaction-volume-today" style="height:200px;"></div>
+                                    @*<div id="morris-bar-chart-transaction-no-today1" style="height:200px;"></div>*@
+                                </div>
+                                <div class="tab-pane active" id="tab_default_2">
+                                    <div id="morris-bar-chart-transaction-no-today" style="height:200px;"></div>
+                                    @*<div id="morris-bar-chart-transaction-no-today" style="height:200px;"></div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                
+            </div>
+        </div>
+
+        <div class="col-md-7 dashboard-no-padding-left ">
+            <div class="panel panel-default">
+                <div class="panel-heading small-padding">
+
+                   
+                    <span id="SalesAreaChartTitle">
+                        Total Sales Volume (@Model.ThisMonth) : <span class="chart-title-value sAdminSalesAreaChartTotalSaleAmountThisMonth"></span>
+                        <span class="second-line" id="SalesAreaChartTimeTitle">No. of Transactions (@Model.ThisMonth) : <span class="chart-title-value sAdminSalesAreaChartTotalSaleCountThisMonth"></span> </span>
+                    </span>
+
+
+                </div> 
+                <div class="panel-body">
+                    <div id="morris-line-chart-sales-valumn" style="height:190px; padding:2px;"></div>
+                </div>
+              
+            </div>
+        </div>
+        <div class="col-md-7 dashboard-no-padding-left">
+            <div class="row bg-white has-shadow">
+                <div class="row">
+                    <div class="col-md-12 dashboard-item-title-row-less-padding">
+                        <div class="row">
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less dashboarditem">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title text-center">
+                                        <span>Total Successful Sales Volume (@Model.Today)</span>
+                                    </div>
+                                    <div class="number-total active-status sAdminSalesAreaChartTotalSaleAmountToday">
+                                        0
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title">
+                                        <span>No. of Successful Transactions (@Model.Today)</span>
+                                    </div>
+                                    <div class="number-total active-status sAdminSalesAreaChartTotalSaleCountToday">
+                                        0
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title">
+                                        <span>Total Successful Sales Volume (@Model.ThisYear)</span>
+                                    </div>
+                                    <div class="number-total active-status sAdminSalesAreaChartTotalSaleAmountThisYear">
+                                        0
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- Item -->
+                            <div class="col-md-3 padding-right-less">
+                                <div class="item d-flex align-items-center">
+                                    <div class="title">
+                                        <span>No. of Successful Transactions (@Model.ThisYear)</span>
+                                    </div>
+                                    <div class="number-total active-status sAdminSalesAreaChartTotalSaleCountThisYear">
+                                        0
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @*<div class="row">
+        <div class="col-md-5 dashboard-no-padding-left">
+            <div class="panel panel-default">
+                <div class="panel-heading small-padding">                   
+                    <span id="barTitle">
+                        No. of Transactions @Model.Today
+                        <span class="second-line" id="SalesAreaChartTimeTitle"><span class="chart-title-value sAdminSalesAreaChartTotalSaleCountToday"></span> </span>
+
+                    </span>
+                </div>
+
+                <div class="panel-body">
+                    <div id="morris-bar-chart-transaction-no-today" style="height:200px;"></div>
+                </div>
+
+            </div>
+        </div>
+
+        
+    </div>*@
+</section>
+
+

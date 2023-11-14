@@ -21,9 +21,7 @@ namespace GoMyShops.Data
 
             var builder = new DbContextOptionsBuilder<DataContext>();
             var connectionString = configuration.GetConnectionString("DefaultConnection");
-            builder.UseSqlServer(connectionString);
-            // builder.UseSqlServer("data source=VPMYN149\\SQL2017;initial catalog=GoMyShops;persist security info=True;user id=sa;password=Password@123;MultipleActiveResultSets=True;App=EntityFramework");
-
+            builder.UseSqlServer(connectionString);          
             return new DataContext(builder.Options);
         }
     }

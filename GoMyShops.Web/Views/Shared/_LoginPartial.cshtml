@@ -1,0 +1,172 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using GoMyShops.Models;
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).on("click", ".menuCommentPost", function (e) {
+
+            $.ajax({
+                type: "GET",
+                url: GetPath("/CommentChat/Create"),
+                //data: ,
+                dataType: "html",
+                success: function (result) {
+                },
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                }
+            }).done(function (data) {
+                if (data != null) {
+                    $('.body-content-details').html(data);
+                    ShowAlertsMessage();
+                }
+            });
+        });
+
+
+
+        $(document).on("click", ".menuResetPassword", function (e) {
+
+            $.ajax({
+                type: "POST",
+                url: GetPath("/Account/MenuResetPassword"),
+                //data: ,
+                dataType: "html",
+                success: function (result) {
+                },
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                }
+            }).done(function (data) {
+                if (data != null) {
+                    $('.body-content-details').html(data);
+                    ShowAlertsMessage();
+                }
+            });
+        });
+
+        $(document).on("click", ".menuResetEmail", function (e) {
+            $.ajax({
+                type: "POST",
+                url: GetPath("/Account/menuResetEmail"),
+                //data: ,
+                dataType: "html",
+                success: function (result) {
+                },
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                }
+            }).done(function (data) {
+                if (data != null) {
+                    $('.body-content-details').html(data);
+                    ShowAlertsMessage();
+                }
+            });
+        });
+    </script>
+}
+
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="" asp-controller="Account" asp-action="LogOff" method="post" id="logoutForm" class="navbar-right ">
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                <a asp-area="" asp-controller="Manage" asp-action="Index" title="Manage" class="btn btn-primary loginLink">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+            <li>
+                <button type="submit" class="btn btn-outline-secondary loginLink">Log out</button>
+            </li>
+        </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right loginLinkRight">
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { @class = "btn btn-outline-secondary loginLink" })</li>
+
+    </ul>
+   @*  <ul class="nav navbar-nav navbar-right">
+        <li><a asp-area="" asp-controller="Account" asp-action="Register">Register</a></li>
+        <li><a asp-area="" asp-controller="Account" asp-action="Login">Log in</a></li>
+    </ul> *@
+}
+
+@* 
+@if (!User.Identity.IsAuthenticated)
+{
+   
+    using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right " }))
+    {
+        @Html.AntiForgeryToken()
+
+
+        <!-- Header Navigation Right -->
+       @*  <ul class="nav-header pull-right">
+                <li class="profile-dropdown">
+
+                    <button class="btn btn-default" data-bs-toggle="dropdown">
+                        <i class="fa fa-user-circle-o"></i> <span class="hidden-xs">hangmifun</span> <b class="caret"></b>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">My Profile</a></li>
+                        <li><a href="#">Sign Out</a></li>
+                    </ul>
+                </li>
+            </ul> *
+        <!-- END Header Navigation Right -->
+
+
+
+        <ul class="nav navbar-nav navbar-right loginLinkRight">
+            <li>
+                <a href="#" class="dropdown-toggle loginDiv" data-bs-toggle="dropdown">
+                    <span class="glyphicon glyphicon-user">
+                    </span>  <span>@User.Identity.Name</span>  <b class="caret"></b>
+                </a>
+                <ul class="dropdown-menu multi-level">
+                    <li><a href="#" class="menuLoginImage">Site-To-User Image And Phrase</a></li>
+                    <li><a href="#" class="menuResetPassword">Change Password</a></li>
+
+                    @{
+                        //GetclaimsIdentity
+                        var claimsIdentity = User.Identity as System.Security.Claims.ClaimsIdentity;
+
+                        if (claimsIdentity != null)
+                        {
+                            var claim1 = claimsIdentity.Claims.FirstOrDefault(c => c.Type == "UserCategory");
+                            if (claim1 != null && claim1.Value != "0")
+                            {
+                                <li><a href="#" class="menuResetEmail">Change Email</a></li>
+                            }
+
+                        }
+                    }
+
+
+                    <li class="divider"></li>
+                    <li><a href="javascript:document.getElementById('logoutForm').submit()"> Log Out</a></li>
+
+                </ul>
+
+            </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right newspaperRight">
+            <li>
+                <a href="#" class="dropdown-toggle loginDiv menuAnnouncement" title="Announcements"  data-bs-toggle="dropdown">                    
+                    <i class="fa fa-newspaper-o fa-2x"></i>
+                </a>
+            </li>
+        </ul>
+    }
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right loginLinkRight">
+        <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+
+    </ul>
+}
+ *@

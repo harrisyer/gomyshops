@@ -1,0 +1,471 @@
+﻿@model GoMyShops.Models.ViewModels.AnnouncementDetailsViewModels
+@using GoMyShops.Models.Helpers;
+
+<div class="card border-primary text-center">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">Announcement Editing<span class="fa fa-arrows-v pull-right"></span></div>
+    <div id="collapseOne" class="collapse show">
+        <div class="card-body">
+            <div class="container-fluid">
+                @Html.Raw(Html.CustomValidationSummary(true))
+                @Html.HiddenFor(a => a.ID)
+                @Html.HiddenFor(a => a.EditJson)               
+                <div class="row">
+                    <div class="col-md-2 FormLableTitle">
+                        <div class="row">
+                            <div class="col-md-9">
+                                @Html.DisplayNameFor(model => model.Title)
+                            </div>
+                            <div class="col-md-3">
+                                <i class="iconRequired"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10 ">
+                        @Html.TextAreaFor(u => u.Title, 5, 80, new { @class = "form-control", maxlength = 500 })
+                        @Html.ValidationMessageFor(m => m.Title)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 FormLableTitle">
+                        <div class="row">
+                            <div class="col-md-9">
+                                @Html.DisplayNameFor(model => model.Message)
+                            </div>
+                            <div class="col-md-3">
+                                <i class="iconRequired"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10 textareaEditor text-start">
+                        @*@Html.TextAreaFor(m => m.Message, new { rows = "20", style = "resize:none;width:400px;", placeholder = Html.DisplayNameFor(m => m.Message), @class = "form-control input-lg textarea-editor" })*@
+                        @Html.TextAreaFor(u => u.Message, 20, 80, new { @class = "form-control input-lg textarea-editor text-start" })
+                        @Html.ValidationMessageFor(m => m.Message)
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 FormLableTitle">
+                    </div>
+                    <div class="col-md-2 FormLableTitle">
+                        <button class="btn btn-primary btm-sm itemPreviewAnnouncement">
+                            <i class="iconCalendar"></i>
+                            Preview
+                        </button>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12 modal fade CloseModal PreviewAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="row closeRow">
+                                    <button type="button" class="close modalclose" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                                </div>
+                                <div class="modal-body edit-content">
+                                    <div class="carousel slide carousel-fullscreen carousel-fade" data-interval="false" data-ride="carousel">
+                                        <div class="carousel-inner" role="listbox">
+                                            <div class="item active">
+                                                <div class="overlay"></div>
+                                                <div class="carousel-caption">
+                                                    <div class="carousel-caption-inner PreviewAnnouncementContainer text-start"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+                <div class="row">
+                    <div class="col-md-2 FormLableTitle">
+                        <div class="row">
+                            <div class="col-md-9">
+                                @Html.DisplayNameFor(model => model.sStartDate)
+                            </div>
+                            <div class="col-md-3">
+                                <i class="iconRequired"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group routeDateControl date" id="createpicker1" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                            <div>@Html.TextBoxFor(model => model.sStartDate, new { @class = "form-control routedatecontrolInput", @readonly = true,@data_td_target="#createpicker1" })</div>
+                            <span class="input-group-text routeDateControlSpan" data-td-target="#createpicker1" data-td-toggle="datetimepicker">
+                                <span class="iconCalendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 FormLableTitle">
+                        <div class="row">
+                            <div class="col-md-9">
+                                @Html.DisplayNameFor(model => model.sEndDate)
+                            </div>
+                            <div class="col-md-3">
+                                <i class="iconRequired"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="input-group routeDateControl date" id="createpicker2" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                            <div>@Html.TextBoxFor(model => model.sEndDate, new { @class = "form-control routedatecontrolInput", @readonly = true,@data_td_target="#createpicker2" })</div>
+                            <span class="input-group-text routeDateControlSpan" data-td-target="#createpicker2" data-td-toggle="datetimepicker">
+                                <span class="iconCalendar"></span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 FormLableTitle">
+                        <div class="row">
+                            <div class="col-md-9">
+                                @Html.DisplayNameFor(model => model.Type)
+                            </div>
+                            <div class="col-md-3">
+                                <i class="iconRequired"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(u => u.Type, Model.AnnouncementTypeDDL, new { @class = "form-control SearchSelect AnnouncementType" })
+                        @Html.ValidationMessageFor(m => m.Type)
+                    </div>
+                </div>
+                <br>
+                <div class="row TargetAudienceContainer text-start">
+                    <div class="col-md-2 FormLableTitle">
+                        <div class="row">
+                            <div class="col-md-9">
+                                Target Audience
+                            </div>
+                            <div class="col-md-3">
+                                <i class="iconRequired"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.IsAdmin, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Admin", data_off = "<i class='fa fa-times'></i> Admin" } })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.IsMerchant, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Merchant", data_off = "<i class='fa fa-times'></i> Merchant" } })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.IsPartner, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Partner", data_off = "<i class='fa fa-times'></i> Partner" } })
+                    </div>
+                </div>
+                <br>
+                <div class="row TargetAudienceContainer">
+                    <div class="col-md-2 FormLableTitle">
+                        <div class="row">
+                            <div class="col-md-9">
+                                @Html.DisplayNameFor(model => model.DisplayFrequency)
+                            </div>
+                            <div class="col-md-3">
+                                <i class="iconRequired"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        @Html.DropDownListFor(u => u.DisplayFrequency, Model.DisplayFrequencyDDL, new { @class = "form-control SearchSelect" })
+                        @Html.ValidationMessageFor(m => m.DisplayFrequency)
+                    </div>
+                </div>
+                <div class="row text-start">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.CheckBoxStatus)</div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.CheckBoxStatus, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Active", data_off = "<i class='fa fa-times'></i> Inactive" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted text-center">
+        <div class="row">
+            <div class="col-md-2 FormLableTitle">
+                <button class="btn btn-primary btm-sm itemPress itemEditSaveAnnouncement">
+                    <i class="iconSave"></i>
+                    Save
+                </button>
+            </div>
+            <div class="col-md-2 FormLableTitle">
+                <button class="btn btn-primary btm-sm itemBackRefresh">
+                    <i class="iconBack"></i>
+                    Back
+                </button>
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="itemEditValidationMessageContainer ValidationMessageContainer"></div>
+                <div class="itemEditMessageContainer DetailMessageContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@* <div class="panel panel-default">
+    <div class="panel-heading">Announcement Editing</div>
+    <div class="panel-body">
+        <div class="container-fluid">
+           
+            @Html.Raw(Html.CustomValidationSummary(true))
+            @Html.HiddenFor(a => a.ID)
+            @Html.HiddenFor(a => a.EditJson)
+            <div class="row">
+                <div class="col-md-2 FormLableTitle">
+                    <div class="row">
+                        <div class="col-md-9">
+                            @Html.DisplayNameFor(model => model.Title)
+                        </div>
+                        <div class="col-md-3">
+                            <i class="glyphicon glyphicon-asterisk glyphiconRequired"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 ">
+                    @Html.TextAreaFor(u => u.Title, 5, 80, new { @class = "form-control", maxlength = 500 })
+                    @Html.ValidationMessageFor(m => m.Title)
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2 FormLableTitle">
+                    <div class="row">
+                        <div class="col-md-9">
+                            @Html.DisplayNameFor(model => model.Message)
+                        </div>
+                        <div class="col-md-3">
+                            <i class="glyphicon glyphicon-asterisk glyphiconRequired"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-10 textareaEditor">
+                    @Html.TextAreaFor(u => u.Message, 20, 80, new { @class = "form-control input-lg textarea-editor" })
+                    @Html.ValidationMessageFor(m => m.Message)
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 FormLableTitle">
+
+                </div>
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemPreviewAnnouncement">
+                        <i class="fa fa-calendar"></i>
+                        Preview
+                    </button>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-12 modal fade CloseModal PreviewAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="row closeRow">
+                                <button type="button" class="close modalclose" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body edit-content">
+                                <div class="carousel slide carousel-fullscreen carousel-fade" data-interval="false" data-ride="carousel">
+                                    <div class="carousel-inner" role="listbox">
+                                        <div class="item active">
+                                            <div class="overlay"></div>
+                                            <div class="carousel-caption">
+                                                <div class="carousel-caption-inner PreviewAnnouncementContainer"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+         
+
+
+        </div>
+        <div class="row">
+            <div class="col-md-2 FormLableTitle">
+                <div class="row">
+                    <div class="col-md-9">
+                        @Html.DisplayNameFor(model => model.sStartDate)
+                    </div>
+                    <div class="col-md-3">
+                        <i class="glyphicon glyphicon-asterisk glyphiconRequired"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class='input-group date routeDateControl'>
+                        <div>@Html.TextBoxFor(model => model.sStartDate, new { @class = "form-control routedatecontrolInput", @readonly = true })</div>
+
+                        <span class="input-group-addon routeDateControlSpan">
+                            <span class="glyphicon glyphicon-calendar">
+                            </span>
+                        </span>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 FormLableTitle">
+                <div class="row">
+                    <div class="col-md-9">
+                        @Html.DisplayNameFor(model => model.sEndDate)
+                    </div>
+                    <div class="col-md-3">
+                        <i class="glyphicon glyphicon-asterisk glyphiconRequired"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <div class='input-group date routeDateControl routeEndDateControl'>
+                        <div>@Html.TextBoxFor(model => model.sEndDate, new { @class = "form-control routedatecontrolInput", @readonly = true })</div>
+
+                        <span class="input-group-addon routeDateControlSpan">
+                            <span class="glyphicon glyphicon-calendar">
+                            </span>
+                        </span>
+
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2 FormLableTitle">
+                <div class="row">
+                    <div class="col-md-9">
+                        @Html.DisplayNameFor(model => model.Type)
+                    </div>
+                    <div class="col-md-3">
+                        <i class="glyphicon glyphicon-asterisk glyphiconRequired"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                @Html.DropDownListFor(u => u.Type, Model.AnnouncementTypeDDL, new { @class = "form-control SearchSelect AnnouncementType" })
+                @Html.ValidationMessageFor(m => m.Type)
+            </div>
+        </div>
+        <br>
+        <div class="row TargetAudienceContainer">
+            <div class="col-md-2 FormLableTitle">
+                <div class="row">
+                    <div class="col-md-9">
+                        Target Audience
+                    </div>
+                    <div class="col-md-3">
+                        <i class="glyphicon glyphicon-asterisk glyphiconRequired"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.IsAdmin, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Admin", data_off = "<i class='fa fa-times'></i> Admin" } })
+            </div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.IsMerchant, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Merchant", data_off = "<i class='fa fa-times'></i> Merchant" } })
+            </div>
+            <div class="col-md-2">
+                @Html.EditorFor(model => model.IsPartner, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Partner", data_off = "<i class='fa fa-times'></i> Partner" } })
+            </div>
+        </div>
+        <br>
+        <div class="row TargetAudienceContainer">
+            <div class="col-md-2 FormLableTitle">
+                <div class="row">
+                    <div class="col-md-9">
+                        @Html.DisplayNameFor(model => model.DisplayFrequency)
+                    </div>
+                    <div class="col-md-3">
+                        <i class="glyphicon glyphicon-asterisk glyphiconRequired"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                @Html.DropDownListFor(u => u.DisplayFrequency, Model.DisplayFrequencyDDL, new { @class = "form-control SearchSelect" })
+                @Html.ValidationMessageFor(m => m.DisplayFrequency)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.CheckBoxStatus)</div>
+            <div class="col-md-4">
+                @Html.EditorFor(model => model.CheckBoxStatus, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Active", data_off = "<i class='fa fa-times'></i> Inactive" } })
+            </div>
+        </div>
+
+       
+       
+
+    </div>
+<div class="panel-footer">
+    <div class="container-fluid itemEditFooter">
+        <div class="row">
+            <div class="col-md-2 FormLableTitle">
+                <button class="btn btn-primary btm-sm itemPress itemEditSaveAnnouncement" data-editjson="@Model.EditJson">
+                    <i class="fa fa-floppy-o"></i>
+                    Save
+                </button>
+            </div>
+            <div class="col-md-2 FormLableTitle">
+                <button class="btn btn-primary btm-sm itemBackRefresh">
+                    <i class="fa fa-reply-all"></i>
+                    Back
+                </button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="itemEditValidationMessageContainer ValidationMessageContainer"></div>
+            <div class="itemEditMessageContainer DetailMessageContainer"></div>
+        </div>
+    </div>
+
+</div>  
+
+</div>
+<div class="panel panel-default">
+    <div class="panel-heading">Priority Listing</div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <span class="help-block">
+                (Drag and drop to set the Priority sequence)
+            </span>
+            <div class="itemPriorityListContainer">
+            
+
+            </div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="container-fluid">
+            <div class="row">              
+                <div class="col-md-3 FormLableTitle">
+                    <input type="button" value="Save Priority" class="btn btn-primary itemPrioritySave" />
+                </div>
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemBackRefreshEditProfile">
+                        <i class="fa fa-reply-all"></i>
+                        Back
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="itemPriorityEditValidationMessageContainer ValidationMessageContainer"></div>
+                <div class="itemPriorityEditMessageContainer DetailMessageContainer"></div>
+            </div>
+        </div>
+    </div>
+</div> *@

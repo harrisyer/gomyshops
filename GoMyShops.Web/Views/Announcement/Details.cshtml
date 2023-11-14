@@ -1,0 +1,107 @@
+﻿@model GoMyShops.Models.ViewModels.AnnouncementDetailsViewModels
+
+<div class="card border-primary text-center">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">Annountment Detail<span class="fa fa-arrows-v pull-right"></span></div>
+    <div id="collapseOne" class="collapse show">
+        <div class="card-body">
+            <div class="container-fluid">
+                @Html.HiddenFor(a => a.ID)
+                @Html.HiddenFor(a => a.EditJson)              
+                <div class="row text-start">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.Title)</div>
+                    <div class="col-md-10 ">
+                        @Html.TextAreaFor(u => u.Title, 5, 80, new { @class = "form-control displayTextArea", @readonly = true })
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.Message)</div>
+                    <div class="col-md-10 textareaEditor text-start">
+                        @Html.TextAreaFor(u => u.Message, 20, 80, new { @class = "form-control input-lg textarea-editor", @readonly = true })
+                    </div>
+                </div>
+                <div class="row text-start">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.sStartDateDisplay)</div>
+                    <div class="col-md-4">
+                        @Html.DisplayFor(model => model.sStartDateDisplay, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row text-start">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.sEndDateDisplay)</div>
+                    <div class="col-md-4">
+                        @Html.DisplayFor(model => model.sEndDateDisplay, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="row text-start">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.TypeDisplay)</div>
+                    <div class="col-md-4">
+                        @Html.DisplayFor(model => model.TypeDisplay, new { @class = "form-control" })
+                    </div>
+                </div>                <br>                
+                <div class="row TargetAudienceContainer text-start">
+                    <div class="col-md-2 FormLableTitle">
+                        <div class="row">
+                            <div class="col-md-9">
+                                Target Audience
+                            </div>                           
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.IsAdmin, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Admin", data_off = "<i class='fa fa-times'></i> Admin" } })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.IsMerchant, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Merchant", data_off = "<i class='fa fa-times'></i> Merchant" } })
+                    </div>
+                    <div class="col-md-2">
+                        @Html.EditorFor(model => model.IsPartner, new { htmlAttributes = new { @class = "form-control", disabled = "disabled", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Partner", data_off = "<i class='fa fa-times'></i> Partner" } })
+                    </div>
+                </div>
+                <div class="row text-start">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.DisplayFrequencyDisplay)</div>
+                    <div class="col-md-4">
+                        @Html.DisplayFor(model => model.DisplayFrequencyDisplay, new { @class = "form-control" })
+                    </div>
+                </div>
+                <h5 class="sub-title text-start bg-light"><span>Operation Logs Details</span></h5>
+                <div class="row text-start">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.CreatedBy)</div>
+                    <div class="col-md-4">@Html.DisplayFor(model => model.CreatedBy, new { @class = "form-control" })</div>
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.sCreatedTime)</div>
+                    <div class="col-md-4">@Html.DisplayFor(model => model.sCreatedTime, new { @class = "form-control" })</div>
+                </div>
+                <div class="row text-start">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.ModifiedBy)</div>
+                    <div class="col-md-4">@Html.DisplayFor(model => model.ModifiedBy, new { @class = "form-control" })</div>
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.sModifiedTime)</div>
+                    <div class="col-md-4">@Html.DisplayFor(model => model.sModifiedTime, new { @class = "form-control" })</div>
+                </div>
+                <div class="row text-start">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.Status)</div>
+                    <div class="col-md-4">@Html.DisplayFor(model => model.Status, new { @class = "form-control" })</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted text-start">
+        <div class="row">
+            <div class="col-md-2 FormLableTitle">
+                <button class="btn btn-primary btm-sm itemPress itemEditAnnouncement" data-editjson="@Model.EditJson">
+                    <i class="iconEdit"></i>
+                    Edit
+                </button>
+            </div>
+            <div class="col-md-2 FormLableTitle">
+                <button class="btn btn-primary btm-sm itemBackRefresh">
+                    <i class="iconBack"></i>
+                    Back
+                </button>
+            </div>
+        </div>
+        <div>      
+                <div class="row">
+                    <div class="itemDetailValidationMessageContainer ValidationMessageContainer"></div>
+                    <div class="itemDetailMessageContainer DetailMessageContainer"></div>
+                </div>
+            </div>
+    </div>
+</div>
+

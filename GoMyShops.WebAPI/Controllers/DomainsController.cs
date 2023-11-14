@@ -8,8 +8,9 @@ using System.ComponentModel.DataAnnotations;
 using MyBGList.Attributes;
 using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
-using MyBGList.Constants;
+using GoMyShops.Commons;
 using GoMyShops.Data;
+using GoMyShops.Data.Entity;
 namespace GoMyShops.WebAPI.Controllers
 {
     [Route("[controller]")]

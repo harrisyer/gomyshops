@@ -77,8 +77,9 @@ namespace GoMyShops.Web.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(DataDetailsSettingModels model)
+        public async Task<ActionResult> EditAsync(DataDetailsSettingModels model)
         {
+
             if (!ModelState.IsValid)
             {
                 return View(model);
@@ -86,7 +87,7 @@ namespace GoMyShops.Web.Controllers
 
             bool isError = false;
 
-            isError = _dataSettingBAL.Edit(model, ModelState);
+            isError = await _dataSettingBAL.EditAsync(model, ModelState);
 
             if (!ModelState.IsValid)
             {

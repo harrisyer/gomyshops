@@ -7,16 +7,16 @@ using System.ComponentModel;
 
 namespace GoMyShops.Models
 {
-    public class SystemDetailSettingsModels : DetailsViewModels
+    public class SystemDetailSettingsModels : ViewModels.DetailsViewModels
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public SystemDetailSettingsModels() : base(null)
+        public SystemDetailSettingsModels() : base()
         {
 
         }
 
-        public SystemDetailSettingsModels(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public SystemDetailSettingsModels(IHttpContextAccessor httpContextAccessor) : base()
         {
             _httpContextAccessor = httpContextAccessor;
         }
@@ -35,7 +35,7 @@ namespace GoMyShops.Models
         public string SettingValue { get; set; } = string.Empty;
     }
 
-    public class SystemSettingsListModel : ActionsListViewModels
+    public class SystemSettingsListModel : ViewModels.ActionsListViewModels
     {
         public int Id { get; set; }
 

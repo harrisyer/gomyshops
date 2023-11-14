@@ -1,0 +1,39 @@
+﻿@using GoMyShops.Models
+@{
+    var alerts = TempData.ContainsKey(Alert.TempDataKey)
+                ? (List<Alert>)TempData[Alert.TempDataKey]
+                : new List<Alert>();
+                
+    if(alerts.Any())
+    {
+        @*<hr/>;*@
+    }
+    <div @*id="AlertPartial"*@ class="AlertPartial">
+
+        @foreach (var alert in alerts)
+        {
+        var dismissableClass = alert.Dismissable ? "alert-dismissable" : null;
+        var autoDisappearClass = alert.AutoDisappear ? "alert-disappear" : null;
+        <div class="alert alert-@alert.AlertStyle @dismissableClass @autoDisappearClass">
+            @if (alert.Dismissable)
+            {
+                <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+            }
+            @Html.Raw(alert.Message)
+        </div>;
+        }
+    </div>
+}
+
+@section Scripts {
+<script type="text/javascript">
+    $(function () {
+
+        $(".alert-disappear").delay(8000).fadeOut(300);
+    });
+
+    
+
+</script>
+}

@@ -1,0 +1,27 @@
+﻿@model GoMyShops.Models.ViewModels.SignUpVerifyViewModels
+@{
+    ViewBag.Title = "ConfirmAccount";
+}
+
+<h2>@ViewBag.Title.</h2>
+<div>
+
+    @{
+        if (Model.IsVerified)
+        {
+            <p>
+                Thank you for confirming your account. Please @Html.ActionLink("click here to log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+            </p>
+        }
+        else
+        {
+            <p>
+                Your confirming is invalid. Please @Html.ActionLink("click here to log in to get confirmation Email", "Login", "Account", routeValues: new { type = "11" }, htmlAttributes: new { id = "loginLink" })
+            </p>
+
+        }
+
+    }
+
+</div>
+

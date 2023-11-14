@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace MyBGList.Models
+namespace GoMyShops.Data.Entity
 {
     public class BoardGames_Mechanics
     {

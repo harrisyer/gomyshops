@@ -1,0 +1,29 @@
+﻿@model GoMyShops.Models.ViewModels.CommentChatDisplayAnnouncementViewModels
+
+@{
+    
+        <div class="panel panel-default">
+            <div class="panel-heading"><span class="glyphicon glyphicon-list-alt"></span><b> Announcements</b></div>
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="newstape">
+                            <div class="newstape-content">
+                                @foreach (var item in Model.ccavmList)
+                                {
+                                    <div class="news-block">
+                                        <h3>@item.Title</h3>
+                                        <small>@item.CreatedTime</small>
+                                        <p class="text-justify"> @item.Comment </p>
+                                        @*<div class="text-right"> <a href="#">More</a> </div>*@
+                                        <div class="newsdivider"></div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+}

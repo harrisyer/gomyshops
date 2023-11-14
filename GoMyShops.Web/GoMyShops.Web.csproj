@@ -8,8 +8,48 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Remove="Views\Home\Index20180411.cshtml" />
+    <Content Remove="Views\Shared\DisplayTemplates\CanonicalHelperModel.cshtml" />
+    <Content Remove="Views\Shared\DisplayTemplates\MenuHelperModel.cshtml" />
+    <Content Remove="Views\Shared\DisplayTemplates\MetaRobotsHelperModel.cshtml" />
+    <Content Remove="Views\Shared\DisplayTemplates\SiteMapHelperModel.cshtml" />
+    <Content Remove="Views\Shared\DisplayTemplates\SiteMapNodeModel.cshtml" />
+    <Content Remove="Views\Shared\DisplayTemplates\SiteMapNodeModelList.cshtml" />
+    <Content Remove="Views\Shared\DisplayTemplates\SiteMapPathHelperModel.cshtml" />
+    <Content Remove="Views\Shared\DisplayTemplates\SiteMapTitleHelperModel.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.449" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.13" />
+    <PackageReference Include="Microsoft.Extensions.Caching.SqlServer" Version="7.0.13" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
+    <PackageReference Include="Serilog.Enrichers.Environment" Version="2.3.0" />
+    <PackageReference Include="Serilog.Enrichers.Thread" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="6.3.0" />
+    <PackageReference Include="SimpleInjector" Version="5.4.1" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc" Version="5.5.0" />
+    <PackageReference Include="SimpleInjector.Integration.AspNetCore.Mvc.ViewFeatures" Version="5.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\GoMyShops.BAL\GoMyShops.BAL.csproj" />
+    <ProjectReference Include="..\GoMyShops.DependencySetup\GoMyShops.DependencySetup.csproj" />
+    <ProjectReference Include="..\GoMyShops.Mappings\GoMyShops.Mappings.csproj" />
     <ProjectReference Include="..\GoMyShops.Models\GoMyShops.Models.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\Shared\DisplayTemplates\" />
+    <Folder Include="Views\Shared\EditorTemplates\" />
+    <Folder Include="wwwroot\css\TempusDominus\" />
   </ItemGroup>
 
 </Project>

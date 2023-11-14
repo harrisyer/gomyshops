@@ -18,9 +18,10 @@ namespace GoMyShops.Models
         {
             get
             {
-                if (this.FindFirst(ClaimTypes.Name)!=null)
+                var a = this.FindFirst(ClaimTypes.Name);
+                if (a!=null)
                 {
-                   return this.FindFirst(ClaimTypes.Name).Value;
+                   return a.Value;
                 }
                 return "";
             }

@@ -1,0 +1,123 @@
+﻿@model GoMyShops.Models.ViewModels.AnnouncementDisplayViewModels
+
+@* <div id="carouselExampleRide" class="carousel slide carousel-fullscreen carousel-fade" data-bs-ride="true">
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <p>Temporary for Testing.</p>
+            <p>Temporary for Testing.</p>
+            <p>Temporary for Testing.</p>
+            <p>Temporary for Testing.</p>
+            <p>Temporary for Testing.</p>
+            <p>Temporary for Testing.</p>
+            <p>Temporary for Testing.</p>
+            <p>Temporary for Testing.</p>
+            <p>Temporary for Testing.</p>
+            <p>Temporary for Testing.</p>
+        </div>
+        <div class="carousel-item">
+            <p>1231232445546657676876876564544567898876498765434356766876543456754567</p>
+        </div>
+        <div class="carousel-item">
+            <p>324556789876545465676hfjgfghjfkghjghfjghdfkghj</p>
+        </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleRide" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div> *@
+
+@Html.HiddenFor(a => a.AnnouncementCount)
+<div id="carousel-announcement" class="carousel slide carousel-fullscreen carousel-fade" data-interval="true" data-bs-ride="true">
+    <!-- Indicators -->
+   @*  <ol class="carousel-indicators">
+        @if (Model.advm != null)
+        {
+            int count = 0;
+            foreach (var item in Model.advm)
+            {
+                if (count == 0)
+                {
+                    <li data-bs-target="#carousel-announcement" data-slide-to=@count class="active"></li>
+                }
+                else
+                {
+                    <li data-bs-target="#carousel-announcement" data-slide-to=@count></li>
+                }
+                count = count + 1;
+            }
+        }
+
+
+
+
+    </ol> *@
+
+    <!-- Wrapper for slides -->
+    <div class="carousel-inner" role="listbox">
+        @if (Model.advm != null)
+        {
+            int count = 0;
+            foreach (var item in Model.advm)
+            {
+                if (count == 0)
+                {
+                    <div class="carousel-item active">
+                        <div class=""></div>
+                       
+                            <div class="carousel-caption1">
+                            <div class="carousel-caption-inner">
+                                
+                                <h2>@item.Title </h2>
+                                <br />
+                                @Html.Raw(@item.Message)
+                            </div>
+
+                        </div>
+                       
+                    </div>
+                }
+                else
+                {
+                    <div class="carousel-item">
+                        <div class=""></div>
+                      
+                        <div class="carousel-caption1">
+                            <div class="carousel-caption-inner">
+                                <h2>@item.Title </h2>
+                                <br />
+                                @Html.Raw(@item.Message)
+                            </div>
+                        </div>
+                    </div>
+                }
+                count = count + 1;
+            }
+        }
+    </div>
+
+    <!-- Controls -->
+   @*  <button class="carousel-control" type="button" data-bs-target="#carousel-announcement" data-bs-slide="prev">
+        <i class="fa-solid fa-chevron-left fa-lg"></i>
+    </button>
+    <button class="carousel-control" type="button" data-bs-target="#carousel-announcement" data-bs-slide="next">
+        <i class="fa-solid fa-chevron-right fa-lg"></i>
+    </button> *@
+   
+    
+</div>
+
+<div class="carouselFooter">
+    <a class="left carousel-control" href="#carousel-announcement" role="button" data-bs-slide="prev">
+        <i class="fa-solid fa-chevron-left fa-lg"></i>
+
+    </a>
+    <a class="right carousel-control" href="#carousel-announcement" role="button" data-bs-slide="next">
+        <i class="fa-solid fa-chevron-right fa-lg"></i>
+
+    </a>
+</div>

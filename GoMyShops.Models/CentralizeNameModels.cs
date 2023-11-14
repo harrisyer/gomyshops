@@ -15,7 +15,7 @@ namespace GoMyShops.Models
 
         }
 
-        public CentralizeDetailsNameModels(IHttpContextAccessor httpContextAccessor) : base(httpContextAccessor)
+        public CentralizeDetailsNameModels(IHttpContextAccessor httpContextAccessor) : base()
         {
             _httpContextAccessor = httpContextAccessor;
         }

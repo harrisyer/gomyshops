@@ -1,0 +1,41 @@
+﻿@model GoMyShops.Models.AlertList
+
+@{
+    var alerts1 = Model.alerts;
+
+    @*if (alerts1.Any())
+    {
+        <hr />;
+    }*@
+    <div class="AlertPartial">
+
+        @foreach (var alert in alerts1)
+        {
+            var dismissableClass = alert.Dismissable ? "alert-dismissable" : null;
+            var autoDisappearClass = alert.AutoDisappear ? "alert-disappear" : null;
+            <div class="alert alert-@alert.AlertStyle @dismissableClass @autoDisappearClass">
+                @if (alert.Dismissable)
+                {
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+
+                }
+                @Html.Raw(alert.Message)
+            </div>;
+        }
+    </div>
+}
+
+@section Scripts {
+    <script type="text/javascript">
+    $(function () {
+        //$('.alert-disappear').fadeOut().delay(5000).queue(function () {
+        //    alert('3432443');
+        //});
+        //$(".alert-disappear").delay(60000).fadeOut(300);
+    });
+
+
+
+    </script>
+}
+

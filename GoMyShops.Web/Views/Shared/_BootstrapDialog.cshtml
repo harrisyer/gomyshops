@@ -1,0 +1,103 @@
+﻿
+<div id="edit-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+            </div>
+            <div class="modal-body edit-content">
+                Click save button to save or Cancel to return main page.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn " data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="ConfirmSave" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="info-modal" class="modal vertical-alignment-helper fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog vertical-align-center">
+        <div class="modal-content">
+            @*<div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Information</h4>
+            </div>*@
+            <div class="modal-body edit-content">
+                <div class="row modal-body-text">
+                    Click OK button to close.
+                </div>
+                <div class="row modal-body-button text-right">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+                </div>
+              
+            </div>
+            @*<div class="modal-footer">
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal">OK</button>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+<div id="refund-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+            </div>
+            <div class="modal-body edit-content">
+                Click confirm button to refund selected exceptions or cancel button to return.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn " data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="ConfirmSaveRefund" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="partner-terminate-modal" class="modal fade" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Confirmation</h4>
+            </div>
+            <div class="modal-body edit-content">
+                <span id="modalText"></span>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="CancelPartnerTerminate" class="btn " data-bs-dismiss="modal">Cancel</button>
+                <button type="button" id="ConfirmPartnerTerminate" class="btn btn-primary" data-bs-dismiss="modal">Confirm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div id="modalConfirmYesNo" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button"
+                        class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 id="lblTitleConfirmYesNo" class="modal-title">Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <p id="lblMsgConfirmYesNo"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="btnYesConfirmYesNo"
+                        type="button" class="btn btn-primary">
+                    Yes
+                </button>
+                <button id="btnNoConfirmYesNo"
+                        type="button" class="btn btn-default">
+                    No
+                </button>
+            </div>
+        </div>
+    </div>
+</div>*@

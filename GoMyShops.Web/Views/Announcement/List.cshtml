@@ -1,0 +1,623 @@
+﻿@model GoMyShops.Models.ViewModels.AnnouncementViewModels
+@using GoMyShops.Models.Helpers;
+
+@section Scripts
+    {
+   @*  <script src='~/js/Jquery/jquery-sortable.js'></script>
+    <script src='~/js/RubaXa/Sortable.js'></script>    *@
+    <script type="text/javascript">
+          var modelName = '@ViewContext.RouteData.Values["Controller"].ToString()';
+          CommonVariable.init(modelName);
+
+      
+        $(function () {
+         
+              ToolbarInit();
+        });
+
+        function ToolbarInit() {
+            $('#toolbar').find('select').change(function () {
+                $('#tbllist').bootstrapTable('destroy').bootstrapTable({
+                    exportDataType: $(this).val(),
+                    exportTypes: ['json', 'xml', 'csv', 'txt', 'sql', 'excel']
+                })
+            }).trigger('change');
+        };
+
+        // function queryParams111111(params) {
+        //     alert(JSON.stringify(params));
+        //     return {
+        //         page: params.pageNumber,
+        //         pageLimit: params.pageSize,
+        //         searchRecord: params.searchText,
+        //         sortName: params.sortName,
+        //         sortOrder: params.sortOrder
+        //     };
+        // };
+
+        function queryParams(params) {        
+            return {
+                limit: params.limit,
+                offset: params.offset,
+                search: params.search,
+                sort: params.sort,
+                order: params.order,
+                param1: $("#srcTitle").val(),
+                param2: $("#srcMessage").val(),
+                param3: $("#srcType").val(),
+                param4: $("#srcDisplayFrequency").val(),
+                param5: $("#srcTargetAudience").val(),
+                param6: $("#srcStartDate").val(),
+                param7: $("#srcStatus").val()
+            };           
+        };
+
+           $(document).on("click", "#btnReset", function () {
+               $("#srcTitle").val('');
+               $("#srcMessage").val('');
+               $("#srcType").val('');
+               $("#srcDisplayFrequency").val('');
+               $("#srcTargetAudience").val('');
+               $("#srcStartDate").val('');
+               $("#srcStatus").val('');
+               listSearch();
+           });
+
+
+        window.operateEventsAnnouncementConnection = {
+           
+            'click .listDetailsLink': function (e, value, row, index) {             
+                itemAnnouncementDetails(row.DetailJson);
+            },
+            'click .listEditLink': function (e, value, row, index) {
+                itemEditAnnouncement(row.EditJson);
+            }
+        };
+
+        
+
+        $(document).ready(function () {
+            $('.itemPopulatePriorityListContainer').hide();
+        });
+
+        ////Start Items Handles       
+ 
+        $(document).on("click", ".itemNewAnnouncement", function (e) {
+            e.preventDefault();
+        
+            itemCreateAnnouncement(e);            
+            return false;
+        });
+
+        function itemCreateAnnouncement(e) {
+
+            $.ajax({
+                type: "get",
+                url: GetPath(CommonVariable.modelName() + "/Create"),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (result) {
+                    if (result != null) {
+
+                        $('.itemCreateContainer').html(result);
+                        $('.itemCreateContainer').show();
+                        $('.itemEditContainer').empty();
+                        $('.itemDetailsContainer').empty();
+                        $('.itemsListingContainer').hide();
+                        ShowAlertsMessage('.itemCreateMessageContainer', true);
+
+                        var datePickerStart = moment().startOf('day')
+                        var datePickerEnd = moment().startOf('day').add(1,'y')
+
+                        
+
+                        // var start_date = $(".routeDateControl").data('DateTimePicker');
+                        // var end_date = $(".routeEndDateControl").data('DateTimePicker');
+                        // start_date.minDate(datePickerStart);
+                        // start_date.maxDate(datePickerEnd);
+                        // end_date.minDate(datePickerStart);
+                        // end_date.maxDate(datePickerEnd);
+
+
+                        $('.textarea-editor').summernote({
+                            height: 220,   //set editable area's height
+
+                        });
+
+                        $('#IsAdmin').bootstrapToggle();
+                        $('#IsMerchant').bootstrapToggle();
+                        $('#IsPartner').bootstrapToggle();
+
+                        validationPartialView('.itemNewAnnouncement');
+                        InitDominusCalender();
+                        InitBottonIcons();
+                    }
+                }
+            });
+        }
+
+        $(document).on("click", ".itemSaveAnnouncement", function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: GetPath(CommonVariable.modelName() + "/Create"),
+                data: $(this).closest('form').serialize(),
+                dataType: "html",
+                success: function (result) {
+                },
+                error: function (xhr, status, error) {
+                    alert(xhr.responseText);
+                    Success = false;
+                }
+            }).done(function (data) {
+                if (data != null) {
+                    $('.itemCreateContainer').html(data);
+                    $('.itemDetailsContainer').hide();
+                    $('.itemEditContainer').hide();
+                    $('.itemCreateContainer').show();
+                    $('.itemsListingContainer').hide();
+                    if (data.Errors != null) {
+                        $('.itemCreateValidationMessageContainer').html(data.Errors);
+                    }
+                    if (data.Success != null) {
+                        $('.itemCreateMessageContainer').html(data.Success);
+                    }
+                    ShowAlertsMessage('.itemCreateMessageContainer', true);
+
+                    var datePickerStart = moment().startOf('day')
+                    var datePickerEnd = moment().startOf('day').add(1, 'y')
+                    
+
+
+                    $('.textarea-editor').summernote({
+                        height: 220,   //set editable area's height
+
+                    });
+
+                    $('#IsAdmin').bootstrapToggle();
+                    $('#IsMerchant').bootstrapToggle();
+                    $('#IsPartner').bootstrapToggle();
+                    $('#CheckBoxStatus').bootstrapToggle();
+                    validationPartialView('.itemCreateContainer');
+                    InitDominusCalender();
+                    InitBottonIcons();
+                }
+            });
+            return false;
+        });
+
+        $(document).on("change", ".AnnouncementType", function () {
+            if ($(this).val() == "2") {
+                $(".TargetAudienceContainer").hide();
+                //$(".TargetAudienceContainer").prop('disabled', true);
+                //var $controls = $(".TargetAudienceContainer").find(":input");
+                //$controls.prop("disabled", true);
+            }
+            else
+            {
+                $(".TargetAudienceContainer").show();
+            }
+        })
+
+        function itemAnnouncementDetails(jsonData) {
+            $.ajax({
+                type: "get",
+                url: GetPath(modelName + "/Details"),
+                data: (jsonData),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (result) {
+
+                    if (result != null) {
+                        $('.itemDetailsContainer').html(result);
+                        $('.itemDetailsContainer').show();
+                        $('.itemCreateContainer').empty();
+                        $('.itemEditContainer').empty();
+                        $('.itemsListingContainer').hide();
+
+                        $('.textarea-editor').summernote({
+                            height: 220,   //set editable area's height
+                            disable:true
+                        });
+                         $('.textarea-editor').summernote('disable');
+                        $('#IsAdmin').bootstrapToggle();
+                        $('#IsMerchant').bootstrapToggle();
+                        $('#IsPartner').bootstrapToggle();
+
+                        InitBottonIcons();
+                    }
+                }
+            });
+        }
+
+        $(document).on("click", ".itemEditAnnouncement", function (e) {
+            e.preventDefault();
+            var aaa = $(this).data("editjson");
+            itemEditAnnouncement(aaa);
+            return false;
+        });
+
+        function itemEditAnnouncement(jsonData) {
+            $.ajax({
+                type: "get",
+                url: GetPath(CommonVariable.modelName() + "/Edit"),
+                data: (jsonData),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (result) {
+
+                    if (result != null) {
+                        $('.itemEditContainer').html(result);
+                        $('.itemEditContainer').show();
+
+                        if ($('#CurrentStatus').val() === '1') {
+                            $(".itemEditContainer :input").attr("disabled", true);
+                            $(".itemEditFooter :input").attr("disabled", false);
+                        }
+
+                        $('.itemCreateContainer').empty();
+                        $('.itemDetailsContainer').empty();
+                        $('.itemsListingContainer').hide();
+
+                        var datePickerStart = moment().startOf('day')
+                        var datePickerEnd = moment().startOf('day').add(1, 'y')
+                       
+
+                        $('.textarea-editor').summernote({
+                            height: 220,   //set editable area's height
+
+                        });
+
+                        $('#IsAdmin').bootstrapToggle();
+                        $('#IsMerchant').bootstrapToggle();
+                        $('#IsPartner').bootstrapToggle();
+                        $('#CheckBoxStatus').bootstrapToggle();
+
+                        // GetPriorityList(1);
+
+                        validationPartialView('.itemEditContainer');
+                        InitDominusCalender();
+                        InitBottonIcons(); 
+                    }
+                }
+            });
+        };
+
+        $(document).on("click", ".itemEditSaveAnnouncement", function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: GetPath(CommonVariable.modelName() + "/Edit"),
+                data: $(this).closest('form').serialize(),
+                dataType: "html",
+                success: function (result) {
+                    if (result != null) {
+                        $('.itemEditContainer').html(result);
+
+                        var datePickerStart = moment().startOf('day')
+                        var datePickerEnd = moment().startOf('day').add(1, 'y')
+                       
+                        // var start_date = $(".routeDateControl").data('DateTimePicker');
+                        // var end_date = $(".routeEndDateControl").data('DateTimePicker');
+                        // start_date.minDate(datePickerStart);
+                        // start_date.maxDate(datePickerEnd);
+                        // end_date.minDate(datePickerStart);
+                        // end_date.maxDate(datePickerEnd);
+
+
+                        $('.textarea-editor').summernote({
+                            height: 220,   //set editable area's height
+
+                        });
+
+
+                        $('#IsAdmin').bootstrapToggle();
+                        $('#IsMerchant').bootstrapToggle();
+                        $('#IsPartner').bootstrapToggle();
+                        $('#CheckBoxStatus').bootstrapToggle();
+
+                        //ShowAlertsMessage();
+                        ShowAlertsMessage('.itemEditMessageContainer', true);
+                        if (result.Errors != null) {
+                            $('.itemEditValidationMessageContainer').html(result.Errors);
+                        }
+                        if (result.Success != null) {
+                            $('.itemEditMessageContainer').html(result.Success);
+                        }
+
+                        InitDominusCalender();
+                        InitBottonIcons();
+
+                    };
+                },
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                }
+
+            })
+
+            //MIDFunding - add back disabled attribute
+            $('#PaymentType').attr('disabled', true);
+            return false;
+        });
+
+        $(document).on("click", ".itemPreviewAnnouncement", function (e) {
+            e.preventDefault();
+
+            var textareaValue = $('.textarea-editor').summernote('code');
+            $(".PreviewAnnouncementContainer").html(' <h2>' + $('#Title').val() + '</h2><br />' +  textareaValue);
+
+            var $confirm = $(".PreviewAnnouncementModal");
+
+            var widthmodal = $(window).width() - 300;
+
+            $confirm.css({
+                //width: (widthmodal),
+                //top: (50),
+                //left: ($(window).width() - widthmodal) / 2,
+                overflow: 'auto',
+            });
+            $confirm.modal('show');
+            return false;
+        })
+
+        $(document).on("click", ".modalclose", function (e) {
+            //alert(12345);
+        //$('#listing-modal').on('hidden', function () {
+            //$(this).modal().hide();
+        });
+
+        $(document).on("click", ".itemGetPriorityList", function (e) {
+            e.preventDefault();
+            GetPriorityList(1);
+            return false;
+
+        })
+
+        function GetPriorityList(type) {
+            $.ajax({
+                type: "GET",
+                url: GetPath(CommonVariable.modelName() + "/GetPriorityList"),
+                data: ({ offset: 0, limit: 100, param1: '', param2: '' }),
+                dataType: "json",
+                contentType: "application/json",
+                success: function (result) {                  
+                    if (result != null) {
+                        if (type==1)
+                        {
+                            alert(1);
+                            $('.itemPriorityListContainer').empty();
+                            $(".itemPriorityList1Container").appendTo(".itemPriorityListContainer");
+                            $('.itemPopulatePriorityListContainer').empty();
+                        }
+
+                        $('.tblPrioritylist').bootstrapTable('removeAll');
+                        alert(4);
+                        $('.tblPrioritylist').bootstrapTable('append', result);
+                        alert(5);
+                        var tbodyMidList = document.getElementById('tbodyPriorityList');
+                        if (tbodyMidList != null) {
+                            Sortable.create(document.getElementById('tbodyPriorityList'));
+                        }
+
+                    }//end if
+                },//end success
+                error: function (xhr, status, error) {
+                    alert(error);
+                }
+            });
+        };
+
+        $(document).on("click", ".itemBackRefreshEditProfile", function (e) {
+            e.preventDefault();
+            $('.itemDetailsContainer').hide();
+            $('.itemCreateContainer').hide();
+            $('.itemEditContainer').hide();
+            $('#tbllist').bootstrapTable('refresh');
+            MoveDivBackToList();
+            $('.itemsListingContainer').show();
+            return false;
+        });
+
+        function MoveDivBackToList() {
+            //$('.itemPriorityListContainer').empty();
+            //$(".itemPriorityList1Container").appendTo(".itemPriorityListContainer");
+
+            $('.itemPopulatePriorityListContainer').empty();
+            $(".itemPriorityList1Container").appendTo(".itemPopulatePriorityListContainer");
+
+            //$('.itemPopulateMidListontainer').empty();
+            //$(".itemMidList1Container").appendTo(".itemPopulateMidListontainer");
+        }
+
+        $(document).on("click", ".itemPrioritySave", function () {
+            $('.itemPriorityEditValidationMessageContainer').empty();
+            $('.itemPriorityEditMessageContainer').empty();
+
+            jsonObj = [];
+            $('#tblPrioritylist tbody td:nth-child(1)').each(function (index) {
+                //var value = $(this).closest('tr').find('td:eq(4)').text(); // for fourth column
+                var code = $(this).closest('tr').find('td:eq(0)').text(); // for first column
+                item = {
+                    'Code1': code,
+                    'RowNo1': index + 1
+                    //'RowNo1': value,
+                };
+                //jsonObj.push(item);
+                jsonObj.push(code);
+            });
+
+            //var y1 = JSON.stringify(jsonObj);
+            //var data1 = { 'announcementIndexList': jsonObj };
+            //var announcementIndexList = JSON.stringify(data1);
+            //alert(JSON.stringify(jsonObj));
+
+            $.ajax({
+
+                type: "POST",
+                url: GetPath(CommonVariable.modelName() + "/PopulatePriorityList"),
+                data: JSON.stringify(jsonObj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result != null) {
+                        if (result.Success != null) {
+                            GetPriorityList(2);
+                            $('.itemPriorityEditMessageContainer').ShowBoostrapAlert(result.Success, "success", true, true, true);
+                        }//end if
+
+                        if (result.Errors != null) {
+                            //$('.itemUserAccessLayerEditValidationMessageContainer').html(result.Errors);
+                            $('.itemPriorityEditValidationMessageContainer').ShowBoostrapAlert(result.Errors, "danger", true, true, false);
+                        }//end if
+                        else {
+                            $('.itemPriorityEditValidationMessageContainer').html("");
+                        }//end else
+                    }//end if
+
+
+                },
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                }
+            }).done(function (data) {
+                ////if (data != null) {
+                ////$('.itemEditPasswordContainer').html(data);
+                //ShowAlertsMessage();
+                //}
+            });
+
+            return false;
+        });
+
+        ////End Items Handles
+    </script>
+}
+
+
+@using (Html.BeginForm("List", @ViewContext.RouteData.Values["Controller"].ToString(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken()
+    @Html.Raw(Html.CustomValidationSummary(true))
+    <div class="itemsListingContainer">      
+        <div class="card border-primary text-center">
+            <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseSearch" aria-controls="collapseSearch">Announcements Search <span class="fa fa-arrows-v pull-right"></span></div>
+                <div id="collapseSearch" class="collapse show">
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div class="row">
+                                <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcTitle)</div>
+                                <div class="col-md-4">@Html.TextBoxFor(u => u.srcTitle, new { @class = "form-control", maxlength = 100 })</div>
+                                <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcMessage)</div>
+                                <div class="col-md-4">@Html.TextBoxFor(u => u.srcMessage, new { @class = "form-control", maxlength = 100 })</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcType)</div>
+                                <div class="col-md-4">@Html.DropDownListFor(u => u.srcType, Model.AnnouncementTypeDDL, "All", new { @class = "form-control SearchSelect" })</div>
+                                <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcDisplayFrequency)</div>
+                                <div class="col-md-4">@Html.DropDownListFor(u => u.srcDisplayFrequency, Model.DisplayFrequencyDDL, "All", new { @class = "form-control SearchSelect" })</div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcTargetAudience)</div>
+                                <div class="col-md-4">@Html.DropDownListFor(u => u.srcTargetAudience, Model.TargetAudienceDDL, "All", new { @class = "form-control SearchSelect" })</div>
+                                <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.srcStatus)</div>
+                                <div class="col-md-4">@Html.DropDownListFor(u => u.srcStatus, Model.StatusDDL, "All", new { @class = "form-control SearchSelect" })</div>
+
+
+                            </div>
+                            <div class="row">
+                                <div class="col-md-2 FormLableTitle">
+                                    <div class="row">
+                                        <div class="col-md-9">
+                                            @Html.DisplayNameFor(model => model.srcStartDate)
+                                        </div>
+                                        <div class="col-md-3">
+                                              
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">                               
+                                    <div class="input-group routeDateControl date" id="datetimepicker1" data-td-target-input="nearest" data-td-target-toggle="nearest">
+                                        <div>@Html.TextBoxFor(model => model.srcStartDate, new { @class = "form-control routedatecontrolInput",@data_td_target="#datetimepicker1", @readonly = true })</div>
+                                            <span class="input-group-text routeDateControlSpan" data-td-target="#datetimepicker1" data-td-toggle="datetimepicker">
+                                            <span class="fas fa-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+                               
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-footer text-muted text-center">
+                        <button class="btn btn-primary btn-sm itemNewAnnouncement">
+                             <i class="iconNew" ></i>                          
+                            Create New
+                        </button>
+                        <button id="btnReset" class="btn btn-primary btn-sm">
+                            <i class="iconReset"></i>
+                                    Reset
+                        </button>
+
+                        <button id="btnFilter" class="btn btn-primary itemPress btn-sm">
+                            <i class="iconSearch"></i>
+                            Search
+                        </button>
+                    </div>
+                </div>   
+         <div class="row"></div>
+        <div class="card border-primary text-center">
+            <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseList" aria-controls="collapseList">Announcements Listing<span class="fa fa-arrows-v pull-right"></span></div>
+            <div id="collapseList" class="collapse show">
+                <div class="card-body">                  
+                    <div id="tableListContainer">
+                        <div id="toolbar">
+                            <select class="form-control">
+                                <option value="">Export Page</option>
+                                <option value="all">Export All</option>
+                            </select>
+                        </div>
+                        <div id="table-wrapper" class="table-responsive">
+                            <table  id="tbllist"                                  
+                                   class="table-condensed table-striped"
+                                   data-toggle="table"
+                                   data-url="@Url.Content("~/")Announcement/getData"
+                                   data-pagination="true"
+                                   data-side-pagination="server"
+                                   data-row-style="TableListrowStyle"
+                                   data-search="false"
+                                   data-query-params="queryParams">
+                                   
+                                <thead>
+                                    <tr>
+                                        <th data-field="Id" data-sortable="true" class="d-xs-none d-sm-none d-md-none d-lg-none d-xl-none">Id</th>
+                                        <th data-field="Title" data-sortable="true" class="col-md-3">Title</th>
+                                        <th data-field="sCreateDate" data-sortable="true" class="col-md-2">Create Date</th>
+                                        <th data-field="Priority" data-sortable="false" class="col-md-1">Priority</th>
+                                        <th data-field="Type" data-sortable="true" class="col-md-2">Type</th>
+                                        <th data-field="DisplayFrequency" data-sortable="true" class="col-md-1">Frequency</th>
+                                        <th data-field="TargetAudience" data-sortable="true" class="col-md-2">Target Audience</th>
+                                          <th data-field="Status" data-class="StatusCol" class="col-md-1" data-sortable="true" data-formatter="FormatterStatus">Status</th>
+                                        <th data-formatter="operateFormatter" data-events="operateEventsAnnouncementConnection" class="col-md-1">Action</th>
+                                    </tr>
+                                </thead> 
+                            </table>
+                        </div>
+
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+        
+
+    <div class="itemDetailsContainer"></div>
+    <div class="itemCreateContainer"></div>
+    <div class="itemEditContainer"></div>
+    <div class="itemPopulatePriorityListContainer">
+        @Html.RenderPartialAsync("PopulatePriorityList")
+        @*@Html.Raw(@Html.RenderAction("PopulatePriorityList", "Announcement"))*@
+
+    </div>
+}

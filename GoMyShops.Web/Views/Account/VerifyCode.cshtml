@@ -1,0 +1,110 @@
+﻿@model GoMyShops.Models.VerifyCodeViewModel
+@using GoMyShops.Models.Helpers;
+@{
+    ViewBag.Title = "Enter Verification Code";
+}
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //$('.body-content').css("background-image", "url('Images/featured-background.png')");
+            // $(".body-content").addClass("loginBackground");
+            // $('.body-content').css('background-size', 'cover');
+        });
+    </script>
+}
+<section id="loginForm" class="text-center">
+    @using (Html.BeginForm("VerifyCode", "Account", new { ReturnUrl = Model.ReturnUrl }, FormMethod.Post,true, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Raw(Html.CustomValidationSummary(true))      
+        @Html.HiddenFor(u => u.UserName)
+        <div class="LoginContainer">
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="row"></div>
+            <div class="row"></div>           
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card border-primary mb-3 text-center">
+                        <div class="card-header">Verification Code</div>
+                        <div class="card-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <span class="help-block">
+                                        @Html.DisplayFor(u => u.PhoneCode, new { @class = "form-control " })
+                                    </span>
+                                   @*  <div class="col-md-12 text-center card-text VerifyPhoneCode">
+                                        @Html.DisplayFor(u => u.PhoneCode, new { @class = "form-control " })
+                                    </div> *@
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-4 FormLableTitle">User ID</div>
+                                    <div class="col-md-6 text-start">
+                                        @Html.DisplayFor(u => u.UserName, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 FormLableTitle">Verification Code</div>
+                                    <div class="col-md-6">
+                                        @Html.TextBoxFor(u => u.Code, new { @class = "form-control", maxlength = 6 })
+                                        @Html.ValidationMessageFor(m => m.Code)
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 FormLableTitle"></div>
+                                    <div class="col-md-6 ">
+                                        <div class="row text-start">
+                                            <div class="col-md-6">
+                                                <input type="submit" value="Submit" class="btn btn-primary" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="button" value="Cancel" class="btn btn-primary itemLoginPage" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @* <div class="row">
+                                    <div class="col-md-4 FormLableTitle"></div>
+                                    <div class="col-md-6 text-start">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="submit" value="Resend" class="btn btn-primary btnforgotPassword" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="button" value="Cancel" class="btn btn-primary itemLoginPage" />
+                                            </div>
+                                        </div>
+
+                                    </div>
+
+                                </div> *@
+
+                                <div class="row">
+                                    <div class="itemListValidationMessageContainer ValidationMessageContainer"></div>
+                                    <div class="itemListMessageContainer DetailMessageContainer"></div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="card-footer text-muted text-start">
+                            <div class="row">
+                                <div class="col-md-12 text-left">
+                                    @*  <a href="#" class="linkForgotPassword">Forgot your password?</a> *@
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+               
+        </div>
+        <div class="col-md-2">
+            @*<img src="@Url.Content("~/Images/gomyshopslogo1.png")" />*@
+
+        </div>
+    </div>
+
+    }
+</section>

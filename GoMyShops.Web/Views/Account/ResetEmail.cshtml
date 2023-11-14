@@ -1,0 +1,78 @@
+﻿@model GoMyShops.Models.ResetEmailViewModel
+@using GoMyShops.Models.Helpers;
+@*<script type="text/javascript">
+        $(document).ready(function () {
+            $(".body-content").addClass("loginBackground");
+            $('.body-content').css('background-size', 'cover');
+        });
+</script>*@
+@*<section id="loginForm" class="text-center">*@
+    @using (Html.BeginForm("ResetEmail", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        //@Html.HiddenFor(model => model.Code)
+        //@Html.HiddenFor(model => model.Email)
+        @Html.Raw(Html.CustomValidationSummary(true))
+        <div class="LoginContainer">
+          
+            <div class="row">
+                @Html.HiddenFor(model => model.OldEmail)
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Change Email</div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+                                <div class="row">
+
+                                    <div class="col-md-4 FormLableTitle">@Html.DisplayNameFor(m => m.OldEmail)</div>
+                                    <div class="col-md-6">
+                                        @Html.DisplayFor(u => u.OldEmail, new { @class = "form-control", maxlength = 100 })
+                                        @Html.ValidationMessageFor(m => m.OldEmail)
+                                    </div>
+
+
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 FormLableTitle">@Html.DisplayNameFor(m => m.Email)</div>
+                                    <div class="col-md-6">
+                                        @Html.EditorFor(u => u.Email, new { htmlAttributes = new { @class = "form-control", maxlength = 100 } })
+                                        @Html.ValidationMessageFor(m => m.Email)
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 FormLableTitle">@Html.DisplayNameFor(m => m.ConfirmEmail)</div>
+                                    <div class="col-md-6">
+                                        @Html.EditorFor(u => u.ConfirmEmail, new { htmlAttributes = new { @class = "form-control", maxlength = 100 } })
+                                        @Html.ValidationMessageFor(m => m.ConfirmEmail)
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-md-4 FormLableTitle"></div>
+                                    <div class="col-md-6 text-left">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <input type="button" value="Change" class="btn btn-primary resetEmail" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <input type="button" value="Cancel" class="btn btn-primary itemLoginPage" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    @*<img src="@Url.Content("~/Images/BorneoExpressLogin.jpg")" />*@
+                </div>
+            </div>
+        </div>
+    }
+@*</section>*@
+

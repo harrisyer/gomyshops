@@ -1,0 +1,223 @@
+﻿@model GoMyShops.Models.ViewModels.LoginModel
+@using GoMyShops.Models.Helpers;
+@{
+    ViewBag.Title = "Log in";
+}
+@section styles
+{
+    <style>
+        .carouselFooter{
+            padding-top: calc(50% - 5px);
+        }
+
+        .PreviewAnnouncementModalContent{
+           /*  min-height: 100%;
+            height: 100%;
+            height: auto !important; */
+        }
+
+        .carousel-fullscreen .carousel-inner .item{
+          overflow-y:hidden;
+        }
+
+        .modal.show .modal-dialog {
+            transform: none;
+            padding-top: 40px;
+        }
+
+        .modal-dialog,
+        .modal-content {
+            /* 80% of window height */
+            height: 90%;
+       
+        }
+
+        .modal-body {
+            /* 100% = dialog height, 120px = header + footer */
+            max-height: calc(100% - 120px);
+            overflow-y: scroll;
+           
+        }
+    </style>
+
+}
+
+@section Scripts
+{
+    <script type="text/javascript">
+        var modelName = '@ViewContext.RouteData.Values["Controller"].ToString()';
+        CommonVariable.init(modelName);
+
+        $(document).ready(function () {           
+            //$('.body-content').css("background-image", 'url("Images/featured-background.png"');          
+            // $(".body-content").addClass("loginBackground");
+
+            // $('.body-content').css('background-size', 'cover');
+            if ("@Model.Msg" != null && "@Model.Msg"!="")
+            {
+                showAlert("@Model.Msg");
+                @*var $confirm = $("#info-modal");
+                var $modalbody = $confirm.find('.modal-body-text');
+                $modalbody.html("@Model.Msg");
+                $confirm.modal('show');*@ 
+            }
+
+             //var $confirm = $("#info-modal");
+             //   var $modalbody = $confirm.find('.modal-body-text');
+             //   $modalbody.html("324567asdfghjasdfgh  asdrfgth45t6f gfgd");
+             //   //alert($(window).height() + "-" + $(this).height() + "-" + $(window).width() + "-" + $(this).width());
+         
+             //   $confirm.modal('show');
+
+            PopulateAnnouncementList();
+
+
+        });
+
+        function PopulateAnnouncementList() { 
+            $.ajax({
+                type: "get",
+                url: GetPath(modelName + "/PopulateAnnouncementList"),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (result) {
+                    if (result != null) {
+                        $(".PreviewAnnouncementContainer").html(result);
+
+                        // if ($("#AnnouncementCount").val()>0)
+                        // {
+                            //var widthmodal = $(window).width() ;
+
+                            var $confirm = $(".PreviewAnnouncementModal");
+                            $confirm.css({
+                                // width: (widthmodal),
+                                // top: (50),
+                                // left: ($(window).width() - widthmodal) / 2,
+                                overflow: 'auto',
+                            });
+                            $confirm.modal('show');
+                        // }
+                        
+                    }//end if
+                },//end success
+                error: function (textStatus, errorThrown) {
+                    Success = false;
+                    showAlert("Error!");
+                }
+            });
+        };
+
+
+    </script>
+}
+@*<h2>@ViewBag.Title.</h2>*@
+    <section id="loginForm" class="text-center">
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post,true, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.AntiForgeryToken()
+            @Html.CustomValidationSummary(false)
+          
+           
+            <div class="LoginContainer">
+                <div class="row"></div>
+                <div class="row"></div>
+                <div class="row"></div>
+                <div class="row"></div>
+                <div class="row"></div>               
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card border-primary mb-3 text-center">
+                            <div class="card-header">User Login</div>
+                            <div class="card-body">
+                                <div class="container-fluid">
+                                    <div class="row text-success pull-left">
+                                        <div class="itemListMessageContainer text-success pull-left"></div>
+                                        <div class="itemListMessageContainer2"></div>
+                                    </div>
+                                    <div class="row"></div>
+                               
+                                    <div class="row">
+                                        <div class="col-md-4 FormLableTitle">User ID</div>
+                                        <div class="col-md-6 text-start">
+                                            @Html.TextBoxFor(u => u.UserName, new { @class = "form-control", maxlength = 20 })
+                                            @Html.ValidationMessageFor(m => m.UserName)
+                                        </div>
+
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-4 FormLableTitle"></div>
+                                        <div class="col-md-6 text-start">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <input type="submit" value="Next" class="btn btn-primary" >
+                                                    
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="itemListValidationMessageContainer ValidationMessageContainer"></div>
+                                        <div class="itemListMessageContainer DetailMessageContainer"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-footer text-muted text-start">
+                                <div class="row">
+                                    <div class="col-md-6 text-left">
+                                        <a href="#" class="linkForgotPassword">Forgot your password?</a>
+                                    </div>
+                                    @if (Model.IsSignUp)
+                                    {
+                                        <div class="col-md-6 text-right">
+                                            <a href="#" class="linkSignUp">Sign Up</a>
+                                        </div>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                  <!-- Modal -->
+            <div class="modal fade show PreviewAnnouncementModal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content PreviewAnnouncementModalContent">
+                        <div class="modal-header"> 
+                            <h3>Announments</h3>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body PreviewAnnouncementContainer">
+                         
+                        </div>
+                       
+                    </div>
+                </div>
+            </div>
+
+
+               @*  <div class="col-md-12 modal fade CloseModal PreviewAnnouncementModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="row closeRow">
+                                <button type="button" class="close modalclose" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body edit-content PreviewAnnouncementContainer">
+                            </div>
+                        </div>
+                    </div>
+                </div> *@
+             
+            </div>
+
+
+
+       
+        }
+    </section>
+
+
+    

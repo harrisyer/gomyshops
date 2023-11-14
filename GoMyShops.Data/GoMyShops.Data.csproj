@@ -8,24 +8,34 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Entity\ApiUser.cs" />
     <Compile Remove="Entity\ApplicationDbContext.cs" />
+    <Compile Remove="Entity\AspNetRole.cs" />
+    <Compile Remove="Entity\AspNetUser.cs" />
+    <Compile Remove="Entity\AspNetUserClaim.cs" />
+    <Compile Remove="Entity\AspNetUserLogin.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.12" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.12" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.12">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="7.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="7.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="7.0.13">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="7.0.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="7.0.0" />
     <PackageReference Include="SimpleInjector" Version="5.4.1" />   
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\GoMyShops.Models\GoMyShops.Models.csproj" />
   </ItemGroup>
 
 </Project>
