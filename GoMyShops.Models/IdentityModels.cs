@@ -98,6 +98,13 @@ namespace GoMyShops.Models
       
         public virtual IList<PreviousPassword> PreviousUserPasswords { get; set; }
 
+        /// <summary>
+        /// For RefreshToken
+        /// </summary>
+        public string? RefreshToken { get; set; }
+        public DateTime? RefreshTokenExpiryTime { get; set; }
+
+
     }
 
     [PrimaryKey(nameof(UserId), nameof(PasswordHash))]

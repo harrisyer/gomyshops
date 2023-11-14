@@ -29,10 +29,14 @@ namespace GoMyShops.BAL
         List<AuditValue> ConvertAuditCompositeKeys(List<AuditValue> model);
         List<SelectListItem> GetLoginFilterList();
         List<SelectListItem> GetCountryList();
+
+        Task<List<SelectListItem>> GetStatusListAsync();
         List<SelectListItem> GetStatusList();
         List<SelectListItem> GetMerchantStatusList();
         List<SelectListItem> GetStateByCountry(string CountryCode);
         List<SelectListItem> GetiParamList(string paramCode);
+        Task<List<SelectListItem>> GetiParamListAsync(string paramCode);
+
         string GetiParamDesc(string paramCode, string paramKey);
         SelectListItem GetiParamByKey(string paramCode, string paramKey);
         List<SelectListItem> GetiParamWithoutCodeList(string paramCode);
@@ -597,6 +601,32 @@ namespace GoMyShops.BAL
                                                          Value = r.StateCode
                                                      }).ToList();
                 //}//end using
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error", ex);
+            }
+            finally { }
+            return infos.IsNullThenNew(_httpContextAccessor);
+        }
+
+        public async Task<List<SelectListItem>> GetStatusListAsync()
+        {
+            List<SelectListItem> infos =  new List<SelectListItem>();
+            try
+            {
+                //using (var uow = this._uowFactory.Create())
+                //{
+                infos =await _uow.Repository<StatusSU>().GetAsQueryable(x => x.Status == CommonSetting.Status.Active ||
+                                                                     x.Status == CommonSetting.Status.Inactive)
+                                                 .Select(r => new SelectListItem()
+                                                 {
+                                                     Text = r.StatusName,
+                                                     Value = r.Status
+                                                 }).ToListAsync();
+                //}//end using
+                //infos.Add(new SelectListItem() { Text = "Active", Value = "1" });
+                //infos.Add(new SelectListItem() { Text = "Deactivated", Value = "0" });
             }
             catch (Exception ex)
             {
@@ -1184,6 +1214,32 @@ namespace GoMyShops.BAL
             return infos.IsNullThenNew(_httpContextAccessor);
         }
 
+
+        public async Task<List<SelectListItem>> GetiParamListAsync(string paramCode)
+        {
+            List<SelectListItem> infos =  new List<SelectListItem>();
+           
+            try
+            {
+                //using (var uow = this._uowFactory.Create())
+                //{
+                infos =await _uow.Repository<Param>().GetAsQueryable()
+                                                .Where(r => r.ParamCode == paramCode && r.ParamStatus == CommonSetting.Status.Active)
+                                                .OrderBy(x => x.SortOrder)
+                                                .Select(r => new SelectListItem()
+                                                {
+                                                    Text = r.ParamValue + " - " + r.ParamDesc,
+                                                    Value = r.ParamKey
+                                                }).ToListAsync();
+                // }//end using
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error", ex);
+            }
+            finally { }
+            return infos.IsNullThenNew(_httpContextAccessor);
+        }
         public List<SelectListItem> GetiParamList(string paramCode)
         {
             List<SelectListItem> infos = null;

@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.Html;
 using GoMyShops.Commons;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
+
 namespace GoMyShops.Models.Helpers
 {
     public static class ModelStateHelper
@@ -211,7 +214,7 @@ namespace GoMyShops.Models.Helpers
             return "";
         }
 
-        public static IHtmlContent CustomValidationSummary(this IHtmlHelper html, bool excludePropertyErrors)
+        public static HtmlString CustomValidationSummary(this IHtmlHelper html, bool excludePropertyErrors)
         {
 
             if (!html.ViewData.ModelState.IsValid)

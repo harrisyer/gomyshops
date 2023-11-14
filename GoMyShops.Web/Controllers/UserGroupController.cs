@@ -50,12 +50,12 @@ namespace GoMyShops.Web.Controllers
         #endregion
         #region Public Functions
         [Permissions]
-        public ActionResult List(UserGroupViewModels model)
+        public async Task<ActionResult> List(UserGroupViewModels model)
         {
-            model.GroupTypeDDL = _userGroupBAL.GetGroupType();
-            model.StatusDDL = _servicesBAL.GetStatusList();
+            model.GroupTypeDDL =await _userGroupBAL.GetGroupTypeAsync();
+            model.StatusDDL =await _servicesBAL.GetStatusListAsync();
             return View(model);
-        }
+        } 
 
      [HttpGet]
         public JsonResult getData(int offset, int limit, string search, string sort, string order, string param1, string param2, string param3, string param4, string param5, string param6, string param7, string param8)

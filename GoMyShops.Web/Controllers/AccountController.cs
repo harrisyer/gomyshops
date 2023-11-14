@@ -158,7 +158,7 @@ namespace GoMyShops.Controllers
         // GET: /Account/Login
         [AllowAnonymous]
        
-        public ActionResult Login(string returnUrl,string type)
+        public ActionResult Login(string? returnUrl,string? type)
         {
 
 
@@ -254,7 +254,7 @@ namespace GoMyShops.Controllers
         [ValidateAntiForgeryToken]
         [AntiForgeryHandleError]
         //[PreventDuplicateRequest]
-        public async Task<ActionResult> Login(LoginModel model, string returnUrl)
+        public async Task<ActionResult> Login(LoginModel model, string? returnUrl)
         {
             //Check for SignUp
             SignUpVerifyViewModels svvm = new SignUpVerifyViewModels();

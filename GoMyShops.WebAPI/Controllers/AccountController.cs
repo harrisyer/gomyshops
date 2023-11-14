@@ -13,6 +13,16 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using GoMyShops.Data;
 using GoMyShops.Models;
+using GoMyShops.WebAPI.Models;
+using Microsoft.ApplicationInsights.Extensibility.Implementation;
+using GoMyShops.WebAPI.Services;
+using System.Linq.Dynamic.Core.Tokenizer;
+using Microsoft.AspNetCore.Authentication;
+using System;
+using Azure.Core;
+using StackExchange.Redis;
+using GoMyShops.Commons;
+
 namespace GoMyShops.WebAPI.Controllers
 {
     [Route("[controller]/[action]")]
@@ -29,18 +39,22 @@ namespace GoMyShops.WebAPI.Controllers
 
         private readonly SignInManager<ApplicationUser> _signInManager;
 
+        private readonly ITokenService _tokenService;
+
         public AccountController(
             DataContext context,
             ILogger<DomainsController> logger,
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            ITokenService tokenService)
         {
             _context = context;
             _logger = logger;
             _configuration = configuration;
             _userManager = userManager;
             _signInManager = signInManager;
+            _tokenService = tokenService;
         }
 
         [HttpPost]
@@ -105,35 +119,68 @@ namespace GoMyShops.WebAPI.Controllers
                     if (user == null
                         || !await _userManager.CheckPasswordAsync(
                                 user, input.Password))
-                        throw new Exception("Invalid login attempt.");
+                        return Unauthorized();
+                        //throw new Exception("Invalid login attempt.");
                     else
                     {
-                        var signingCredentials = new SigningCredentials(
-                            new SymmetricSecurityKey(
-                                System.Text.Encoding.UTF8.GetBytes(
-                                    _configuration["JWT:SigningKey"])),
-                            SecurityAlgorithms.HmacSha256);
+                        //var signingCredentials = new SigningCredentials(
+                        //    new SymmetricSecurityKey(
+                        //        System.Text.Encoding.UTF8.GetBytes(
+                        //            _configuration["JWT:SigningKey"])),
+                        //    SecurityAlgorithms.HmacSha256);
+
+                        //Check Cuurent got access token or not.
+                        //var accessToken1 = await HttpContext.GetTokenAsync("access_token");
+                        //if (accessToken1 != null) {
+                        //    var tokenHandler = new JwtSecurityTokenHandler();
+
+                        //    var jwtSecurityToken = tokenHandler.ReadJwtToken(accessToken1);
+                        //}
+                      
+
 
                         var claims = new List<Claim>();
                         claims.Add(new Claim(
                             ClaimTypes.Name, user.UserName));
-                        claims.AddRange(
-                            (await _userManager.GetRolesAsync(user))
-                                .Select(r => new Claim(ClaimTypes.Role, r)));
+                        claims.Add(new Claim(
+                           ClaimTypes.Role, RoleNames.Moderator));
+                        //claims.Add(new Claim(
+                        //   "refresh_token", refreshToken,ClaimValueTypes.String));
+                        ////claims.AddRange(
+                        //    (await _userManager.GetRolesAsync(user))
+                        //        .Select(r => new Claim(ClaimTypes.Role, r)));
 
-                        var jwtObject = new JwtSecurityToken(
-                            issuer: _configuration["JWT:Issuer"],
-                            audience: _configuration["JWT:Audience"],
-                            claims: claims,
-                            expires: DateTime.Now.AddSeconds(300),
-                            signingCredentials: signingCredentials);
 
-                        var jwtString = new JwtSecurityTokenHandler()
-                            .WriteToken(jwtObject);
+                        var accessToken = _tokenService.GenerateAccessToken(claims);
+                        //var authenticationInfo = await HttpContext.AuthenticateAsync();
+                    
+                        var refreshToken = _tokenService.GenerateRefreshToken();
 
-                        return StatusCode(
-                            StatusCodes.Status200OK,
-                            jwtString);
+                        // ... update tokens using refresh token flow ...
+
+                        //authenticationInfo.Properties.UpdateTokenValue("access_token", accessToken);
+                        //var aaa = authenticationInfo.Principal;
+
+                        // authenticationInfo.Properties.SetString("refresh_token", refreshToken);
+                        // authenticationInfo.Properties.ExpiresUtc = DateTime.Now.AddSeconds(300);//UpdateTokenValue("expires_at", DateTime.Now.AddSeconds(300).ToString("o"));
+
+                        user.RefreshToken = refreshToken;
+                        user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+                        _context.SaveChanges();
+                      
+                        Response.Cookies.Append("X-Access-Token", accessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+                        Response.Cookies.Append("X-Username", user.UserName, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+                        Response.Cookies.Append("X-Refresh-Token", refreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+
+                        return Ok();
+
+                        //return Ok(new AuthenticatedResponse
+                        //{
+                        //    Token = accessToken,
+                        //    RefreshToken = refreshToken
+                        //});
+
                     }
                 }
                 else

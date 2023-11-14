@@ -15,6 +15,7 @@
   <ItemGroup>
     <ProjectReference Include="..\GoMyShops.BAL\GoMyShops.BAL.csproj" />
     <ProjectReference Include="..\GoMyShops.Commons\GoMyShops.Commons.csproj" />
+    <ProjectReference Include="..\GoMyShops.Data\GoMyShops.Data.csproj" />
   </ItemGroup>
 
 </Project>

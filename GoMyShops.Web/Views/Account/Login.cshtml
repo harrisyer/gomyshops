@@ -115,7 +115,8 @@
         @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post,true, new { @class = "form-horizontal", role = "form" }))
         {
             @Html.AntiForgeryToken()
-            @Html.Raw(Html.CustomValidationSummary(true))
+            @Html.CustomValidationSummary(false)
+          
            
             <div class="LoginContainer">
                 <div class="row"></div>

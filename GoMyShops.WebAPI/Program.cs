@@ -18,6 +18,10 @@ using SimpleInjector;
 using SimpleInjector.Lifestyles;
 using AutoMapper;
 using GoMyShops.Mappings;
+using GoMyShops.WebAPI.Services;
+using GoMyShops.BAL;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Options;
 //using GoMyShops.Data.Entity;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -212,6 +216,32 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 })
     .AddEntityFrameworkStores<DataContext>();
 
+///Some internal Services
+//builder.Services.AddScoped<ITokenService, TokenService>();
+container.Register<ITokenService, TokenService>(AsyncScopedLifestyle.Transient);
+///try put all configuration file parameter here
+//container.Register<IConfigurationParameters, ConfigurationParameters>(AsyncScopedLifestyle.Singleton);
+///services.AddSingleton<IConfigurationParameters, ConfigurationParameters>();
+var gConfigurationParameters = new ConfigurationParameters {
+
+    tokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        RequireExpirationTime = true,
+        ValidateLifetime=true, //manual check skip default  
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])),        
+        ClockSkew = TimeSpan.Zero//FromMinutes(1)//
+    },
+    tokenExpiredHour =Convert.ToInt16( builder.Configuration["JWT:TokenExpiredHour"]),
+    refreshTokenExpiryDay = Convert.ToInt16(builder.Configuration["JWT:RefreshTokenExpiryDay"]),
+};
+
+    container.RegisterSingleton<IConfigurationParameters>(() => gConfigurationParameters);
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme =
@@ -223,19 +253,32 @@ builder.Services.AddAuthentication(options =>
         JwtBearerDefaults.AuthenticationScheme;
 }).AddJwtBearer(options =>
 {
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateIssuerSigningKey = true,
-        RequireExpirationTime = true,
-        ValidIssuer = builder.Configuration["JWT:Issuer"],
-        ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(
-          System.Text.Encoding.UTF8.GetBytes(
-              builder.Configuration["JWT:SigningKey"])
-      )
+    options.TokenValidationParameters = gConfigurationParameters.tokenValidationParameters;
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;    
+    options.Events = new JwtBearerEvents()
+    {   
+        OnMessageReceived = context =>
+        {
+            var a = context.Request;
+            if (context.Request.Cookies.Count <= 0)
+            {
+                return Task.CompletedTask;
+            }
+
+            ///ASP.NET Core still waits the token from Authorization Header. Therefore, we have to set the token from the cookies
+            if (context.Request.Cookies.ContainsKey("X-Access-Token"))
+            {
+                context.Token = context.Request.Cookies["X-Access-Token"];
+                //var aaaa=context.HttpContext.User.Identity.IsAuthenticated;
+            }           
+
+            return Task.CompletedTask;
+        }
     };
+    //options.Events.OnMessageReceived = context => {
+       
+    //};
 });
 
 builder.Services.AddAuthorization(options =>
@@ -305,7 +348,7 @@ if (app.Environment.IsDevelopment())
 if (app.Configuration.GetValue<bool>("UseDeveloperExceptionPage"))
     app.UseDeveloperExceptionPage();
 else
-    app.UseExceptionHandler("/error");
+    app.UseExceptionHandler("/Error");
 
 app.UseHttpsRedirection();
 
@@ -317,16 +360,16 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 #region Adds a default cache-control (no cache, overwrite by [RequestCache])
-app.Use((context, next) =>
-{
-    context.Response.GetTypedHeaders().CacheControl =
-            new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
-            {
-                NoCache = true,
-                NoStore = true
-            };
-    return next.Invoke();
-});
+//app.Use((context, next) =>
+//{
+//    context.Response.GetTypedHeaders().CacheControl =
+//            new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+//            {
+//                NoCache = true,
+//                NoStore = true
+//            };
+//    return next.Invoke();
+//});
 #endregion
 
 // Minimal API

@@ -264,6 +264,15 @@ namespace GoMyShops.Commons
             return false;
         }
 
+        public static DateTime IsNullTimeThenNew<T>(this T? enumerable)
+        {
+            if (enumerable == null)
+            {
+                return DateTime.Now;
+            }
+            return Convert.ToDateTime (enumerable);
+        }
+
         public static bool IsNullOrEmpty<T>(this T enumerable)
         {
             if (enumerable == null)

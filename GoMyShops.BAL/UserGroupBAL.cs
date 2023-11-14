@@ -21,7 +21,8 @@ namespace GoMyShops.BAL
 {
     public interface IUserGroupBAL
     {
-        List<SelectListItem> GetGroupType();
+     
+        Task<List<SelectListItem>> GetGroupTypeAsync();
         List<SelectListItem> GetActiveUserGroupList();
         List<SelectListItem> GetActiveUserGroupList(string GroupType, string Code);
         List<SelectListItem> GetActiveAdminUserGroupList();
@@ -51,8 +52,8 @@ namespace GoMyShops.BAL
             _uow = uowFactory.Create();
             _servicesBAL = servicesBAL;
             _appCtrlUserProfileBAL = appCtrlUserProfileBAL;
-            _httpContextAccessor = httpContextAccessor;
-            //_urlHelper = new UrlHelper(HttpContext.Current.Request.RequestContext);
+            _httpContextAccessor = httpContextAccessor;         
+            CurrentUser = CommonFunctionsBAL.GetCurrentUser(CurrentUser, _httpContextAccessor);
 
         }
         #endregion
@@ -187,7 +188,7 @@ namespace GoMyShops.BAL
                     //
 
                     model1.EditJson = JsonConvert.SerializeObject(new ActionsListDetails(model1.GroupCode, "", "", "", ""));
-                    model1.sCreatedTime = CommonFunctionsBAL.ParseStandardDateFormat(model1.CreatedTime, true, true);
+                    model1.sCreatedTime = CommonFunctionsBAL.ParseStandardDateFormat(model1.CreatedTime.IsNullTimeThenNew(), true, true);
                     model1.sModifiedTime = model1.ModifiedTime.HasValue ? CommonFunctionsBAL.ParseStandardDateFormat(model1.ModifiedTime.GetValueOrDefault(), true, true) : " - ";
 
                     //for Application Control Access right
@@ -405,12 +406,12 @@ namespace GoMyShops.BAL
             return isError;
         }
 
-        public List<SelectListItem> GetGroupType()
+        public async Task<List<SelectListItem>> GetGroupTypeAsync()
         {
-            List<SelectListItem> infos = null;
+            List<SelectListItem> infos = new List<SelectListItem>();
             try
             {
-                infos=_servicesBAL.GetiParamList(CommonSetting.ParamCodes.UserType);
+                infos=await _servicesBAL.GetiParamListAsync(CommonSetting.ParamCodes.UserType);
             }
             catch (Exception ex)
             {
