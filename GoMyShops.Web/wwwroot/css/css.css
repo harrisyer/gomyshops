@@ -3218,7 +3218,7 @@ aside {
     }
 
     #loginForm .validation-summary-errors li {
-        display: inline;
+        display:block;
         list-style: none;
         margin: 0;
     }
@@ -3393,7 +3393,7 @@ td button {
 
 /* styles for validation helpers */
 .field-validation-error {
-    color: #e80c4d;
+    color:whitesmoke;
     font-weight: 100;
 }
 

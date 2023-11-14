@@ -22,7 +22,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using System.IO;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
+//using Microsoft.AspNetCore.Mvc.ViewEngines;
 
 namespace GoMyShops.Web.Controllers
 {
@@ -41,14 +41,14 @@ namespace GoMyShops.Web.Controllers
         ISmsBAL _smsBAL;
         private readonly IHttpContextAccessor _httpContextAccessor;
         IWebHostEnvironment _hostingEnvironment;
-        ICompositeViewEngine _viewEngine;
+        //ICompositeViewEngine _viewEngine;
         #endregion
         #region Constructor
-        public UserController(IWebHostEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, ILogger<UserController> logger, ICompositeViewEngine viewEngine, IUsersBAL userBAL, ICompanyBAL companyBAL, IDistributorBAL distributorBAL, IBranchBAL branchBAL,  IUserGroupBAL userGroupBAL, IServicesBAL servicesBAL, ISmsBAL smsBAL)
+        public UserController(IWebHostEnvironment hostingEnvironment, IHttpContextAccessor httpContextAccessor, ILogger<UserController> logger,  IUsersBAL userBAL, ICompanyBAL companyBAL, IDistributorBAL distributorBAL, IBranchBAL branchBAL,  IUserGroupBAL userGroupBAL, IServicesBAL servicesBAL, ISmsBAL smsBAL)
         {
             _hostingEnvironment = hostingEnvironment;
             _httpContextAccessor = httpContextAccessor;
-            _viewEngine = viewEngine;
+           // _viewEngine = viewEngine;
             _userBAL = userBAL;
             _userGroupBAL = userGroupBAL;
             _companyBAL = companyBAL;
@@ -416,59 +416,59 @@ namespace GoMyShops.Web.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> EditLoginImage(LoginImageViewModels model)
         {
-           // SignInStatus status = new SignInStatus();
-            bool isError = false;
-            if (ModelState.IsErrors("Password"))
-            //    if (!ModelState.IsValid)
-            {
-                setLoginImages(model);
-                //return Json(new { Errors = "Invalid data.", OperationContainer = CommonFunctionsBAL.RenderRazorViewToString(ControllerContext, "EditLoginImagePartial", model) });
+            ////// SignInStatus status = new SignInStatus();
+            //// bool isError = false;
+            //// if (ModelState.IsErrors("Password"))
+            //// //    if (!ModelState.IsValid)
+            //// {
+            ////     setLoginImages(model);
+            ////     //return Json(new { Errors = "Invalid data.", OperationContainer = CommonFunctionsBAL.RenderRazorViewToString(ControllerContext, "EditLoginImagePartial", model) });
 
-                return Json(new { Errors = "Invalid data.", OperationContainer = CommonFunctionsBAL.RenderPartialViewToString(_hostingEnvironment, _viewEngine, ControllerContext, "EditLoginImagePartial", model) });
+            ////     return Json(new { Errors = "Invalid data.", OperationContainer = CommonFunctionsBAL.RenderPartialViewToString(_hostingEnvironment, _viewEngine, ControllerContext, "EditLoginImagePartial", model) });
 
 
-                //return PartialView("EditLoginImagePartial", model);
-            }//end if
+            ////     //return PartialView("EditLoginImagePartial", model);
+            //// }//end if
 
-            VerifyCodeViewModel vc = new VerifyCodeViewModel();
-            vc.Code = model.Code;
-            vc.UserName = CurrentUser.Name;
-            var isTrue = await _userBAL.VerifyTwoFactorWithoutChangedAsync(vc);
-            if (ModelState.IsErrors("Password"))
-            {
-                setLoginImages(model);
-                return Json(new { Errors = "Invalid data.", OperationContainer = CommonFunctionsBAL.RenderPartialViewToString(_hostingEnvironment,_viewEngine,ControllerContext, "EditLoginImagePartial", model) });
-            }
+            //// VerifyCodeViewModel vc = new VerifyCodeViewModel();
+            //// vc.Code = model.Code;
+            //// vc.UserName = CurrentUser.Name;
+            //// var isTrue = await _userBAL.VerifyTwoFactorWithoutChangedAsync(vc);
+            //// if (ModelState.IsErrors("Password"))
+            //// {
+            ////     setLoginImages(model);
+            ////     return Json(new { Errors = "Invalid data.", OperationContainer = CommonFunctionsBAL.RenderPartialViewToString(_hostingEnvironment,_viewEngine,ControllerContext, "EditLoginImagePartial", model) });
+            //// }
 
-            if (isTrue)
-            {
-                isError = _userBAL.EditPhrase(model, ModelState);
+            //// if (isTrue)
+            //// {
+            ////     isError = _userBAL.EditPhrase(model, ModelState);
 
-                if (isError)
-                {
-                    return Json(new { Errors = CommonSetting.PleaseContactAdmin });
-                }//end if
+            ////     if (isError)
+            ////     {
+            ////         return Json(new { Errors = CommonSetting.PleaseContactAdmin });
+            ////     }//end if
 
-                //MessageSuccess(string.Format(CommonSetting.SuccessModifyRecordsArgs, CurrentUser.Name), true, true);
-                //return PartialView("EditLoginImagePartial", model);
+            ////     //MessageSuccess(string.Format(CommonSetting.SuccessModifyRecordsArgs, CurrentUser.Name), true, true);
+            ////     //return PartialView("EditLoginImagePartial", model);
 
-                //if type=1, not modal dialog
-                if (model.Type!="1")
-                {
-                    return Json(new { Success = CommonSetting.SuccessModifyRecords, Type="1"});
+            ////     //if type=1, not modal dialog
+            ////     if (model.Type!="1")
+            ////     {
+            ////         return Json(new { Success = CommonSetting.SuccessModifyRecords, Type="1"});
 
-                }//end if
+            ////     }//end if
 
-                setLoginImages(model);
-                return Json(new { Success = CommonSetting.SuccessModifyRecords, OperationContainer = CommonFunctionsBAL.RenderPartialViewToString(_hostingEnvironment,_viewEngine,ControllerContext, "EditLoginImagePartial", model) });
+            ////     setLoginImages(model);
+            ////     return Json(new { Success = CommonSetting.SuccessModifyRecords, OperationContainer = CommonFunctionsBAL.RenderPartialViewToString(_hostingEnvironment,_viewEngine,ControllerContext, "EditLoginImagePartial", model) });
 
-            }
-            else
-            {
-                return Json(new { Errors = "Invalid code." });
-                //ModelState.AddModelError("Code", "Invalid code.");
-            }//end if-else
-     
+            //// }
+            //// else
+            //// {
+            ////     return Json(new { Errors = "Invalid code." });
+            ////     //ModelState.AddModelError("Code", "Invalid code.");
+            //// }//end if-else
+            return Ok();
         }
 
         [AllowAnonymous]

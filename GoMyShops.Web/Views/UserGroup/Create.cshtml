@@ -1,0 +1,158 @@
+﻿@model GoMyShops.Models.ViewModels.UserGroupDetailsViewModels
+@using GoMyShops.Models.Helpers;
+
+<div class="card border-primary text-center">
+    <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-controls="collapseOne">User Group Creation<span class="fa fa-arrows-v pull-right"></span></div>
+    <div id="collapseOne" class="collapse show">
+        <div class="card-body">
+            <div class="container-fluid">
+              @Html.CustomValidationSummary(true)
+                <div class="row">
+                    <div class="col-md-2 FormLableTitle">
+                        <div class="row">
+                            <div class="col-md-9">
+                                @Html.DisplayNameFor(model => model.GroupName)
+                            </div>
+                            <div class="col-md-3">
+                                <i class="iconRequired"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        @Html.TextBoxFor(u => u.GroupName, new { @class = "form-control", maxlength = 20 })
+                        @Html.ValidationMessageFor(m => m.GroupName)
+                    </div>
+                    <div class="row">
+                        <div class="col-md-2 FormLableTitle">
+                            <div class="row">
+                                <div class="col-md-9">
+                                    @Html.DisplayNameFor(model => model.Description)
+                                </div>
+                                <div class="col-md-3">
+                                    <i class="iconRequired"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+
+                            @Html.TextAreaFor(u => u.Description, new { @class = "form-control FillTextArea", @rows = "5", maxlength = 200 })
+                            @Html.ValidationMessageFor(m => m.Description)
+                        </div>
+
+                    </div>
+                    @{
+                        if (Model.UsersType == "W")
+                        {
+                            <h5 class="sub-title"><span>Application Access Rights</span></h5>
+
+                            <div class="row">
+                                <div class="col-md-9">
+                                    <div class="list-group routeTimeListGroup">
+                                        <div class="list-group-item clearfix listGroupTitleNormal">
+                                            <div class="col-md-3">Checked </div>
+                                            <div class="col-md-9">Description</div>
+
+                                        </div>
+                                        @if (Model.AppCtrDetailList != null)
+                                        {
+                                            for (int i = 0; i <= Model.AppCtrDetailList.Count() - 1; i++)
+                                            {
+                                                var item = Model.AppCtrDetailList[i];
+
+                                                @Html.HiddenFor(u => u.AppCtrDetailList[i].AppCtrlID)
+                                                <div class="list-group-item clearfix ">
+                                                    <div class="col-md-2">
+                                                        <label class="checkbox">
+                                                            @Html.EditorFor(u => u.AppCtrDetailList[i].Status, new { htmlAttributes = new { @class = "form-control" } })
+                                                            @Html.ValidationMessageFor(u => u.AppCtrDetailList[i].Status)
+                                                        </label>
+                                                    </div>
+                                                    <div class="col-md-4">@Html.DisplayTextFor(u => u.AppCtrDetailList[i].AppCtrName)</div>
+
+                                                </div>
+
+                                            }
+                                        }
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                  
+            </div>
+        </div>
+    </div>
+    <div class="card-footer text-muted text-center">
+        <div class="row">
+            <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemPress itemSave">
+                    <i class="iconSave"></i>
+                    Save
+                </button>
+            </div>
+            <div class="col-md-2 FormLableTitle">
+                <button class="btn btn-primary btm-sm itemBackRefresh">
+                    <i class="iconBack"></i>
+                    Back
+                </button>
+            </div>
+        </div>
+        <div>
+            <div class="row">
+                <div class="itemCreateValidationMessageContainer ValidationMessageContainer"></div>
+                <div class="itemCreateMessageContainer DetailMessageContainer"></div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+
+
+
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">User Group Access List</div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div id="tree" class="col-md-8"></div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="container-fluid">
+            <div class="row">
+                @*<div class="col-md-3 FormLableTitle"><input class="btn btn-primary itemUserGroupAccess" type="button" value="Get User Group Access" /></div>*@
+                <div class="col-md-3 FormLableTitle">
+                    <input type="button" value="Save User Group Access" class="btn btn-primary itemUserGroupAccessSave" />
+                </div>
+                @*<div class="col-md-2 FormLableTitle"><input class="btn btn-primary itemUserGroupAccessReset" type="button" value="Clear" /></div>*@
+                @*<div class="col-md-2 FormLableTitle">
+                        <button class="btn btn-primary btn-sm itemUserGroupAccessReset">
+                            <i class="fa fa-refresh"></i>
+                            Clear
+                        </button>
+                    </div>*@
+
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemBackRefresh">
+                        <i class="fa fa-reply-all"></i>
+                        Back
+                    </button>
+                </div>
+                @*<div class="col-md-1 FormLableTitle">
+
+                    <input class="btn btn-primary itemBackRefresh" type="button" value="Back" /></div>*@
+
+            </div>
+            <div class="row">
+                <div class="itemUserGroupAccessLayerEditValidationMessageContainer ValidationMessageContainer"></div>
+                <div class="itemUserGroupAccessLayerEditMessageContainer DetailMessageContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>

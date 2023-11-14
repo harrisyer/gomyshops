@@ -1,0 +1,174 @@
+﻿@model GoMyShops.Models.ViewModels.UserGroupDetailsViewModels
+@using GoMyShops.Models.Helpers;
+<div class="panel panel-default">
+    <div class="panel-heading">User Group Editing</div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            @Html.Raw(Html.CustomValidationSummary(true))
+            @*@Html.HiddenFor(a => a.CompanyCode)*@
+            @*@Html.HiddenFor(a => a.Company)*@
+            @Html.HiddenFor(a => a.GroupCode)
+            <div class="row">
+                @*<div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.Company)</div>
+            <div class="col-md-3">@Html.DisplayFor(model => model.Company, new { @class = "form-control" })</div>*@
+                @*<div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.GroupType)<i class="glyphicon glyphicon-asterisk glyphiconRequired"></i></div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(u => u.GroupType, Model.GroupTypeDDL, "-", new { @class = "form-control SearchSelect" })
+                @Html.ValidationMessageFor(m => m.GroupType)
+            </div>*@
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.GroupCode)</div>
+                <div class="col-md-3">@Html.DisplayFor(model => model.GroupCode, new { @class = "form-control" })</div>
+                @*<div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.SecurityId)<i class="glyphicon glyphicon-asterisk glyphiconRequired"></i></div>
+            <div class="col-md-3">
+                @Html.DropDownListFor(u => u.SecurityId, Model.SecurityNameDDL, "-", new { @class = "form-control SearchSelect" })
+                @Html.ValidationMessageFor(m => m.SecurityId)
+            </div>*@
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 FormLableTitle">
+                    <div class="row">
+                        <div class="col-md-9">
+                            @Html.DisplayNameFor(model => model.GroupName)
+                        </div>
+                        <div class="col-md-3">
+                            <i class="glyphicon glyphicon-asterisk glyphiconRequired"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    @Html.TextBoxFor(u => u.GroupName, new { @class = "form-control", maxlength = 20 })
+                    @Html.ValidationMessageFor(m => m.GroupName)
+                </div>
+
+
+            </div>
+
+            <div class="row">
+                <div class="col-md-2 FormLableTitle">
+                    <div class="row">
+                        <div class="col-md-9">
+                            @Html.DisplayNameFor(model => model.Description)
+                        </div>
+                        <div class="col-md-3">
+                            <i class="glyphicon glyphicon-asterisk glyphiconRequired"></i>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+
+                    @Html.TextAreaFor(u => u.Description, new { @class = "form-control FillTextArea", @rows = "5", maxlength = 200 })
+                    @Html.ValidationMessageFor(m => m.Description)
+                </div>
+            </div>
+
+            @if (!Model.IsInActive)
+            {
+                <div class="row">
+                    <div class="col-md-2 FormLableTitle">@Html.DisplayNameFor(model => model.CheckBoxStatus)</div>
+                    <div class="col-md-4">
+                        @Html.EditorFor(model => model.CheckBoxStatus, new { htmlAttributes = new { @class = "form-control", data_toggle = "toggle", data_onstyle = "success", data_on = "<i class='fa fa-check'></i> Active", data_off = "<i class='fa fa-times'></i> Inactive" } })
+                    </div>
+                </div>
+            }
+
+            @{
+                if (Model.UsersType == "W")
+                {
+                    <h5 class="sub-title"><span>Application Access Rights</span></h5>
+
+                    <div class="row">
+                        <div class="col-md-9">
+                            <div class="list-group routeTimeListGroup">
+                                <div class="list-group-item clearfix listGroupTitleNormal">
+                                    <div class="col-md-3">Checked </div>
+                                    <div class="col-md-9">Description</div>
+
+                                </div>
+                                @if (Model.AppCtrDetailList != null)
+                                {
+                                    for (int i = 0; i <= Model.AppCtrDetailList.Count() - 1; i++)
+                                    {
+                                        var item = Model.AppCtrDetailList[i];
+                                        @Html.HiddenFor(u => u.AppCtrDetailList[i].AppCtrlID)
+                                        <div class="list-group-item clearfix ">
+                                            <div class="col-md-3">
+                                                <label class="checkbox">
+                                                    @Html.EditorFor(u => u.AppCtrDetailList[i].Status, new { htmlAttributes = new { @class = "form-control" } })
+                                                    @Html.ValidationMessageFor(u => u.AppCtrDetailList[i].Status)
+                                                </label>
+                                            </div>
+                                            <div class="col-md-8">@Html.DisplayTextFor(u => u.AppCtrDetailList[i].AppCtrName)</div>
+
+                                        </div>
+                                    }
+                                }
+
+
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemPress itemEditSave" data-editjson="@Model.EditJson">
+                        <i class="fa fa-floppy-o"></i>
+                        Save
+                    </button>
+                </div>
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemBackRefresh">
+                        <i class="fa fa-reply-all"></i>
+                        Back
+                    </button>
+                </div>
+                @*<div class="col-md-1 FormLableTitle">
+                <input type="button" value="Save" class="btn btn-primary itemEditSave" />
+            </div>
+            <div class="col-md-1 FormLableTitle"><input class="btn btn-primary itemBackRefresh" type="button" value="Back" /></div>*@
+            </div>
+            <div class="row">
+                <div class="itemEditValidationMessageContainer ValidationMessageContainer"></div>
+                <div class="itemEditMessageContainer DetailMessageContainer"></div>
+            </div>
+        </div>
+        @*</div>*@
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-heading">User Group Access List</div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div id="tree" class="col-md-8"></div>
+        </div>
+    </div>
+    <div class="panel-footer">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-3 FormLableTitle"><input class="btn btn-primary itemUserGroupAccess" type="button" value="Get User Group Access" /></div>
+                <div class="col-md-3 FormLableTitle">
+                    <input type="button" value="Save User Group Access" class="btn btn-primary itemUserGroupAccessSave" />
+                </div>
+                <div class="col-md-2 FormLableTitle">
+                    <button class="btn btn-primary btm-sm itemBackRefresh">
+                        <i class="fa fa-reply-all"></i>
+                        Back
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="itemUserGroupAccessLayerEditValidationMessageContainer ValidationMessageContainer"></div>
+                <div class="itemUserGroupAccessLayerEditMessageContainer DetailMessageContainer"></div>
+            </div>
+        </div>
+    </div>
+</div>

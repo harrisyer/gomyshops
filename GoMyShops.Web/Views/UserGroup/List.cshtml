@@ -1,0 +1,383 @@
+﻿@model GoMyShops.Models.ViewModels.UserGroupViewModels
+@using GoMyShops.Models.Helpers;
+@section Scripts
+{
+    <script type="text/javascript">
+        var modelName = '@ViewContext.RouteData.Values["Controller"].ToString()';     
+        CommonVariable.init(modelName);
+
+        function queryParams(params) {
+            return {
+                limit: params.limit,
+                offset: params.offset,
+                search: params.search,
+                sort: params.sort,
+                order: params.order,
+                param1: $("#srcGroupCode").val(),
+                param2: '',/*$("#srcGroupType").val(),*/
+                param3: $("#srcStatus").val(),
+                //param4: $("#srcStatus").val()
+            };           
+        };
+
+        
+          $(document).on("click", "#btnReset", function (e) {
+              e.preventDefault();
+               $("#srcGroupCode").val('');
+               //$("#srcGroupType").val('');
+               $("#srcStatus").val('');
+
+               listSearch();
+           });
+
+
+        
+
+        //for Edit User Group Access
+        $(document).on("click", ".itemNewUserGroup", function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: "get",
+                url: GetPath(CommonVariable.modelName() + "/Create"),
+                contentType: "application/json",
+                dataType: "html",
+                success: function (result) {
+                    if (result != null) {
+
+                        $('.itemCreateContainer').html(result);
+                        $('.itemCreateContainer').show();
+                        $('.itemEditContainer').empty();
+                        $('.itemDetailsContainer').empty();
+                        $('.itemsListingContainer').hide();
+                        ShowAlertsMessage('.itemCreateMessageContainer', true);
+
+                        validationPartialView('itemNewUserGroup');
+
+                        PopulateUserGroupAccessList();
+                        InitBottonIcons();
+
+                    }
+                }
+            });
+            return false;
+        }); 
+
+
+          $(document).on("click", ".itemNewTab", function (e) {
+              e.preventDefault();
+              window.open(window.location.href, '_blank');
+              return false;
+          });
+
+          $(document).on("click", ".itemUserGroupAccess", function () {
+              PopulateUserGroupAccessList();
+          });
+
+          $(document).on("click", ".itemUserGroupAccessReset", function (e) {
+              e.preventDefault();
+              $('#tree').treeview('remove');
+              return false;
+          });
+          
+          $(document).on("click", ".itemUserGroupAccessSave", function () {
+              $('.itemEditValidationMessageContainer').empty();
+              $('.itemEditMessageContainer').empty();
+
+              var node = undefined;
+              node = $('#tree').treeview('getChecked');
+
+              jsonObj = [];
+              $(node).each(function (i, row) {
+
+                  item = {
+                      'nodeCode': row.nodeCode,
+                      'nodeType': row.type
+                  };
+                  jsonObj.push(item);
+              });
+
+              var myObject = new Object();
+              myObject.userName = $("#GroupCode").val();
+              //myObject.__RequestVerificationToken = $('input[name=__RequestVerificationToken]').val();
+              myObject.nodes = JSON.parse(JSON.stringify(jsonObj));              
+              //var data = JSON.stringify(myObject);
+             
+              $.ajax({
+                  type: "POST",
+                  url: GetPath("UserGroup/PopulateUserGroupAccessList"),
+                  //headers: headers,
+                  //data: { tvsim: JSON.stringify(jsonObj) },
+                  //data: data, // JSON.stringify(myObject),
+                  data: {
+                      __RequestVerificationToken: $('input[name=__RequestVerificationToken]').val(),
+                      tvsim1: JSON.stringify(myObject)
+                  },
+                  dataType: 'json',
+                  //contentType: 'application/x-www-form-urlencoded; charset=utf-8',
+                  //contentType: "application/json; charset=utf-8",
+                  //dataType: "json",
+                  success: function (result) {
+                      if (!isNull(result))
+                      {
+                         if (!isNull(result.Success))
+                          {
+                              $('.itemUserGroupAccessLayerEditMessageContainer').ShowBoostrapAlert(result.Success, "success", true, true, true);
+                          }//end if
+
+                          if (!isNull(result.Errors))
+                          {
+                              //$('.itemUserAccessLayerEditValidationMessageContainer').html(result.Errors);
+                              //$('.itemUserGroupAccessLayerEditValidationMessageContainer').ShowBoostrapAlert(result.Errors, "danger", true, true, false);
+                          }//end if
+                          else
+                          {
+                              $('.itemUserGroupAccessLayerEditValidationMessageContainer').html("");
+                          }//end else
+                      }//end if
+                  },
+                  error: function (xhr, ajaxOptions, thrownError) {
+                      //alert(xhr.status);
+                      //alert(xhr.responseText);                    
+                      Success = false;
+                  }
+              }).done(function (data) {
+                  ////if (data != null) {
+                  ////$('.itemEditPasswordContainer').html(data);
+                  //ShowAlertsMessage();
+                  //}
+              });
+
+              return false;
+          });
+
+          function adjustParent(node) {
+              var parent = $('#tree').treeview('getParent', node);
+              if (parent !== undefined) {
+                  var nodeId = parent['nodeId'];
+                  if (nodeId !== undefined) {
+                      var checked = 0;
+                      for (var i in parent.nodes) {
+                          if (parent.nodes[i].state.checked) {
+                              checked++;
+                              break;
+                          }
+                      }
+                      if (checked > 0) {
+                          if (!parent.state.checked) {
+                              $('#tree').treeview('checkNode', [parent.nodeId, { silent: true }]);
+                          }
+
+                      }
+                      else {
+                          $('#tree').treeview('uncheckNode', [parent.nodeId, { silent: true }]);
+                      }
+                      adjustParent(parent);
+                  }
+              }
+
+          }
+
+          function adjustdefaultCheckbox(nodes) {
+              $(nodes).each(function (i, row) {
+
+                  state = {
+                      'checked': true,
+
+                  };
+
+                  if (row.checkedByDefault) {
+                      row.state = state;
+                  }
+
+
+                  if (row.nodes != null && row.nodes != undefined) {
+                      adjustdefaultCheckbox(row.nodes);
+                  }
+
+              });
+          }
+
+          function PopulateUserGroupAccessList() {
+              $.ajax({
+                  type: "GET",
+                  url: "@Url.Content("~/")UserGroup/PopulateUserGroupAccessList",
+                  data: ({ UserGroup: $("#GroupCode").val() }),
+                  dataType: "json",
+                  success: function (result) {
+                  if (result != null) {
+
+                      $(result).each(function (i, row) {
+                          // state = {
+                          //     'checked': true,
+                          // };
+
+                          // if (row.checkedByDefault) {
+                          //     row.state = state;
+                          // }
+
+                          // if (row.nodes != null && row.nodes != undefined)
+                          // {
+                          //     adjustdefaultCheckbox(row.nodes);
+                          // }
+
+                      });
+
+                      //var a = JSON.stringify(result);
+
+                      // $('#tree').treeview(
+                      //     {
+                      //         color: "#428bca",
+                      //         expandIcon: "glyphicon glyphicon-folder-close",
+                      //         collapseIcon: "glyphicon glyphicon-folder-open",
+                      //         onhoverColor: "orange",
+                      //         highlightSelected: false,
+                           
+                      //         showTags: true,
+                      //         enableLinks: true,
+                      //         showCheckbox: true,
+                      //         levels: 2,
+                      //         data: a
+                      //     }
+                      //     );
+                   
+                      // $('#tree').on('nodeChecked ', function (ev, node) {
+                      //     var inEvent = 0;
+                      //     inEvent++;
+                      //     for (var i in node.nodes) {
+                      //         var child = node.nodes[i];
+                             
+                      //         if (child != null && child != undefined)
+                      //         {
+                      //             $(this).treeview(true).checkNode(child.nodeId);
+
+                      //             for (var j in child.nodes) {
+                      //                 var child2 = child.nodes[j];
+                      //                 if (child2 != null && child2 != undefined)
+                      //                 $(this).treeview(true).checkNode(child2.nodeId);
+                      //             }
+                      //         }
+                             
+                      //     }
+                      //     inEvent--;
+                      //     if (inEvent == 0) {
+                      //         adjustParent(node);
+                      //     }
+                      // }).on('nodeUnchecked ', function (ev, node) {
+                      //     var inEvent = 0;
+                      //     inEvent++;
+                      //     for (var i in node.nodes) {
+                      //         var child = node.nodes[i];
+                      //         if (child != null && child != undefined) {
+                      //             $(this).treeview(true).uncheckNode(child.nodeId);
+
+                      //             for (var j in child.nodes) {
+                      //                 var child2 = child.nodes[j];
+                      //                 if (child2 != null && child2 != undefined)
+                      //                     $(this).treeview(true).uncheckNode(child2.nodeId);
+                      //             }
+                      //         }                      
+                      //     }
+                      //     inEvent--;
+                      //     if (inEvent == 0) {
+                      //         adjustParent(node);
+                      //     }
+                      // });
+                      // $('#tree').on('nodeSelected', function (event, node) {
+                      //     //node.path
+
+                      //     //nodeId  parentId
+                      // });
+                      //return a;
+                  }//end if
+                  }//end success
+                  });
+          }
+
+          //
+
+    </script>
+}
+
+@{
+    ViewBag.Title = "List";
+}
+
+@using (Html.BeginForm("List", @ViewContext.RouteData.Values["Controller"].ToString(), FormMethod.Post))
+{
+    @Html.AntiForgeryToken()   
+    @Html.Raw(Html.CustomValidationSummary(true))
+    <div class="itemsListingContainer">
+        <div class="card border-primary text-center">
+            <div class="card-header" data-bs-toggle="collapse" data-bs-target="#collapseSearch" aria-controls="collapseSearch">User Group Search<span class="fa fa-arrows-v pull-right"></span></div>
+            <div id="collapseSearch" class="collapse show">
+                <div class="card-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-2 FormLableTitle">Group Code</div>
+                            <div class="col-md-4">@Html.TextBoxFor(u => u.srcGroupCode, new { @class = "form-control", maxlength = 20 })</div>
+                            <div class="col-md-2 FormLableTitle">Status</div>
+                            <div class="col-md-4">@Html.DropDownListFor(u => u.srcStatus, Model.StatusDDL, "All", new { @class = "form-control SearchSelect" })</div>
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-2 FormLableTitle">Group Type</div>
+                            <div class="col-md-3">@Html.DropDownListFor(u => u.srcGroupType, Model.GroupTypeDDL, "All", new { @class = "form-control SearchSelect" })</div>
+
+                        </div>                      
+                       
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer text-muted text-center">
+                <button class="btn btn-primary btn-sm itemNewUserGroup">
+                    <i class="iconNew"></i>
+                    Create New
+                </button>
+                <button id="btnReset" class="btn btn-primary btn-sm">
+                    <i class="iconReset"></i>
+                    Reset
+                </button>
+
+                <button id="btnFilter" class="btn btn-primary itemPress btn-sm">
+                    <i class="iconSearch"></i>
+                    Search
+                </button>
+            </div>
+        </div>
+        <div class="row"></div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">User Group Listing</div>
+            <div class="panel-body">
+                <div id="table-wrapper" class="table-responsive">
+                    <table id="tbllist"
+                           data-classes="table table-no-bordered"
+                           data-pagination="true"
+                           data-toggle="table"
+                           data-id-field="id"
+                           data-page-list="[10, 25, 50, 100]"
+                           data-url="@Url.Content("~/")UserGroup/getData"
+                           data-side-pagination="server"
+                           data-maintain-selected="false"
+                           data-row-style="TableListrowStyle">
+                        <thead>
+                            <tr>
+                                @*<th data-field="checkBoxKey" data-checkbox="true" data-align="center" data-valign="middle"></th>*@
+                                <th data-field="GroupCode" data-sortable="true">Group Code</th>
+                                <th data-field="GroupName" data-sortable="true">Group Name</th>
+                                <th data-field="Description" data-sortable="true">Description</th>
+                                <th data-field="Status" data-class="StatusCol" data-sortable="true" data-formatter="FormatterStatus">Status</th>
+                                <th data-field="ActionLinks" data-formatter="operateFormatter" data-events="operateEvents">Action</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="itemDetailsContainer"></div>
+    <div class="itemCreateContainer"></div>
+    <div class="itemEditContainer"></div>
+}
+
