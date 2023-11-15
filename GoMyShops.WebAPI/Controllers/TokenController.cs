@@ -1,18 +1,11 @@
-﻿using Azure.Core;
+﻿using GoMyShops.BAL.WebAPI;
 using GoMyShops.Commons;
 using GoMyShops.Data;
 using GoMyShops.Models;
-using GoMyShops.WebAPI.Models;
-using GoMyShops.WebAPI.Services;
-using Microsoft.ApplicationInsights.Extensibility.Implementation;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Net.Http.Headers;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq.Dynamic.Core.Tokenizer;
 using System.Security.Claims;
 
 namespace GoMyShops.WebAPI.Controllers
@@ -21,6 +14,7 @@ namespace GoMyShops.WebAPI.Controllers
     [ApiController]
     public class TokenController : ControllerBase
     {
+        #region Definations
         private readonly DataContext _context;
 
         private readonly ILogger<TokenController> _logger;
@@ -30,11 +24,13 @@ namespace GoMyShops.WebAPI.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
 
         private readonly SignInManager<ApplicationUser> _signInManager;
-      
-        private readonly ITokenService _tokenService;
+
+        private readonly ITokenServiceBAL _tokenService;
 
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public TokenController(DataContext context, ITokenService tokenService, ILogger<TokenController> logger, IConfiguration configuration, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IHttpContextAccessor httpContextAccessor)
+        #endregion
+        #region Constructor
+        public TokenController(DataContext context, ITokenServiceBAL tokenService, ILogger<TokenController> logger, IConfiguration configuration, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IHttpContextAccessor httpContextAccessor)
         {
             this._tokenService = tokenService ?? throw new ArgumentNullException(nameof(tokenService));
             this._context = context;
@@ -44,7 +40,8 @@ namespace GoMyShops.WebAPI.Controllers
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
         }
-
+        #endregion
+        #region Public Functions
         [HttpGet("refreshToken")]
         public async Task<IActionResult> RefreshToken()
         {
@@ -53,41 +50,41 @@ namespace GoMyShops.WebAPI.Controllers
                 if (!(Request.Cookies.TryGetValue("X-Username", out var userName) && Request.Cookies.TryGetValue("X-Refresh-Token", out var refreshToken)))
                     return BadRequest("Invalid Access token!");
 
-                //if (!User.Identity.IsAuthenticated)
-                //{
-                //    return BadRequest("Invalid Access token!");
-                //}
-
                 Request.Cookies.TryGetValue("X-Access-Token", out var accessToken);
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                var jwtToken = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
-                if (jwtToken == null)
+                if (accessToken == null || refreshToken == null)
                     return BadRequest();
 
+                //var tokenHandler = new JwtSecurityTokenHandler();
+                //var jwtToken = tokenHandler.ReadToken(accessToken) as JwtSecurityToken;
+                //if (jwtToken == null)
+                //    return BadRequest();
 
-                // var principal = _tokenService.GetPrincipalFromExpiredToken(accessToken);
-                // var username = principal.Identity.Name; //this is mapped to the Name claim by default
-                var username = jwtToken.Claims.FirstOrDefault(o=> o.Type ==ClaimTypes.Name).Value;
-                if (username.IsNullOrEmpty())
-                    return BadRequest();
-                var user = await _userManager.FindByNameAsync(username);
-                if (user == null)
-                    return BadRequest();
+                //var username = jwtToken.Claims.FirstOrDefault(o => o.Type == ClaimTypes.Name).Value;
+                //if (username.IsNullOrEmpty())
+                //    return BadRequest();
+                //var user = await _userManager.FindByNameAsync(username);
+                //if (user == null)
+                //    return BadRequest();
 
-                if (user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
-                    return BadRequest("Invalid client request");
+                //if (user.RefreshToken != refreshToken || user.RefreshTokenExpiryTime <= DateTime.Now)
+                //    return BadRequest("Invalid client request");
 
 
-                var newAccessToken = _tokenService.GenerateAccessToken(jwtToken.Claims);
-                var newRefreshToken = _tokenService.GenerateRefreshToken();
+                //var newAccessToken = _tokenService.GenerateAccessToken(jwtToken.Claims);
+                //var newRefreshToken = _tokenService.GenerateRefreshToken();
 
-                user.RefreshToken = newRefreshToken;
-                _context.SaveChanges();
+                //user.RefreshToken = newRefreshToken;
+                //_context.SaveChanges();
 
-                Response.Cookies.Append("X-Access-Token", newAccessToken, new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
-                Response.Cookies.Append("X-Username", username, new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
-                Response.Cookies.Append("X-Refresh-Token", newRefreshToken, new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
+                var newtokens =await _tokenService.RefreshToken(accessToken, refreshToken);
+                if (newtokens.IsError)
+                {
+                    return BadRequest(newtokens.ErrorMessages);
+                }//end if
+
+                Response.Cookies.Append("X-Access-Token", newtokens.AccessToken, new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
+                Response.Cookies.Append("X-Username", userName, new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
+                Response.Cookies.Append("X-Refresh-Token", newtokens.RefreshToken, new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
 
                 return Ok();
 
@@ -95,14 +92,9 @@ namespace GoMyShops.WebAPI.Controllers
             catch (System.Exception ex)
             {
                 _logger.LogError(ex.Message, ex);
-                return BadRequest(string.Format("{a}, {b}", "Invalid Access",CommonSetting.PleaseContactAdmin));
-            }
-
-           
+                return BadRequest(string.Format("{a}, {b}", "Invalid Access", CommonSetting.PleaseContactAdmin));
+            }//end try
         }
-
-
-       
 
         [HttpPost, Authorize]
         [Route("revoke")]
@@ -111,13 +103,16 @@ namespace GoMyShops.WebAPI.Controllers
             try
             {
                 var username = User.Identity.Name;
-                //TODO harris Revoke token
-                var user = await _userManager.FindByNameAsync(username);
-                if (user == null) return BadRequest();
+                if (username == null) return BadRequest();
 
-                user.RefreshToken = null;
+                var isError = await _tokenService.Revoke(username);
+                if (isError) return BadRequest();
+                //var user = await _userManager.FindByNameAsync(username);
+                //if (user == null) return BadRequest();
 
-                _context.SaveChanges();
+                    //user.RefreshToken = null;
+
+                    //_context.SaveChanges();
 
                 return NoContent();
 
@@ -127,7 +122,10 @@ namespace GoMyShops.WebAPI.Controllers
                 _logger.LogError(ex.Message, ex);
                 return BadRequest(string.Format("{a}, {b}", "Revoke fail", CommonSetting.PleaseContactAdmin));
             }
-           
+
         }
-    }
-}
+        #endregion
+
+
+    }//end class
+}//end namespace

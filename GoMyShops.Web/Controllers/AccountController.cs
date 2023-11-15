@@ -31,6 +31,15 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Hosting;
+using System.Net.Http;
+using Microsoft.Net.Http.Headers;
+using System.Net.Http.Headers;
+using System.Runtime.ConstrainedExecution;
+using System.Text;
+using MediaTypeHeaderValue = System.Net.Http.Headers.MediaTypeHeaderValue;
+using Azure.Core;
+using GoMyShops.Data.Entity;
+using GoMyShops.BAL.WebAPI;
 
 namespace GoMyShops.Controllers
 {
@@ -47,11 +56,13 @@ namespace GoMyShops.Controllers
         private UserManager<ApplicationUser> _userManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly ITokenServiceBAL _tokenService;
+        private readonly IHttpClientFactory _httpClientFactory;
         public IConfiguration _configuration { get; private set; }
         IWebHostEnvironment _hostingEnvironment;
         #endregion
         #region Constructor
-        public AccountController(IHttpContextAccessor httpContextAccessor, ILogger<AccountController> logger, IWebHostEnvironment hostingEnvironment, IConfiguration configuration, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IAnnouncementBAL announcementBAL, IUsersBAL userBAL, ILoginBAL loginBAL, ISmsBAL smsBAL, ISignUpBAL signUpBAL)
+        public AccountController(IHttpContextAccessor httpContextAccessor, ILogger<AccountController> logger, IWebHostEnvironment hostingEnvironment, IConfiguration configuration, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IAnnouncementBAL announcementBAL, IUsersBAL userBAL, ILoginBAL loginBAL, ISmsBAL smsBAL, ISignUpBAL signUpBAL, IHttpClientFactory httpClientFactory, ITokenServiceBAL tokenService)
         {
             _userManager = userManager;
             _userBAL = userBAL;
@@ -64,6 +75,8 @@ namespace GoMyShops.Controllers
             _hostingEnvironment = hostingEnvironment;
             _signInManager = signInManager;
             _logger = logger;
+            _httpClientFactory = httpClientFactory;
+            _tokenService = tokenService;
         }
 
         //TODO Harris Core-temp-off
@@ -654,6 +667,58 @@ namespace GoMyShops.Controllers
             //TODO Send sms code
             if (status == CommonSetting.SignInStatus.Success)
             {
+                var newtokens = await _tokenService.LoginFromWebApp(model.UserName);
+               
+                if (newtokens.IsError)
+                {
+                    ModelState.AddModelError("Web Resources", "Unable to connect to Resource's website.");
+                    return View(model);
+                }
+                else
+                {
+                    Response.Cookies.Append("X-Access-Token", newtokens.AccessToken, new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
+                    Response.Cookies.Append("X-Username", model.UserName, new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
+                    Response.Cookies.Append("X-Refresh-Token", newtokens.RefreshToken, new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
+
+                }//end if
+
+
+                //TODO harris Call WebAPI for login token
+                ////var id1 = JsonConvert.SerializeObject(model.UserName);
+                ////var content = new StringContent(id1, Encoding.UTF8, "application/json");
+                ////content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+
+
+                ////var request1 = new HttpRequestMessage
+                ////   (HttpMethod.Get, $"https://localhost:7097/Account/LoginFromWebApp?userName={model.UserName}");
+
+
+                ////using (var httpClient = _httpClientFactory.CreateClient())
+                ////{
+                ////    httpClient.DefaultRequestHeaders.Clear();
+                ////    httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                ////    var httpResponseMessage = await httpClient.PostAsync($"https://localhost:7097/Account/LoginFromWebApp", content);
+
+                ////    if (httpResponseMessage.IsSuccessStatusCode)
+                ////    {
+                ////        //Set-Cookie
+
+                ////        var values = httpResponseMessage.Headers;
+                ////        if (values == null)
+                ////        {
+                ////            ModelState.AddModelError("Web Resources", "Unable to connect to Resource's website.");
+                ////        }
+                ////        else {
+                ////            Response.Cookies.Append("X-Access-Token", httpResponseMessage.Headers.GetValues("X-Access-Token").FirstOrDefault(""), new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
+                ////            Response.Cookies.Append("X-Username", httpResponseMessage.Headers.GetValues("X-Username").FirstOrDefault(""), new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
+                ////            Response.Cookies.Append("X-Refresh-Token", httpResponseMessage.Headers.GetValues("X-Refresh-Token").FirstOrDefault(""), new CookieOptions() { HttpOnly = true, SameSite = Microsoft.AspNetCore.Http.SameSiteMode.Strict });
+
+                ////        }
+
+                ////    }
+                ////}//end using
+
                 if (_userBAL.IsPhrased(model.UserName))
                 {
                     _loginBAL.SetAuditHeader(model.UserName);

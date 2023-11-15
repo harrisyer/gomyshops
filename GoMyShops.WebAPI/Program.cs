@@ -18,10 +18,12 @@ using SimpleInjector;
 using SimpleInjector.Lifestyles;
 using AutoMapper;
 using GoMyShops.Mappings;
-using GoMyShops.WebAPI.Services;
+//using GoMyShops.WebAPI.Services;
 using GoMyShops.BAL;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
+using GoMyShops.BAL.WebAPI;
+using GoMyShops.Models.WebAPI;
 //using GoMyShops.Data.Entity;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -218,7 +220,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 ///Some internal Services
 //builder.Services.AddScoped<ITokenService, TokenService>();
-container.Register<ITokenService, TokenService>(AsyncScopedLifestyle.Transient);
+container.Register<ITokenServiceBAL, TokenServiceBAL>(AsyncScopedLifestyle.Transient);
 ///try put all configuration file parameter here
 //container.Register<IConfigurationParameters, ConfigurationParameters>(AsyncScopedLifestyle.Singleton);
 ///services.AddSingleton<IConfigurationParameters, ConfigurationParameters>();
