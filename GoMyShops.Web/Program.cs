@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using GoMyShops.Models.WebAPI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -205,6 +206,30 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 //builder.Services.Configure<SecurityStampValidatorOptions>(o =>
 //                   o.ValidationInterval = TimeSpan.FromMinutes(1));
 
+///try put all configuration file parameter here
+var gConfigurationParameters = new ConfigurationParameters
+{
+
+    tokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateAudience = true,
+        ValidateIssuerSigningKey = true,
+        RequireExpirationTime = true,
+        ValidateLifetime = true, //manual check skip default  
+        ValidIssuer = builder.Configuration["JWT:Issuer"],
+        ValidAudience = builder.Configuration["JWT:Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(
+        System.Text.Encoding.UTF8.GetBytes(builder.Configuration["JWT:SigningKey"])),
+        ClockSkew = TimeSpan.Zero//FromMinutes(1)//
+    },
+    tokenExpiredHour = Convert.ToInt16(builder.Configuration["JWT:TokenExpiredHour"]),
+    refreshTokenExpiryDay = Convert.ToInt16(builder.Configuration["JWT:RefreshTokenExpiryDay"]),
+};
+
+container.RegisterSingleton<IConfigurationParameters>(() => gConfigurationParameters);
+
+
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = 
@@ -217,32 +242,56 @@ builder.Services.AddAuthentication(options =>
 
 }).AddJwtBearer(options =>
 {
-    options.Events = new JwtBearerEvents
+    options.TokenValidationParameters = gConfigurationParameters.tokenValidationParameters;
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.Events = new JwtBearerEvents()
     {
-        OnTokenValidated = context =>
+        OnMessageReceived = context =>
         {
-            var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
-            var user = userManager.GetUserAsync(context.HttpContext.User);
-            if (user == null) context.Fail("Unauthorized");
+            var a = context.Request;
+            if (context.Request.Cookies.Count <= 0)
+            {
+                return Task.CompletedTask;
+            }
+
+            ///ASP.NET Core still waits the token from Authorization Header. Therefore, we have to set the token from the cookies
+            if (context.Request.Cookies.ContainsKey("X-Access-Token"))
+            {
+                context.Token = context.Request.Cookies["X-Access-Token"];
+                //var aaaa=context.HttpContext.User.Identity.IsAuthenticated;
+            }
+
             return Task.CompletedTask;
         }
     };
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
-    {
-        ValidateIssuer = true,
-        ValidateAudience = true,
-        ValidateIssuerSigningKey = true,
-        RequireExpirationTime = true,
-        ValidIssuer = builder.Configuration["JWT:Issuer"],
-        ValidAudience = builder.Configuration["JWT:Audience"],
-        IssuerSigningKey = new SymmetricSecurityKey(
-          System.Text.Encoding.UTF8.GetBytes(
-              builder.Configuration["JWT:SigningKey"])
-      )
-    };
-});//.AddIdentityCookies(o => { }); ;
+
+    //options.Events = new JwtBearerEvents
+    //{
+    //    OnTokenValidated = context =>
+    //    {
+    //        var userManager = context.HttpContext.RequestServices.GetRequiredService<UserManager<ApplicationUser>>();
+    //        var user = userManager.GetUserAsync(context.HttpContext.User);
+    //        if (user == null) context.Fail("Unauthorized");
+    //        return Task.CompletedTask;
+    //    }
+    //};
+    //options.RequireHttpsMetadata = false;
+    //options.SaveToken = true;
+    //options.TokenValidationParameters = new TokenValidationParameters
+    //{
+    //    ValidateIssuer = true,
+    //    ValidateAudience = true,
+    //    ValidateIssuerSigningKey = true,
+    //    RequireExpirationTime = true,
+    //    ValidIssuer = builder.Configuration["JWT:Issuer"],
+    //    ValidAudience = builder.Configuration["JWT:Audience"],
+    //    IssuerSigningKey = new SymmetricSecurityKey(
+    //      System.Text.Encoding.UTF8.GetBytes(
+    //          builder.Configuration["JWT:SigningKey"])
+    //  )
+    //};
+});
 
 builder.Services.AddAuthorization(options =>
 {
@@ -296,6 +345,9 @@ builder.Services.AddSession(options =>
     options.IdleTimeout = TimeSpan.FromSeconds(10);
     options.Cookie.IsEssential = true;
 });
+
+///add for web call web api
+builder.Services.AddHttpClient();//.SetHandlerLifetime(TimeSpan.FromMinutes(3)); ;
 
 var app = builder.Build();
 

@@ -10,6 +10,7 @@ using GoMyShops.Commons;
 using GoMyShops.Data;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using GoMyShops.Models;
+using GoMyShops.BAL.WebAPI;
 
 namespace GoMyShops.DependencySetup
 {
@@ -35,6 +36,7 @@ namespace GoMyShops.DependencySetup
             container.Register<ICompanyBAL, CompanyBAL>();
             container.Register<IAnnouncementBAL, AnnouncementBAL>();
             container.Register<IIndexBAL, IndexBAL>();
+            container.Register<ITokenServiceBAL, TokenServiceBAL>();
 
             container.Register<IDataSettingBAL, DataSettingBAL>();
             container.Register<ICentralizeNameBAL, CentralizeNameBAL>();

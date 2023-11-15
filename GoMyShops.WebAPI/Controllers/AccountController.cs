@@ -1,27 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using MyBGList.DTO;
-using MyBGList.Models;
-using System.Linq.Expressions;
-using System.Linq.Dynamic.Core;
-using System.ComponentModel.DataAnnotations;
-using MyBGList.Attributes;
-using System.Diagnostics;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
+﻿using Azure.Core;
+using GoMyShops.BAL.WebAPI;
+using GoMyShops.Commons;
 using GoMyShops.Data;
 using GoMyShops.Models;
-using GoMyShops.WebAPI.Models;
-using Microsoft.ApplicationInsights.Extensibility.Implementation;
-using GoMyShops.WebAPI.Services;
-using System.Linq.Dynamic.Core.Tokenizer;
-using Microsoft.AspNetCore.Authentication;
-using System;
-using Azure.Core;
-using StackExchange.Redis;
-using GoMyShops.Commons;
+//using GoMyShops.WebAPI.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using MyBGList.DTO;
+using System.Linq.Dynamic.Core;
+//using GoMyShops.WebAPI.Services;
+using System.Security.Claims;
 
 namespace GoMyShops.WebAPI.Controllers
 {
@@ -39,7 +27,7 @@ namespace GoMyShops.WebAPI.Controllers
 
         private readonly SignInManager<ApplicationUser> _signInManager;
 
-        private readonly ITokenService _tokenService;
+        private readonly ITokenServiceBAL _tokenService;
 
         public AccountController(
             DataContext context,
@@ -47,7 +35,7 @@ namespace GoMyShops.WebAPI.Controllers
             IConfiguration configuration,
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ITokenService tokenService)
+            ITokenServiceBAL tokenService)
         {
             _context = context;
             _logger = logger;
@@ -80,7 +68,7 @@ namespace GoMyShops.WebAPI.Controllers
                     }
                     else
                         throw new Exception(
-                            string.Format("Error: {0}", string.Join(" ", 
+                            string.Format("Error: {0}", string.Join(" ",
                                 result.Errors.Select(e => e.Description))));
                 }
                 else
@@ -89,7 +77,7 @@ namespace GoMyShops.WebAPI.Controllers
                     details.Type =
                             "https://tools.ietf.org/html/rfc7231#section-6.5.1";
                     details.Status = StatusCodes.Status400BadRequest;
-                    var a= new BadRequestObjectResult(details);                   
+                    var a = new BadRequestObjectResult(details);
                     return new BadRequestObjectResult(details);
                 }
             }
@@ -102,86 +90,115 @@ namespace GoMyShops.WebAPI.Controllers
                 exceptionDetails.Type =
                         "https://tools.ietf.org/html/rfc7231#section-6.6.1";
                 return StatusCode(
-                    StatusCodes.Status500InternalServerError, 
+                    StatusCodes.Status500InternalServerError,
                     exceptionDetails);
             }
         }
 
+        //[HttpPost]
+        //[ResponseCache(CacheProfileName = "NoCache")]
+        //public async Task<ActionResult> LoginFromWebApp([FromBody] string userName)
+        //{
+        //    try
+        //    {
+        //        if (ModelState.IsValid)
+        //        {
+        //            var user = await _userManager.FindByNameAsync(userName);
+        //            //if (user == null
+        //            //    || !await _userManager.CheckPasswordAsync(
+        //            //            user, input.Password))
+        //            //    return Unauthorized();
+        //            //throw new Exception("Invalid login attempt.");
+        //            var claims = new List<Claim>();
+        //            claims.Add(new Claim(
+        //                ClaimTypes.Name, user.UserName));
+        //            claims.Add(new Claim(
+        //               ClaimTypes.Role, RoleNames.Moderator));
+        //            //claims.Add(new Claim(
+        //            //   "refresh_token", refreshToken,ClaimValueTypes.String));
+        //            ////claims.AddRange(
+        //            //    (await _userManager.GetRolesAsync(user))
+        //            //        .Select(r => new Claim(ClaimTypes.Role, r)));
+
+
+        //            var accessToken = _tokenService.GenerateAccessToken(claims);
+        //            var refreshToken = _tokenService.GenerateRefreshToken();
+
+        //            user.RefreshToken = refreshToken;
+        //            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+
+        //            _context.SaveChanges();
+
+        //            Response.Headers.Add("X-Access-Token", accessToken);
+        //            Response.Headers.Add("X-Username", user.UserName);
+        //            Response.Headers.Add("X-Refresh-Token", refreshToken);
+
+        //            return Ok();
+        //        }
+
+        //        else
+        //        {
+
+        //            return BadRequest("ModelState invalid");
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        return BadRequest(e.Message);
+        //    }
+        //}
+
         [HttpPost]
         [ResponseCache(CacheProfileName = "NoCache")]
-        public async Task<ActionResult> Login(LoginDTO input)
+        public async Task<ActionResult> Login(LoginWebApIModels input)
         {
             try
             {
                 if (ModelState.IsValid)
                 {
-                    var user = await _userManager.FindByNameAsync(input.UserName);
-                    if (user == null
-                        || !await _userManager.CheckPasswordAsync(
-                                user, input.Password))
-                        return Unauthorized();
-                        //throw new Exception("Invalid login attempt.");
-                    else
+                    var newtokens = await _tokenService.Login(input);
+                    if (newtokens.IsError)
                     {
-                        //var signingCredentials = new SigningCredentials(
-                        //    new SymmetricSecurityKey(
-                        //        System.Text.Encoding.UTF8.GetBytes(
-                        //            _configuration["JWT:SigningKey"])),
-                        //    SecurityAlgorithms.HmacSha256);
+                        return BadRequest(newtokens.ErrorMessages);
+                    }//end if
 
-                        //Check Cuurent got access token or not.
-                        //var accessToken1 = await HttpContext.GetTokenAsync("access_token");
-                        //if (accessToken1 != null) {
-                        //    var tokenHandler = new JwtSecurityTokenHandler();
+                    Response.Cookies.Append("X-Access-Token", newtokens.AccessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+                    Response.Cookies.Append("X-Username", input.UserName, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+                    Response.Cookies.Append("X-Refresh-Token", newtokens.RefreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
 
-                        //    var jwtSecurityToken = tokenHandler.ReadJwtToken(accessToken1);
-                        //}
-                      
+                    return Ok();
 
+                    //var user = await _userManager.FindByNameAsync(input.UserName);
+                    //if (user == null
+                    //    || !await _userManager.CheckPasswordAsync(
+                    //            user, input.Password))
+                    //    return Unauthorized();
 
-                        var claims = new List<Claim>();
-                        claims.Add(new Claim(
-                            ClaimTypes.Name, user.UserName));
-                        claims.Add(new Claim(
-                           ClaimTypes.Role, RoleNames.Moderator));
-                        //claims.Add(new Claim(
-                        //   "refresh_token", refreshToken,ClaimValueTypes.String));
-                        ////claims.AddRange(
-                        //    (await _userManager.GetRolesAsync(user))
-                        //        .Select(r => new Claim(ClaimTypes.Role, r)));
+                    //else
+                    //{
+                    //    var claims = new List<Claim>();
+                    //    claims.Add(new Claim(
+                    //        ClaimTypes.Name, user.UserName));
+                    //    claims.Add(new Claim(
+                    //       ClaimTypes.Role, RoleNames.Moderator));
 
+                    //    var accessToken = _tokenService.GenerateAccessToken(claims);
+                    //    //var authenticationInfo = await HttpContext.AuthenticateAsync();
 
-                        var accessToken = _tokenService.GenerateAccessToken(claims);
-                        //var authenticationInfo = await HttpContext.AuthenticateAsync();
-                    
-                        var refreshToken = _tokenService.GenerateRefreshToken();
+                    //    var refreshToken = _tokenService.GenerateRefreshToken();
 
-                        // ... update tokens using refresh token flow ...
+                    //    user.RefreshToken = refreshToken;
+                    //    user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
 
-                        //authenticationInfo.Properties.UpdateTokenValue("access_token", accessToken);
-                        //var aaa = authenticationInfo.Principal;
+                    //    _context.SaveChanges();
 
-                        // authenticationInfo.Properties.SetString("refresh_token", refreshToken);
-                        // authenticationInfo.Properties.ExpiresUtc = DateTime.Now.AddSeconds(300);//UpdateTokenValue("expires_at", DateTime.Now.AddSeconds(300).ToString("o"));
+                    //    Response.Cookies.Append("X-Access-Token", accessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+                    //    Response.Cookies.Append("X-Username", user.UserName, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
+                    //    Response.Cookies.Append("X-Refresh-Token", refreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
 
-                        user.RefreshToken = refreshToken;
-                        user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+                    //    return Ok();
 
-                        _context.SaveChanges();
-                      
-                        Response.Cookies.Append("X-Access-Token", accessToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
-                        Response.Cookies.Append("X-Username", user.UserName, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
-                        Response.Cookies.Append("X-Refresh-Token", refreshToken, new CookieOptions() { HttpOnly = true, SameSite = SameSiteMode.Strict });
-
-                        return Ok();
-
-                        //return Ok(new AuthenticatedResponse
-                        //{
-                        //    Token = accessToken,
-                        //    RefreshToken = refreshToken
-                        //});
-
-                    }
+                    //}
                 }
                 else
                 {
@@ -205,5 +222,5 @@ namespace GoMyShops.WebAPI.Controllers
                     exceptionDetails);
             }
         }
-    }
-}
+    }//end class
+}//end namespace

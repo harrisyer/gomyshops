@@ -11,7 +11,7 @@ using GoMyShops.Models.ViewModels;
 using GoMyShops.Commons;
 using Microsoft.AspNetCore.Http;
 
-namespace GoMyShopsv.Models.ViewModels
+namespace GoMyShops.Models.ViewModels
 {
     public class CommissionViewModels
     {
