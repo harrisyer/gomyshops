@@ -24,6 +24,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;
 using GoMyShops.BAL.WebAPI;
 using GoMyShops.Models.WebAPI;
+using Microsoft.AspNetCore.DataProtection;
+using System.Configuration;
 //using GoMyShops.Data.Entity;
 var builder = WebApplication.CreateBuilder(args);
 
@@ -207,6 +209,16 @@ builder.Services.AddDbContext<DataContext>(options =>
         m => m.MigrationsAssembly("GoMyShops.Data"));
 });
 
+//// Add a DbContext to store your Database Keys
+//services.AddDbContext<MyKeysContext>(options =>
+//    options.UseSqlServer(
+//        Configuration.GetConnectionString("MyKeysConnection")));
+
+//// using Microsoft.AspNetCore.DataProtection;
+//services.AddDataProtection()
+//    .PersistKeysToDbContext<MyKeysContext>();
+
+
 #region Authentication And Authorization (1-last) Setup to AutoMapper
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
@@ -220,7 +232,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 
 ///Some internal Services
 //builder.Services.AddScoped<ITokenService, TokenService>();
-container.Register<ITokenServiceBAL, TokenServiceBAL>(AsyncScopedLifestyle.Transient);
+//container.Register<ITokenServiceBAL, TokenServiceBAL>(AsyncScopedLifestyle.Transient);
 ///try put all configuration file parameter here
 //container.Register<IConfigurationParameters, ConfigurationParameters>(AsyncScopedLifestyle.Singleton);
 ///services.AddSingleton<IConfigurationParameters, ConfigurationParameters>();
@@ -340,12 +352,13 @@ app.Services.UseSimpleInjector(container);
 #endregion
 
 // Configure the HTTP request pipeline.
-
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 if (app.Configuration.GetValue<bool>("UseDeveloperExceptionPage"))
     app.UseDeveloperExceptionPage();

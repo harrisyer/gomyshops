@@ -25,4 +25,21 @@ namespace GoMyShops.Data
             return new DataContext(builder.Options);
         }
     }
+
+    public class MyKeysContextFactory : IDesignTimeDbContextFactory<MyKeysContext>
+    {
+        MyKeysContext IDesignTimeDbContextFactory<MyKeysContext>.CreateDbContext(string[] args)
+        {
+
+            IConfigurationRoot configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json")
+                .Build();
+
+            var builder = new DbContextOptionsBuilder<MyKeysContext>();
+            var connectionString = configuration.GetConnectionString("MyKeysConnection");
+            builder.UseSqlServer(connectionString);
+            return new MyKeysContext(builder.Options);
+        }
+    }
 }

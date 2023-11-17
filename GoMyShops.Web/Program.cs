@@ -19,6 +19,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using GoMyShops.Models.WebAPI;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,7 +29,11 @@ var services = builder.Services;
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
 //JSON options to MVC since this is useful in displaying JSON data
-services.AddMvc().AddJsonOptions(options => {
+//ad antiforgery
+services.AddMvc(options =>
+{
+    options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+}).AddJsonOptions(options => {
     options.JsonSerializerOptions.PropertyNameCaseInsensitive = false;
     options.JsonSerializerOptions.PropertyNamingPolicy = null;
 });

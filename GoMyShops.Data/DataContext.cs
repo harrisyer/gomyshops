@@ -8,9 +8,34 @@ using GoMyShops.Models;
 using System.Diagnostics;
 using System.Reflection.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.AspNetCore.DataProtection.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 
 namespace GoMyShops.Data
 {
+    public class MyKeysContext : DbContext, IDataProtectionKeyContext
+    {
+        // A recommended constructor overload when using EF Core 
+        // with dependency injection.
+        public MyKeysContext(DbContextOptions<MyKeysContext> options)
+            : base(options) { }
+
+        // This maps to the table that stores keys.
+        public DbSet<DataProtectionKey> DataProtectionKeys { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+
+            //optionsBuilder.UseSqlServer(@"data source=123; initial catalog=abc;user id=admin;password=123;Trusted_Connection=True;MultipleActiveResultSets=True;");
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+        }
+    }
+
+
     public class DataContext : IdentityDbContext<ApplicationUser>
     {
         //public DataContext()
