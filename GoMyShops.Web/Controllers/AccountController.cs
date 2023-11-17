@@ -266,7 +266,7 @@ namespace GoMyShops.Controllers
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
         [AntiForgeryHandleError]
-        //[PreventDuplicateRequest]
+        //[PreventDuplicateRequest]       
         public async Task<ActionResult> Login(LoginModel model, string? returnUrl)
         {
             //Check for SignUp
@@ -1575,6 +1575,25 @@ namespace GoMyShops.Controllers
                 return RedirectToAction("Index", "Home", new { type = "1" });
             }
         }
+
+        /// <summary>
+        /// SECURE: Remove any remaining cookies including Anti-CSRF cookie
+        /// </summary>
+        public void RemoveAntiForgeryCookie(Controller controller)
+        {
+            var allCookies = controller.Request.Cookies.Keys;
+            foreach (string cookie in allCookies)
+            {
+                Response.Cookies.Delete(cookie);
+
+                //if (controller.Response.Cookies(cookie) != null &&
+                //    cookie == "__RequestVerificationToken")
+                //{
+                //    controller.Response.Cookies[cookie].Expires = DateTime.Now.AddDays(-1);
+                //}
+            }
+        }
+
 
         //private class ChallengeResult : HttpUnauthorizedResult
         //{

@@ -1,5 +1,6 @@
 ﻿@model GoMyShops.Models.ViewModels.AnnouncementViewModels
 @using GoMyShops.Models.Helpers;
+@inject Microsoft.AspNetCore.Antiforgery.IAntiforgery antiforgeryProvider
 
 @section Scripts
     {
@@ -95,7 +96,7 @@
                 type: "get",
                 url: GetPath(CommonVariable.modelName() + "/Create"),
                 contentType: "application/json",
-                dataType: "html",
+                dataType: "html",               
                 success: function (result) {
                     if (result != null) {
 
@@ -141,7 +142,8 @@
             $.ajax({
                 type: "POST",
                 url: GetPath(CommonVariable.modelName() + "/Create"),
-                data: $(this).closest('form').serialize(),
+                data: $(this).closest('form').serialize()
+                        '__RequestVerificationToken': '@antiforgeryProvider.GetAndStoreTokens(this.Context).RequestToken',
                 dataType: "html",
                 success: function (result) {
                 },
