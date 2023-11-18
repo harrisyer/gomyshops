@@ -1470,6 +1470,7 @@ namespace GoMyShops.Controllers
             var info = _loginBAL.SetAuditHeaderTimeOut();
             await _signInManager.SignOutAsync();
             //AuthenticationManager.SignOut();
+            RemoveAntiForgeryCookie(this);
             return RedirectToAction("Login", "Account");
         }
 
