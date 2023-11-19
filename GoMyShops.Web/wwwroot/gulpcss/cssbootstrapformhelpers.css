@@ -1,0 +1,542 @@
+/**
+* bootstrap-formhelpers.js v2.3.0 by @vincentlamanna
+* Copyright 2013 Vincent Lamanna
+* http://www.apache.org/licenses/LICENSE-2.0
+*/
+/*Formhelpers*/
+
+/*.dropdown-submenu {
+    position: relative;
+}
+
+.dropdown-submenu .dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: -1px;
+}*/
+
+/*for Pop up OK*/
+#edit-modal .modal-title {
+ font-weight:bold;
+}
+
+#edit-modal .modal-dialog {
+  position:absolute;
+  top:60% !important;
+  transform: translate(0, -50%) !important;
+  -ms-transform: translate(0, -50%) !important;
+  -webkit-transform: translate(0, -50%) !important;
+  margin:auto 5%;
+  margin-left: 350px;
+  /*width:40%;*/
+  height:60%;
+  /*left:20%;*/
+}
+
+#edit-modal .modal-body {
+    overflow-y:hidden;
+}
+
+.vertical-alignment-helper {
+    /*display: table;*/
+    height: 100%;
+    /*width: 50%;*/
+    
+}
+
+.vertical-align-center {  
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.modal-body-text {
+    margin-left: 5px;
+    margin-right: 0px;
+}
+.modal-body-button {
+    margin-left: 0px;
+    margin-right: 0px;
+}
+.modal-body-button button {
+    width:80px;
+}
+
+.LoginContainer {
+    display: inline-block;
+    vertical-align: middle;
+    /*transform: translateY(-50%);*/
+    /*position: fixed;*/
+    /*top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;*/
+    /*width: 50%;*/
+    /*height: 100px;*/
+    margin: 0 auto;
+    min-width:500px;
+}
+
+.SignUpContainer {
+    margin: 0 auto;
+    min-width: 800px;
+    overflow-x:hidden;
+    overflow-y: auto;
+    max-height: 100%;
+}
+/*newstape*/
+.newstape {
+    /*background-color: #3BB0D6;*/
+    /*color: #fff;*/
+    height: 300px;
+    overflow: hidden;
+}
+
+	.newstape-content {
+	  position: relative;
+	  padding: 15px;
+	}
+
+	.text-center { text-align: center; }
+
+	.text-right { text-align: right; }
+
+	.text-justify { text-align: justify; }
+.newsdivider {
+    border-bottom: 2px solid #ccc;
+}
+/*.homeIndex {
+    background-image:url(../Images/woods.jpg);
+}*/
+
+/*Comment Box*/
+.panel-shadow {
+    box-shadow: rgba(0, 0, 0, 0.3) 7px 7px 7px;
+}
+.panel-white {
+  border: 1px solid #dddddd;
+}
+.panel-white .panel-heading {
+  /*color: #333;
+  background-color: #fff;
+  border-color: #ddd;*/
+}
+.panel-white  .panel-footer {
+  background-color: #fff;
+  border-color: #ddd;
+}
+
+.post .post-heading {
+  height: 95px;
+  padding: 20px 15px;
+}
+.post .post-heading .meta .title {
+  margin-bottom: 0;
+}
+.post .post-heading .meta .title a {
+  color: black;
+}
+.post .post-heading .meta .title a:hover {
+  color: #aaaaaa;
+}
+.post .post-heading .meta .time {
+  margin-top: 8px;
+  color: #999;
+}
+.post .post-description {
+  padding: 15px;
+}
+.post .post-description p {
+  font-size: 14px;
+}
+.post .post-footer {
+  border-top: 1px solid #ddd;
+  padding: 15px;
+}
+.post .post-footer .input-group-addon a {
+  color: #454545;
+}
+.post .post-footer .comments-list {
+  padding: 0;
+  margin-top: 20px;
+  list-style-type: none;
+}
+.post .post-footer .comments-list .comment {
+  display: block;
+  width: 100%;
+  margin: 20px 0;
+}
+.post .post-footer .comments-list .comment .comment-heading {
+  display: block;
+  width: 100%;
+}
+.post .post-footer .comments-list .comment .comment-heading .user {
+  font-size: 14px;
+  font-weight: bold;
+  display: inline;
+  margin-top: 0;
+  margin-right: 10px;
+}
+.post .post-footer .comments-list .comment .comment-heading .time {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 0;
+  display: inline;
+}
+.post .post-footer .comments-list .comment .comment-body {
+  margin-left: 50px;
+}
+.post .post-footer .comments-list .comment > .comments-list {
+  margin-left: 50px;
+}
+
+.panel-heading span {
+	/*margin-top: -20px;*/
+	font-size: 15px;
+}
+
+.displayTextArea {
+    border: none !important;
+    background-color: white !important;
+    resize: none !important;
+    padding:0px;
+    font-size:14px;
+    /*outline: none !important;
+    border-radius: 0 !important;
+    border-color:none !important;
+    outline:0px !important;
+    -webkit-appearance:none !important;*/
+    box-shadow: none !important;
+    -moz-box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+    /*background-color:white !important;
+    border:none !important;
+    border-width: 0px !important;*/ 
+}
+
+/*for sort and drap drop*/
+
+/*for List Group Header*/
+.listGroupTitleNormal {
+    background-color:#323232 /*#c8c8c8*/;
+    /*font-weight: bold;*/
+    /*padding: 5px 20px 5px 20px;*/
+    /*margin: 0px 12px 0px 0;*/
+    color:#c8c8c8;
+    font-size: 12px;
+    font-weight: normal;
+   
+    vertical-align: central;
+    text-align:left;
+    border: none;
+    border-top-left-radius: 0px !important;
+    border-top-right-radius: 0px !important;
+}
+
+/*For Calender*/
+
+.routeDateControlSpan {
+   
+    padding:2px 8px;
+    margin: 1px 0 1px 0;
+}
+
+.routedatecontrolInput {
+    margin: 0px 0px 0px 0px;
+}
+
+/*.normalEvent {
+    background-color:#0274FF;
+    color:#FFFFFF;
+}*/
+
+/*.fc-time-grid-container {
+    overflow-x:hidden; 
+    overflow-y:hidden; 
+    height:auto;
+}*/
+
+.input-group .bootstrap-select.form-control {
+        z-index: inherit;
+    }
+
+.bootstrap-select .btn {
+    font-size:12px;
+    padding:7px;  
+}
+
+/*Report Iframe*/
+
+/*.ReturnTabTitle {
+    border:none !important;
+    
+}
+
+.TicketMasterReturnTabTitle {
+     border:none !important;
+    
+}
+
+.DepartureTabTitle {
+    border-top-left-radius:0px;
+   
+}*/
+
+/*for spinner*/
+div#spinner {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba( 33, 4, 79, .2 ) url(../images/ajax-loader.gif) 50% 50% no-repeat;
+    /*display: none;
+    width:100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background:url(Images/ajax-loader.gif) no-repeat center #fff;
+    text-align:center;
+    padding:10px;
+    font:normal 16px Tahoma, Geneva, sans-serif;
+    
+    margin-left: -50px;
+    margin-top: -50px;
+    z-index:2;
+    overflow: auto;*/
+    /*display: none;
+    width:100px;
+    height: 100px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    text-align:center;
+    margin-left: -50px;
+    margin-top: -100px;
+    z-index:2;
+    overflow: auto;*/
+}
+
+/*override <a> button pattern*/
+
+/*override <a> button pattern*/
+
+/*Booking Form*/
+
+.ValidationMessageContainer {
+    text-align:left;
+    color:red;
+}
+
+.DetailMessageContainer {
+    text-align:left;
+}
+
+.glyphicon-asterisk {
+    font-size: 9px;
+    top:4px;
+}
+
+/*Add for TextAreaEditor*/
+.textareaEditor {
+    font-size: 10px !important;
+    /*padding: 5px 10px 8px 5px !important;*/
+    background-color: white !important;
+    color: black !important;
+}
+
+    .textareaEditor .btn-sm {
+        font-size: 10px !important;
+        padding: 5px 10px 8px 5px !important;
+        height: 32px;
+        background-color: white !important;
+        color: black !important;
+    }
+
+    .textareaEditor .btn-default,
+    .btn-default:hover {
+        background-color: white !important;
+        color: black !important;   
+    }
+
+    .textareaEditor .panel-heading {
+      padding-top:1px;
+      padding-bottom:1px;
+    }
+
+    .textareaEditor .panel {
+        margin-bottom: 1px !important;
+    }
+
+/*Harris for Close Modal*/
+.CloseModal .modal-dialog {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+.CloseModal .modal-body {
+    padding:0px 20px 20px 20px;
+}
+
+.CloseModal .closeRow {
+    margin-bottom: 1px;  
+}
+
+.CloseModal .modal {
+    background-color: white;
+}
+
+.CloseModal .close {
+    font-size: 30px;
+    padding: 2px 22px;
+}
+
+/* carousel */
+
+.carousel-fade .carousel-inner .item {
+    -webkit-transition-property: opacity;
+    transition-property: opacity;
+}
+
+.carousel-fade .carousel-inner .item,
+.carousel-fade .carousel-inner .active.left,
+.carousel-fade .carousel-inner .active.right {
+    opacity: 0;
+}
+
+.carousel-fade .carousel-inner .active,
+.carousel-fade .carousel-inner .next.left,
+.carousel-fade .carousel-inner .prev.right {
+    opacity: 1;
+}
+
+    .carousel-fade .carousel-inner .next,
+    .carousel-fade .carousel-inner .prev,
+    .carousel-fade .carousel-inner .active.left,
+    .carousel-fade .carousel-inner .active.right {
+        left: 0;
+        -webkit-transform: translate3d(0, 0, 0);
+        transform: translate3d(0, 0, 0);
+    }
+
+.carousel-fade .carousel-control {
+    z-index: 2;
+}
+
+
+/* carousel fullscreen */
+
+.carousel-fullscreen .carousel-inner .item {
+    height: 100%; /*100vh;*/
+    min-height: 550px;
+    overflow-y: scroll;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+
+/* carousel fullscreen - vertically centered caption*/
+
+.carousel-fullscreen .carousel-caption {
+    /*top: 50%;*/
+    bottom: auto;
+    /*-webkit-transform: translate(0, -50%);*/
+    /*-ms-transform: translate(0, -50%);
+    transform: translate(0, -50%);*/
+    left: 16%;
+    right: 16%;
+    text-align: left;
+}
+
+    .carousel-fullscreen .carousel-caption .article {
+        width: 100%;
+        
+    }
+/* overlay for better readibility of the caption  */
+.overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    /*background: #000;*/
+    opacity: 0.3;
+    transition: all 0.2s ease-out;
+}
+
+.carousel .carousel-control {
+    color: #443838;
+}
+
+.carousel .carousel-control.left {
+    background-image:none;
+    background-color:white;
+}
+
+    .carousel .carousel-control.right {
+        background-image: none;
+        background-color: white;
+    }
+
+/*.carousel-indicators {
+    width: 20px;
+    height: 20px;
+    
+}*/
+
+
+
+.carousel-indicators li {
+    width: 20px;
+    height: 20px;
+    border: 1px solid #777474;
+}
+
+.carousel-indicators .active {
+    width: 20px;
+    height: 20px;
+    background-color:transparent;
+    border: 1px solid #74bd25;
+}
+/*h1, h2, h3, h4 {
+    font-weight: 700;
+}
+
+.super-heading {
+    font-size: 70px;
+}*/
+/*.super-paragraph {
+    font-size: 30px;
+    font-weight: 300;
+}*/
+
+/*for Annoucement Newspaper Icon*/
+.newspaperRight i {
+    font-size:1.3em;
+}
+
+.newspaperRight a {
+    padding: 10px 10px;
+}
+
+/*for Google ReCaptcha*/
+.g-recaptcha {
+    transform: scale(0.77);
+    transform-origin: 0 0;
+}
+
+.ActionLinks a {
+    padding-left:3px;
+}
+
+/*For Login on top right corner*/
+a.loginLink:link {
+    color: white;
+}
+/* mouse over link */
+a.loginLink:hover {
+    color: blue;
+}

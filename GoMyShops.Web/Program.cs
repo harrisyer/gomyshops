@@ -20,16 +20,18 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using GoMyShops.Models.WebAPI;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
 var services = builder.Services;
 
-// Add services to the container.
+/// Add services to the container.
 builder.Services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-//JSON options to MVC since this is useful in displaying JSON data
-//ad antiforgery
+///JSON options to MVC since this is useful in displaying JSON data
+///ad antiforgery
 services.AddMvc(options =>
 {
     options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
@@ -57,14 +59,14 @@ services.ConfigureApplicationCookie(options =>
 var container = new SimpleInjector.Container();
 #endregion
 
-//add extention from Microsoft.Extensions.DependencyInjection
+///add extention from Microsoft.Extensions.DependencyInjection
 container.Options.DefaultScopedLifestyle = new AsyncScopedLifestyle();
 services.AddControllers();
 services.AddLocalization();
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-//for IHelperFactory
+///for IHelperFactory
 services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-//for IhtmlHelper
+///for IhtmlHelper
 services.AddTransient<IHtmlHelper, HtmlHelper>();
 services.AddTransient(typeof(IHtmlHelper<>), typeof(HtmlHelper<>));
 
@@ -73,24 +75,22 @@ GoMyShops.DependencySetup.SimplerInjectorSetup.IOCSetup(container);
 services.UseSimpleInjectorAspNetRequestScoping(container);
 services.AddSimpleInjector(container, options =>
 {
-    // AddAspNetCore() wraps web requests in a Simple Injector scope and
-    // allows request-scoped framework services to be resolved.
+    /// AddAspNetCore() wraps web requests in a Simple Injector scope and
+    /// allows request-scoped framework services to be resolved.
     options.AddAspNetCore()
-
-       // Ensure activation of a specific framework type to be created by
-       // Simple Injector instead of the built-in configuration system.
-       // All calls are optional. You can enable what you need. For instance,
-       // ViewComponents, PageModels, and TagHelpers are not needed when you
-       // build a Web API.
-
+       /// Ensure activation of a specific framework type to be created by
+       /// Simple Injector instead of the built-in configuration system.
+       /// All calls are optional. You can enable what you need. For instance,
+       /// ViewComponents, PageModels, and TagHelpers are not needed when you
+      /// build a Web API.
        .AddControllerActivation()
       .AddViewComponentActivation();
     //.AddPageModelActivation()
     //.AddTagHelperActivation();
 
-    // Optionally, allow application components to depend on the non-generic
-    // ILogger (Microsoft.Extensions.Logging) or IStringLocalizer
-    // (Microsoft.Extensions.Localization) abstractions.
+    /// Optionally, allow application components to depend on the non-generic
+    /// ILogger (Microsoft.Extensions.Logging) or IStringLocalizer
+    /// (Microsoft.Extensions.Localization) abstractions.
     options.AddLogging();
     options.AddLocalization();
     //options.AddLogging();   
@@ -188,6 +188,7 @@ services.AddSingleton<IMapper>(s => config.CreateMapper());
 
 builder.Services.AddDbContext<DataContext>(options =>
 {
+    ///MigrationsAssembly mention ef core is in other project.
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"),
         m => m.MigrationsAssembly("GoMyShops.Data"));
 });
@@ -196,11 +197,11 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequireNonAlphanumeric = true;
-    options.Password.RequiredLength = 10;
+    //options.Password.RequireDigit = true;
+    //options.Password.RequireLowercase = true;
+    //options.Password.RequireUppercase = true;
+    //options.Password.RequireNonAlphanumeric = true;
+    //options.Password.RequiredLength = 10;
 
 })
     .AddEntityFrameworkStores<DataContext>()
@@ -300,21 +301,26 @@ builder.Services.AddAuthentication(options =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("ModeratorWithMobilePhone", policy =>
-        policy
-            .RequireClaim(ClaimTypes.Role, RoleNames.Moderator)
-            .RequireClaim(ClaimTypes.MobilePhone));
+    ///the fallback authorization policy requires all users to be authenticated. 
+    ///Endpoints such as controllers, Razor Pages, etc that specify their own authorization requirements don't use the fallback authorization policy. 
+    options.FallbackPolicy = new AuthorizationPolicyBuilder()
+       .RequireAuthenticatedUser()
+       .Build();
+    //options.AddPolicy("ModeratorWithMobilePhone", policy =>
+    //    policy
+    //        .RequireClaim(ClaimTypes.Role, RoleNames.Moderator)
+    //        .RequireClaim(ClaimTypes.MobilePhone));
 
-    options.AddPolicy("MinAge18", policy =>
-        policy
-            .RequireAssertion(ctx =>
-                ctx.User.HasClaim(c => c.Type == ClaimTypes.DateOfBirth)
-                && DateTime.ParseExact(
-                    "yyyyMMdd",
-                    ctx.User.Claims.First(c =>
-                        c.Type == ClaimTypes.DateOfBirth).Value,
-                    System.Globalization.CultureInfo.InvariantCulture)
-                    >= DateTime.Now.AddYears(-18)));
+    //options.AddPolicy("MinAge18", policy =>
+    //    policy
+    //        .RequireAssertion(ctx =>
+    //            ctx.User.HasClaim(c => c.Type == ClaimTypes.DateOfBirth)
+    //            && DateTime.ParseExact(
+    //                "yyyyMMdd",
+    //                ctx.User.Claims.First(c =>
+    //                    c.Type == ClaimTypes.DateOfBirth).Value,
+    //                System.Globalization.CultureInfo.InvariantCulture)
+    //                >= DateTime.Now.AddYears(-18)));
 });
 
 
@@ -333,8 +339,8 @@ builder.Services.AddResponseCaching(options =>
 
 builder.Services.AddMemoryCache();
 
-// SQL Server Distributed Cache
-// --------------------------------------
+/// SQL Server Distributed Cache
+/// --------------------------------------
 builder.Services.AddDistributedSqlServerCache(options =>
 {
     options.ConnectionString =
@@ -343,13 +349,14 @@ builder.Services.AddDistributedSqlServerCache(options =>
     options.TableName = "AppCache";
 });
 
-//add session
+///add session
 builder.Services.AddSession(options =>
 {
     options.Cookie.Name = ".GoMyShops.Session";
     options.IdleTimeout = TimeSpan.FromSeconds(10);
     options.Cookie.IsEssential = true;
 });
+builder.Services.AddApplicationInsightsTelemetry();
 
 ///add for web call web api
 builder.Services.AddHttpClient();//.SetHandlerLifetime(TimeSpan.FromMinutes(3)); ;
@@ -360,20 +367,39 @@ var app = builder.Build();
 app.Services.UseSimpleInjector(container);
 #endregion
 
-// Configure the HTTP request pipeline.
+/// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    /// The default HSTS value is 30 days. You may want to change this for production scenarios, 
+    /// see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
+/////config files extra from www root
+//var cacheMaxAgeOneWeek = (60 * 60 * 24 * 7).ToString();
+//app.UseStaticFiles(new StaticFileOptions
+//{
+//    ///set /StaticFiles is access path than www root
+//    FileProvider = new PhysicalFileProvider(
+//           Path.Combine(builder.Environment.ContentRootPath, "StaticFiles")),
+//    RequestPath = "/StaticFiles",
+
+//    ///makes static files publicly available in the local cache for one week (604800 seconds)
+//    OnPrepareResponse = ctx =>
+//    {
+//        ctx.Context.Response.Headers.Append(
+//             "Cache-Control", $"public, max-age={cacheMaxAgeOneWeek}");
+//    }
+
+//});
+
 app.UseRouting();
 
-//add session
+///add session
 app.UseSession();
 
 app.UseCors();
@@ -384,6 +410,41 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 #region Adds a default cache-control (no cache, overwrite by [RequestCache])
+//app.Use(async (context, next) =>
+//{
+//    string path = context.Request.Path;
+
+//    if (path.EndsWith(".css") || path.EndsWith(".js"))
+//    {
+
+//        ///Set css and js files to be cached for 7 days
+//        //TimeSpan maxAge = new TimeSpan(7, 0, 0, 0);     //7 days
+//        //context.Response.Headers.Append("Cache-Control", "max-age=" + maxAge.TotalSeconds.ToString("0"));
+
+//    }
+//    else if (path.EndsWith(".gif") || path.EndsWith(".jpg") || path.EndsWith(".png"))
+//    {
+//        //context.Response.GetTypedHeaders().CacheControl =
+//        //       new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+//        //       {
+//        //           NoCache = true,
+//        //           NoStore = true
+//        //       };
+//    }
+//    else
+//    {
+//        //Request for views fall here.
+//        //context.Response.Headers.Append("Cache-Control", "no-cache");
+//        //context.Response.Headers.Append("Cache-Control", "private, no-store");
+//        context.Response.GetTypedHeaders().CacheControl =
+//                new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+//                {
+//                    NoCache = true,
+//                    NoStore = true
+//                };
+//    }
+//    await next();
+//});
 //app.Use((context, next) =>
 //{
 //    context.Response.GetTypedHeaders().CacheControl =

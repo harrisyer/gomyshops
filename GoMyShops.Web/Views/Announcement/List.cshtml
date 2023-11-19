@@ -142,8 +142,10 @@
             $.ajax({
                 type: "POST",
                 url: GetPath(CommonVariable.modelName() + "/Create"),
-                data: $(this).closest('form').serialize()
-                        '__RequestVerificationToken': '@antiforgeryProvider.GetAndStoreTokens(this.Context).RequestToken',
+                data: 
+                    $(this).closest('form').serialize()
+                    // '__RequestVerificationToken': '@antiforgeryProvider.GetAndStoreTokens(this.Context).RequestToken'
+                ,
                 dataType: "html",
                 success: function (result) {
                 },
