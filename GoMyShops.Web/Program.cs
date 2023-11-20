@@ -376,6 +376,7 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
@@ -410,41 +411,77 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 #region Adds a default cache-control (no cache, overwrite by [RequestCache])
-//app.Use(async (context, next) =>
-//{
-//    string path = context.Request.Path;
+app.Use(async (context, next) =>
+{
+    ///The X-Frame-Options header prevents framing — i.e., 
+    ///it prevents browsers from rendering your web page within another web page, 
+    ///and thus prevents other websites from using your content
+    context.Response.Headers.Append("X-Frame-Options", "SAMEORIGIN"); //DENY
+    ///The X-Xss-Protection header will cause modern-day browsers to stop loading the web page 
+    ///when they detect a cross-site scripting attack
+    context.Response.Headers.Append("X-Xss-Protection", "1; mode=block");
+    ///When you click on a link in the website you’re currently browsing, 
+    ///the control is transferred to the linked site. 
+    ///In addition, referrer data such as the URL could also be passed.
+    ///If this URL includes the path and query string, 
+    ///then user privacy or security could be compromised
+    context.Response.Headers.Append("Referrer-Policy", "no-referrer");
+    ///The X-Content-Type-Options header is used to indicate that the MIME types specified in the 
+    ///Content-Type headers are deliberately configured and should not be changed by the browser. 
+    ///This header prevents MIME sniffing, which can be used by attackers to turn non-executable MIME types
+    ///into executable ones.
+    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
+    ///This header can be used to indicate if Adobe products are allowed to render the web page 
+    ///from a different domain than yours. In other words, like X-Frame-Options above, 
+    ///this header protects you against website spoofing or unauthorized use of your content. 
+    ///As an example, if you’re using Flash in your application, 
+    ///you can prevent clients from making cross-site requests using the X-Permitted-Cross-Domain-Policies header
+    ///using the following code snippet.
+    context.Response.Headers.Append("X-Permitted-Cross-Domain-Policies", "none");
+    ///The Feature-Policy header is used to specify all of the features your application needs.
+    context.Response.Headers.Append("Feature-Policy", "camera none; geolocation none; microphone  none ; usb  none ");
+    ///Content Security Policy is a security policy that is used to control the resources that a web page
+    ///is allowed to load. It represents an extra layer of security that is implemented 
+    ///via a Content-Security-Policy header in an HTTP response.
+    ///Content-Security-Policy is used to detect and mitigate certain types of attacks 
+    ///such as cross-site scripting attacks and data injection attacks.
+    //context.Response.Headers.Append("Content-Security-Policy",
+    //"default-src 'self'; report-uri /idgreport");
 
-//    if (path.EndsWith(".css") || path.EndsWith(".js"))
-//    {
 
-//        ///Set css and js files to be cached for 7 days
-//        //TimeSpan maxAge = new TimeSpan(7, 0, 0, 0);     //7 days
-//        //context.Response.Headers.Append("Cache-Control", "max-age=" + maxAge.TotalSeconds.ToString("0"));
+    string path = context.Request.Path;
 
-//    }
-//    else if (path.EndsWith(".gif") || path.EndsWith(".jpg") || path.EndsWith(".png"))
-//    {
-//        //context.Response.GetTypedHeaders().CacheControl =
-//        //       new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
-//        //       {
-//        //           NoCache = true,
-//        //           NoStore = true
-//        //       };
-//    }
-//    else
-//    {
-//        //Request for views fall here.
-//        //context.Response.Headers.Append("Cache-Control", "no-cache");
-//        //context.Response.Headers.Append("Cache-Control", "private, no-store");
-//        context.Response.GetTypedHeaders().CacheControl =
-//                new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
-//                {
-//                    NoCache = true,
-//                    NoStore = true
-//                };
-//    }
-//    await next();
-//});
+    if (path.EndsWith(".css") || path.EndsWith(".js"))
+    {
+
+        ///Set css and js files to be cached for 7 days
+        //TimeSpan maxAge = new TimeSpan(7, 0, 0, 0);     //7 days
+        //context.Response.Headers.Append("Cache-Control", "max-age=" + maxAge.TotalSeconds.ToString("0"));
+
+    }
+    else if (path.EndsWith(".gif") || path.EndsWith(".jpg") || path.EndsWith(".png"))
+    {
+        //context.Response.GetTypedHeaders().CacheControl =
+        //       new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+        //       {
+        //           NoCache = true,
+        //           NoStore = true
+        //       };
+    }
+    else
+    {
+        //Request for views fall here.
+        //context.Response.Headers.Append("Cache-Control", "no-cache");
+        //context.Response.Headers.Append("Cache-Control", "private, no-store");
+        context.Response.GetTypedHeaders().CacheControl =
+                new Microsoft.Net.Http.Headers.CacheControlHeaderValue()
+                {
+                    NoCache = true,
+                    NoStore = true
+                };
+    }
+    await next();
+});
 //app.Use((context, next) =>
 //{
 //    context.Response.GetTypedHeaders().CacheControl =

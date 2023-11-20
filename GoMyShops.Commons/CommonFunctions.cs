@@ -1010,7 +1010,10 @@ namespace GoMyShops.Commons
         public static void Set<T>(this ITempDataDictionary tempData, string key, T value)
         {
             string json = JsonConvert.SerializeObject(value);
-            tempData.Add(key, json);
+            if(tempData!=null)
+                if(tempData.Keys.Count()>0)
+                    if (!tempData.ContainsKey(key) )                     
+                        tempData.Add(key, json);
         }
 
         public static T Get<T>(this ITempDataDictionary tempData, string key)

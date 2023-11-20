@@ -32,7 +32,7 @@
 </div> *@
 
 @Html.HiddenFor(a => a.AnnouncementCount)
-<div id="carousel-announcement" class="carousel slide carousel-fullscreen carousel-fade" data-interval="true" data-bs-ride="true">
+<div id="carousel-announcement" class="carousel slide carousel-fullscreen carousel-fade" data-interval="true" data-bs-ride="carousel">
     <!-- Indicators -->
    @*  <ol class="carousel-indicators">
         @if (Model.advm != null)
@@ -58,7 +58,7 @@
     </ol> *@
 
     <!-- Wrapper for slides -->
-    <div class="carousel-inner" role="listbox">
+    <div class="carousel-inner">  @* role="listbox"> *@
         @if (Model.advm != null)
         {
             int count = 0;
@@ -66,7 +66,12 @@
             {
                 if (count == 0)
                 {
-                    <div class="carousel-item active">
+                    <div class="carousel-item active" data-bs-interval="2000">
+                        <h2>@item.Title </h2>
+                        @Html.Raw(@item.Message)
+                    </div>
+
+                    @* <div class="carousel-item active">
                         <div class=""></div>
                        
                             <div class="carousel-caption1">
@@ -79,11 +84,15 @@
 
                         </div>
                        
-                    </div>
+                    </div> *@
                 }
                 else
                 {
-                    <div class="carousel-item">
+                    <div class="carousel-item" data-bs-interval="2000">
+                        <h2>@item.Title </h2>
+                        @Html.Raw(@item.Message)
+                    </div>
+                    @* <div class="carousel-item">
                         <div class=""></div>
                       
                         <div class="carousel-caption1">
@@ -93,13 +102,20 @@
                                 @Html.Raw(@item.Message)
                             </div>
                         </div>
-                    </div>
+                    </div> *@
                 }
                 count = count + 1;
             }
         }
     </div>
-
+    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-announcement" data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#carousel-announcement" data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
     <!-- Controls -->
    @*  <button class="carousel-control" type="button" data-bs-target="#carousel-announcement" data-bs-slide="prev">
         <i class="fa-solid fa-chevron-left fa-lg"></i>
@@ -111,7 +127,7 @@
     
 </div>
 
-<div class="carouselFooter">
+@* <div class="carouselFooter">
     <a class="left carousel-control" href="#carousel-announcement" role="button" data-bs-slide="prev">
         <i class="fa-solid fa-chevron-left fa-lg"></i>
 
@@ -120,4 +136,4 @@
         <i class="fa-solid fa-chevron-right fa-lg"></i>
 
     </a>
-</div>
+</div> *@
