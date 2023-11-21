@@ -3176,3 +3176,40 @@ input::placeholder {
     opacity: 0.5;
     color:gray;
 }
+
+.modal {
+    height: 90%;
+    max-width: 100%;
+    --bs-modal-width: 100%;
+    padding: 1px 25px 1px 25px;
+    overflow-x: unset;
+    overflow-y: unset;
+}
+
+.modal-header {
+    border-bottom: none;
+    background-color: none;
+}
+
+.modal-content {
+    height: 95%
+}
+
+.modal-dialog {
+    max-width: none;
+    margin: 1.75rem auto;
+    height: 95%;
+}
+.carousel-inner, carousel-item {
+    height: 100%;
+}
+
+#carouselExampleAutoplaying {
+    z-index: 3;
+    height: 100%;
+}
+
+.carousel-control-next,
+.carousel-control-prev /*, .carousel-indicators */ {
+    filter: invert(100%);
+}

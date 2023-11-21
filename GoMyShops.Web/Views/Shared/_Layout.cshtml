@@ -11,60 +11,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title Go My Shops</title>
   
+    <environment include="Development">
+        <!--bootstrap main css from bootwatch -->
+        <link href="~/lib/bootstrap/css/bootwatch_flatly.css" rel="stylesheet" />
+
+        <!--font-awesome css -->
+        <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
+
+        <link href="~/css/boostrap/bootstrap-treeview.css" rel="stylesheet" />
+
+        <!--bootstrap-table css -->
+        <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
+        <link href="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.css" rel="stylesheet" />
+        <link href="~/lib/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.min.css" rel="stylesheet" />
+
+        <!-- DateTime Picker css -->
+        <link href="~/css/tempusdominus/tempus-dominus.css" rel="stylesheet" />
+
+       @*  <link href="~/css/boostrap/bootstrap-select.css" rel="stylesheet" /> *@
+
+        <!--bootstrap-toggle css -->
+        <link href="~/lib/bootstrap-toggle/bootstrap5-toggle.min.css" rel="stylesheet" />
+
+        <!--bootstrap-sidebar css -->
+        <link href="~/css/bootstrap-sidebar.css" rel="stylesheet" />
+        <!--summernote css -->
+        @*  <link href="~/css/summernote/summernote-lite.min.css" rel="stylesheet" /> *@
+        <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
+
+        @* <link href="~/css/boostrap/bootstrap-table-fixed-columns.css" rel="stylesheet" />  *@
+
+
+
+        <!--custom and site css -->
+        <link href="~/css/bootstrap.custom.css" rel="stylesheet" />
+        <link href="~/css/fontawesomecustoms.css" rel="stylesheet" />
+        <link href="~/css/site.css" rel="stylesheet" />
+       @*  <link href="~/gulpcss/site.css" rel="stylesheet" /> *@
+        <link href="~/css/cssbootstrapformhelpers.css" rel="stylesheet" />
+    </environment>
+    <environment exclude="Development">
     <!--bootstrap main css from bootwatch -->
-    <link href="~/lib/bootstrap/css/bootwatch_flatly.css" rel="stylesheet" />  
-    
+    <link href="~/lib/bootstrap/css/bootwatch_flatly.min.css" rel="stylesheet" />
     <!--font-awesome css -->
     <link href="~/lib/font-awesome/css/all.min.css" rel="stylesheet" />
- 
-    <link href="~/css/boostrap/bootstrap-treeview.css" rel="stylesheet" />
-  
+    <!--boostrap treeview css -->
+    <link href="~/css/boostrap/bootstrap-treeview.min.css" rel="stylesheet" />
     <!--bootstrap-table css -->
     <link href="~/lib/bootstrap-table/bootstrap-table.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-table/extensions/filter-control/bootstrap-table-filter-control.min.css" rel="stylesheet" />
-  
-    <!-- DateTime Picker css -->
-    <link href="~/css/tempusdominus/tempus-dominus.css" rel="stylesheet" />
-   
-    <link href="~/css/boostrap/bootstrap-select.css" rel="stylesheet" />
-  
+    <!-- DateTime Picker css -->      
+    <link href="~/css/tempusdominus/tempus-dominus.min.css" rel="stylesheet" />
     <!--bootstrap-toggle css -->
     <link href="~/lib/bootstrap-toggle/bootstrap5-toggle.min.css" rel="stylesheet" />
 
-    <!--bootstrap-sidebar css -->   
+    <!--bootstrap-sidebar css -->
     <link href="~/css/bootstrap-sidebar.css" rel="stylesheet" />
     <!--summernote css -->
-   @*  <link href="~/css/summernote/summernote-lite.min.css" rel="stylesheet" /> *@
+    @*  <link href="~/css/summernote/summernote-lite.min.css" rel="stylesheet" /> *@
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
-
-     @* <link href="~/css/boostrap/bootstrap-table-fixed-columns.css" rel="stylesheet" />  *@
-  
-   
-    @* <link href="~/css/metismenu.css" rel="stylesheet" />
-    <link href="~/css/sb-admin-2.css" rel="stylesheet" />
-    <link href="~/css/morris.css" rel="stylesheet" />
-    <link href="~/css/jqplot/jquery.jqplot.css" rel="stylesheet" /> *@
-
     <!--custom and site css -->
     <link href="~/css/bootstrap.custom.css" rel="stylesheet" />
     <link href="~/css/fontawesomecustoms.css" rel="stylesheet" />
     <link href="~/css/site.css" rel="stylesheet" />
     <link href="~/css/cssbootstrapformhelpers.css" rel="stylesheet" />
-
-
+    </environment>
      <style>
         #sidebar-nav {
             width: 200px;
         }
-    </style>
-  
-    <script src='https://www.google.com/recaptcha/api.js'></script>
-    <script>
-
-
-    </script>
-
+    </style>  
+    <script src='https://www.google.com/recaptcha/api.js'></script>   
 </head>
 
 <body>
@@ -79,10 +97,6 @@
                             @Html.ActionLink("GoShops", "Index", "Home", new { area = "" }, new { @class = "navbar-brand gomyshopsLogo" })
                             <input id="IsMenu" type="checkbox" checked data-toggle="toggle" data-size="sm" data-onlabel="Menu On" data-offlabel="Menu Off">
                         </div>
-                              
-                        
-                                           
-                   
                         @* <button type="button" id="sidebarCollapse" class="btn btn-info navbar-btn">
                             <i class="fa-solid fa-align-left"></i>                        
                         </button> *@
@@ -168,71 +182,61 @@
         </div> *@
     </div>
   
+    <environment include="Development">
+        <!-- Popperjs -->
+        <script src="~/js/popper.min.js"></script>
+        <!-- Popperjs -->
+        @*  <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+        *@
+        <!--jquery js -->       
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <!--bootstrap-table js -->
+        <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Popperjs -->
-    <script src="~/js/popper.min.js"></script>
-    <!-- Popperjs -->
-   @*  <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
- *@
+        <!--momentwithlocales js for easy write related to datetime -->
+        <script src="~/js/momentwithlocales.min.js"></script>
 
-    <!--jquery js -->
-    <script src="~/lib/jquery/dist/jquery.js"></script>
+        <!-- DateTime Picker -->
+        <script src="~/js/tempusdominus/tempus-dominus.min.js"></script>
+        <script src="~/js/tempusdominus/jquery-provider.min.js"></script>
 
-    <!--bootstrap-table js -->
-    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+       @*  <script src="~/js/lib/jspdf.js"></script>
+        <script src="~/js/lib/from_html.js"></script>
+        <script src="~/js/lib/split_text_to_size.js"></script>
+        <script src="~/js/lib/standard_fonts_metrics.js"></script>
+        <script src="~/js/lib/html2canvas.js"></script> *@
 
-    <!--momentwithlocales js for easy write related to datetime -->
-    <script src="~/js/momentwithlocales.min.js"></script>
+        <!-- validation -->
+        <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
 
-    <!-- DateTime Picker -->
-    <script src="~/js/tempusdominus/tempus-dominus.min.js"></script>
-    <script src="~/js/tempusdominus/jquery-provider.min.js"></script>
+        <script src="~/js/boostrap/bootstrap-treeview.js"></script>
+        @*  <script src="~/js/boostrap/bootstrap-datetimepicker.js"></script> *@
+       @*  <script src="~/js/boostrap/bootstrap-select.js"></script> *@
 
-       
-    <script src="~/js/lib/jspdf.js"></script>
-    <script src="~/js/lib/from_html.js"></script>
-    <script src="~/js/lib/split_text_to_size.js"></script>
-    <script src="~/js/lib/standard_fonts_metrics.js"></script>
-    <script src="~/js/lib/html2canvas.js"></script>
-  
-    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>   
-    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
-   @*  <script src="~/js/modernizr.js"></script> *@
+        <!--bootstrap-toggle js -->
+        <script src="~/lib/bootstrap-toggle/bootstrap5-toggle.jquery.min.js"></script>
 
+        <!--bootstrap-tables js -->
+        <script src="~/lib/bootstrap-table/bootstrap-table.min.js" type="module"></script>
+        <script src="~/lib/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js" type="module"></script>
+        <script src="~/lib/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.min.js" type="module"></script>
+        <script src="~/lib/bootstrap-table/extensions/export/bootstrap-table-export.min.js" type="module"></script>
+        <script src="~/lib/bootstrap-table/extensions/cookie/bootstrap-table-cookie.min.js" type="module"></script>
+        <script src="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.js" type="module"></script>
+        <script src="~/lib/bootstrap-table/tableexport.js"></script>
+        <!-- Summernote JS -->
+        <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 
-    <script src="~/js/boostrap/bootstrap-treeview.js"></script>
-   @*  <script src="~/js/boostrap/bootstrap-datetimepicker.js"></script> *@
-    <script src="~/js/boostrap/bootstrap-select.js"></script> 
-    
-    <!--bootstrap-toggle js -->
-    <script src="~/lib/bootstrap-toggle/bootstrap5-toggle.jquery.min.js"></script>
+        <script src="~/js/bootstrapformhelpers/bootstrap-formhelpers.js"></script>
+        <script src="~/js/bootstrapformhelpers/bootstrap-formhelpers-languages.js"></script>
+        <script src="~/js/bootstrapformhelpers/bootstrap-formhelpers-selectbox.js"></script>
 
-    <!--bootstrap-tables js -->
-    <script src="~/lib/bootstrap-table/bootstrap-table.min.js" type="module"></script>
-    <script src="~/lib/bootstrap-table/extensions/toolbar/bootstrap-table-toolbar.min.js" type="module"></script>
-    <script src="~/lib/bootstrap-table/extensions/multiple-sort/bootstrap-table-multiple-sort.min.js" type="module"></script>
-    <script src="~/lib/bootstrap-table/extensions/export/bootstrap-table-export.min.js" type="module"></script>
-    <script src="~/lib/bootstrap-table/extensions/cookie/bootstrap-table-cookie.min.js" type="module"></script>
-    <script src="~/lib/bootstrap-table/extensions/page-jump-to/bootstrap-table-page-jump-to.min.js" type="module"></script>
-    <script src="~/lib/bootstrap-table/tableexport.js"></script>
-  
-   @*  <script src="~/js/boostrap/bootstrap-table-fixed-columns.js"></script>
-    <script src="~/js/boostrap/summernote.js"></script>
-    <script src="~/js/respond.js"></script> *@
-    @* <script src="~/js/summernote.min.js"></script> *@
-
-    <!-- Summernote JS -->
-    <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
-
-    <script src="~/js/bootstrapformhelpers/bootstrap-formhelpers.js"></script>  
-    <script src="~/js/bootstrapformhelpers/bootstrap-formhelpers-languages.js"></script>
-    <script src="~/js/bootstrapformhelpers/bootstrap-formhelpers-selectbox.js"></script>
-
-    <!--customs js -->
-    <script src="~/js/bodycommonfunctions.js"></script>
-    <script src="~/js/bodycustoms.js"></script>
-   
-   
+        <!--customs js -->
+        <script src="~/js/bodycommonfunctions.js"></script>
+        <script src="~/js/bodycustoms.js"></script>
+    </environment>
+     
     <script type="text/javascript">
         $(document).ajaxStart(function () {
             $("#spinner").show();
@@ -309,11 +313,7 @@
             }
         });
 
-        //if (window.sidebar) {
-        //    document.onmousedown = disableselect                    // for mozilla
-        //    document.onclick = reEnable
-        //}
-
+     
 
        //document.oncontextmenu = new Function("return false")
         //End Disable Selection on Web
@@ -380,14 +380,14 @@
 
            
 
-            $('#txtSearchProdAssign').keypress(function (e) {
-                var key = e.which;
-                if (key == 13)  // the enter key code
-                {
-                    $('input[name = butAssignProd]').click();
-                    return false;
-                }
-            });   
+            // $('#txtSearchProdAssign').keypress(function (e) {
+            //     var key = e.which;
+            //     if (key == 13)  // the enter key code
+            //     {
+            //         $('input[name = butAssignProd]').click();
+            //         return false;
+            //     }
+            // });   
 
 
 
@@ -448,10 +448,6 @@
             });
 
            
-
-            // $('#sidebarCollapse').on('click', function () {
-            //     $('#sidebar').toggleClass('active');
-            // });
 
             var url = '';
             var UL = sessionStorage.getItem("menuUL");
@@ -589,18 +585,18 @@
             return '@Url.Content("~/")' + url;
         }
 
-        $(document).on('click', '.panel-heading span.clickable', function (e) {
-            var $this = $(this);
-            if (!$this.hasClass('panel-collapsed')) {
-                $this.parents('.panel').find('.panel-body').slideUp();
-                $this.addClass('panel-collapsed');
-                $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
-            } else {
-                $this.parents('.panel').find('.panel-body').slideDown();
-                $this.removeClass('panel-collapsed');
-                $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
-            }
-        })
+        // $(document).on('click', '.panel-heading span.clickable', function (e) {
+        //     var $this = $(this);
+        //     if (!$this.hasClass('panel-collapsed')) {
+        //         $this.parents('.panel').find('.panel-body').slideUp();
+        //         $this.addClass('panel-collapsed');
+        //         $this.find('i').removeClass('glyphicon-chevron-up').addClass('glyphicon-chevron-down');
+        //     } else {
+        //         $this.parents('.panel').find('.panel-body').slideDown();
+        //         $this.removeClass('panel-collapsed');
+        //         $this.find('i').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-up');
+        //     }
+        // })
 
         $(document).on("click", ".menuCommentPost", function (e) {
 
